@@ -5,8 +5,24 @@ html
     meta(name='viewport', content='width=device-width, initial-scale=1')
     link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/foundation-essential/6.0.6/css/foundation.css')
     link(href='/css/default.css', rel='stylesheet')
+    
   body
     .row
       .columns.small-12.header
         div University of Louisiana at Monroe
         div Advising Assistant
+
+    p
+      | First name:
+      input(data-bind='value: firstName')
+    p
+      | Last name:
+      input(data-bind='value: lastName')
+    h2
+      | Hello, 
+      span(data-bind='text: fullName')
+    button(data-bind='click: fullNameCaps')
+      | Caps, Bitch
+      
+    script(src='/js/knockout.js')
+    script(src='/js/test.js')
