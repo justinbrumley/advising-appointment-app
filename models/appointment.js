@@ -3,7 +3,7 @@
 var Sequelize = require("sequelize");
 
 module.exports = function(sequelize, DataTypes) {
-  var appointment = sequelize.define("appointment", {
+  var Appointment = sequelize.define("Appointment", {
       advisor:{
           type: Sequelize.STRING,
           allowNull: false,
@@ -27,7 +27,7 @@ module.exports = function(sequelize, DataTypes) {
       
   });
   
-  return appointment;
+  return Appointment;
   
 }
       
