@@ -2,6 +2,7 @@
 
 var express = require('express');
 var app = express();
+var models = require('./models');
 
 var port = process.env.PORT || 8080;
 
