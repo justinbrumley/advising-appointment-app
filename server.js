@@ -10,10 +10,10 @@ app.set('view engine', 'jade');
 app.set('views', __dirname + '/views');
 app.use(express.static(__dirname + '/public'));
 
-app.get('/', function(req, res) {
-  res.render('index');
-});
+// Controller initialization
+app.use('/', require('./controllers'));
 
+// Start server
 app.listen(port, function() {
   console.log("NodeJS Server running on port " + port);
 });
