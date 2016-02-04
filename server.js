@@ -11,19 +11,18 @@ app.set('view engine', 'jade');
 app.set('views', __dirname + '/views');
 app.use(express.static(__dirname + '/public'));
 
-app.get('/', function(req, res) {
-  res.render('index');
-});
+// Controller initialization
+app.use('/', require('./controllers'));
 
 models.sequelize.sync().then(function() {
-    models.user.create({
-      'cwid': '99999999',
-      'username': 'super_admin',
-      'password': 'SuperSecurePassword123',
-      'role': 'super_admin'
-    }).then(function() {
-        app.listen(port, function() {
-          console.log("Swiggity Server on port " + port);
-        });
+  models.user.create({
+    'cwid': '99999999',
+    'username': 'super_admin',
+    'password': 'SuperSecurePassword123',
+    'role': 'super_admin'
+  }).then(function() {
+    app.listen(port, function() {
+      console.log("Swiggity Server on port " + port);
     });
+  });
 });
