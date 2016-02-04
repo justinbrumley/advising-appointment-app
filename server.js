@@ -12,17 +12,11 @@ app.set('views', __dirname + '/views');
 app.use(express.static(__dirname + '/public'));
 
 // Controller initialization
-app.use('/', require('./controllers'));
+app.use('/', require('./controllers/index'));
+app.use('/users', require('./controllers/users'));
 
 models.sequelize.sync().then(function() {
-  models.user.create({
-    'cwid': '99999999',
-    'username': 'super_admin',
-    'password': 'SuperSecurePassword123',
-    'role': 'super_admin'
-  }).then(function() {
-    app.listen(port, function() {
-      console.log("Swiggity Server on port " + port);
-    });
+  app.listen(port, function() {
+    console.log("Swiggity Server on port " + port);
   });
 });

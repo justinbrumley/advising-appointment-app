@@ -22,8 +22,16 @@ $mobileWidth: 480px;
   max-width: initial;
 }
 
-.login-form {
+.register-form {
   text-align: center;
+  
+  input {
+    width: 100%;
+  }
+  
+  .button {
+     width: 100%; 
+  }
 }
 
 @media only screen and (max-device-width: $mobileWidth) {
