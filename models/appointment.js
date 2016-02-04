@@ -3,13 +3,14 @@
 var Sequelize = require("sequelize");
 
 module.exports = function(sequelize, DataTypes) {
-  var Appointment = sequelize.define("Appointment", {
-     id: {
+  var appointment = sequelize.define("appointment", {
+    id: {
       type: Sequelize.STRING(36),
       allowNull: false,
       primaryKey: true,
-      validate: { isUUID: 4 }
-
+      validate: {
+        isUUID: 4
+      }
     },
     advisor_cwid: {
       type: Sequelize.STRING,
@@ -18,7 +19,6 @@ module.exports = function(sequelize, DataTypes) {
     advisee_cwid: {
       type: Sequelize.STRING
     },
-  
     duration: {
       type: Sequelize.INTEGER
     },
@@ -26,6 +26,6 @@ module.exports = function(sequelize, DataTypes) {
       type: Sequelize.DATE
     }
   });
-  
-  return Appointment;
+
+  return appointment;
 };

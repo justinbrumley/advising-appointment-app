@@ -15,6 +15,15 @@ app.get('/', function(req, res) {
   res.render('index');
 });
 
-app.listen(port, function() {
-  console.log("NodeJS Server running on port " + port);
+models.sequelize.sync().then(function() {
+    models.user.create({
+      'cwid': '99999999',
+      'username': 'super_admin',
+      'password': 'SuperSecurePassword123',
+      'role': 'super_admin'
+    }).then(function() {
+        app.listen(port, function() {
+          console.log("Swiggity Server on port " + port);
+        });
+    });
 });

@@ -1,6 +1,6 @@
 {
   "development": {
-    "username": "gopops1225",
+    "username": "test",
     "password": null,
     "database": "test_db",
     "host": "process.env.$IP",
