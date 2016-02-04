@@ -22,6 +22,10 @@ $mobileWidth: 480px;
   max-width: initial;
 }
 
+.login-form {
+  text-align: center;
+}
+
 @media only screen and (max-device-width: $mobileWidth) {
   /*  Mobile Styles */
   .header {
