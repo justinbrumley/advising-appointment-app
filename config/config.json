@@ -3,7 +3,7 @@
     "username": "test",
     "password": null,
     "database": "test_db",
-    "host": "process.env.$IP",
+    "host": "localhost",
     "dialect": "mysql"
   },
   "test": {
