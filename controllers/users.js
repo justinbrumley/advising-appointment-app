@@ -2,12 +2,13 @@ var express = require('express');
 var router = express.Router();
 var models = require('../models');
 
+var User = models['user'];
+
 router.get('/register', function(req, res) {
   res.render('users/register');
 });
 
 router.post('/register', function(req, res) {
-  var User = models['user'];
   var cwid = req.body.cwid;
   var username = req.body.username;
   var password = req.body.password;
@@ -21,7 +22,7 @@ router.post('/register', function(req, res) {
       // User already exists
       return res.json({
         success: false,
-        message: 'Incorrect Username/Password'
+        message: 'CWID already exists'
       });
     }
     
@@ -31,16 +32,17 @@ router.post('/register', function(req, res) {
       username: username,
       password: password,
       role: 'student'
-    }).done(function(err, user) {
-      if(err) {
+    }).done(function(user) {
+      if(user) {
         return res.json({
-          success: false,
-          message: err
+          success: true,
+          message: user
+        });
+      } else {
+        return res.json({
+          success: false
         });
       }
-      return res.json({
-        success: true
-      });
     });
   });
 });

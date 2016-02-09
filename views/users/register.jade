@@ -6,19 +6,22 @@ block content
       form.register-form(method='POST')
         | CWID:
         br
-        input(type='text', name='cwid', placeHolder='cwid')
+        input(id='cwid', type='text', name='cwid', placeHolder='cwid')
         br
         | Username:
         br
-        input(type='text', name='username')
+        input(id='username', type='text', name='username')
         br
         | Password:
         br
-        input(type='password', name='password')
+        input(id='password', type='password', name='password')
         br
         | Verify Password:
         br
-        input(type='password', name='passwordVerify')
+        input(id='passwordVerify', type='password', name='passwordVerify')
         br
         br
-        input(type='submit', value='Submit')
+        button.button#register-form-submit Submit
+        
+block scripts
+  script(src='/js/register.js', type='application/javascript')
