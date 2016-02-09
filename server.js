@@ -3,6 +3,7 @@
 var express = require('express');
 var app = express();
 var models = require('./models');
+var bodyParser = require('body-parser');
 
 var port = process.env.PORT || 8080;
 
@@ -10,6 +11,8 @@ var port = process.env.PORT || 8080;
 app.set('view engine', 'jade');
 app.set('views', __dirname + '/views');
 app.use(express.static(__dirname + '/public'));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 // Controller initialization
 app.use('/', require('./controllers/index'));

@@ -3,10 +3,10 @@ extends ../_layout.jade
 block content
   .row
     .columns.small-6.small-offset-3
-      form.register-form
+      form.register-form(method='POST')
         | CWID:
         br
-        input(type='text', name='cwid')
+        input(type='text', name='cwid', placeHolder='cwid')
         br
         | Username:
         br
@@ -21,4 +21,4 @@ block content
         input(type='password', name='passwordVerify')
         br
         br
-        button.button Submit
+        input(type='submit', value='Submit')
