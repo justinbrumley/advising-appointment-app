@@ -6,10 +6,13 @@ html
     
     link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/foundation-essential/6.0.6/css/foundation.css')
     link(href='/css/default.css', rel='stylesheet')
+    block head
     
   body
     .row.full-width
       .columns.small-12.header
         img(src='/img/ulm_logo.png')
     block content
-    script(src='/js/knockout.js')
+    script(src='/js/jquery.js' type='application/javascript')
+    script(src='/js/knockout.js' type='application/javascript')
+    block scripts
