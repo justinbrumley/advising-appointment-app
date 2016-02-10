@@ -3,10 +3,6 @@
 var Sequelize = require('sequelize');
 var config = require('../config/config.json').development;
 
-// if(development) {
-  config.host = process.env.$IP;
-//}
-
 var sequelize = new Sequelize(
   config.database,
   config.username,

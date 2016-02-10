@@ -1,7 +1,9 @@
 var express = require('express');
 var router = express.Router();
 
-// Initialize default routes
+// -------------------------
+// Set up / routes
+// -------------------------
 router.get('/', function(req, res) {
     res.render('index');
 });

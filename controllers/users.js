@@ -4,6 +4,9 @@ var models = require('../models');
 
 var User = models['user'];
 
+// -------------------------
+// Set up /users routes
+// -------------------------
 router.get('/register', function(req, res) {
   res.render('users/register');
 });
