@@ -35,7 +35,15 @@ body {
         text-decoration: underline;
       }
     }
+  }
 }
+
+.button {
+  background-color: #660000;
+  
+  &:hover {
+    background-color: #3B0000;
+  }
 }
 
 .full-width {
