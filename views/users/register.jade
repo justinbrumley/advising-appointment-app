@@ -1,27 +1,23 @@
 extends ../_layout.jade
 
 block content
-  .row
-    .columns.small-6.small-offset-3
-      form.register-form(method='POST')
-        | CWID:
-        br
-        input(id='cwid', type='text', name='cwid', placeHolder='cwid')
-        br
-        | Username:
-        br
-        input(id='username', type='text', name='username')
-        br
-        | Password:
-        br
-        input(id='password', type='password', name='password')
-        br
-        | Verify Password:
-        br
-        input(id='passwordVerify', type='password', name='passwordVerify')
-        br
-        br
-        button.button#register-form-submit Submit
+  form.register-form(method='POST')
+    .row
+      .columns.small-12.medium-6.medium-offset-3
+        .callout
+          label
+            | CWID
+            input(id='cwid', type='text', name='cwid', placeHolder='CWID')
+          label
+            | Username
+            input(id='username', type='text', name='username', placeHolder='Username')
+          label
+            | Password
+            input(id='password', type='password', name='password', placeHolder='Password')
+          label
+            | Verify Password
+            input(id='passwordVerify', type='password', placeHolder='Password')
+          button.button#register-form-submit Submit
         
 block scripts
   script(src='/js/register.js', type='application/javascript')
