@@ -2,9 +2,13 @@ $mobileWidth: 480px;
 
 /* @media only screen and (max-device-width: $mobileWidth) */
 
+body {
+  font-family: geneva, tahoma, sans-serif;
+}
+
 .header {
   text-align: center;
-  background-color: maroon;
+  background-color: #660000;
   padding-bottom: 5px;
   background-image: url('/img/bg_pattern.png');
   height: 130px;
@@ -13,6 +17,27 @@ $mobileWidth: 480px;
     top: 50%;
     transform: translateY(-50%);
   }
+}
+
+.sub-header {
+  background-color: #3B0000;
+  padding-left: 20vw;
+  padding-right: 20vw;
+  
+  #loginButton {
+    text-align:right;
+    padding: 10px;
+    
+    a {
+      font-size: 13px;
+      color: white;
+      font-weight:bold;
+      
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+}
 }
 
 .full-width {
