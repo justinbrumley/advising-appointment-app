@@ -1,7 +1,5 @@
 $mobileWidth: 480px;
 
-/* @media only screen and (max-device-width: $mobileWidth) */
-
 body {
   font-family: geneva, tahoma, sans-serif;
 }
@@ -67,5 +65,9 @@ body {
       height: 66px;
       padding: 4px 0 4px 0;
     }
+  }
+  
+  .sub-header {
+    display: none;
   }
 }
