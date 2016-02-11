@@ -48,6 +48,7 @@ app.use('/users', require('./controllers/users'));
 // Sync the db and start the server
 // ----------------------------
 models.sequelize.sync().then(function() {
+  console.log("DB Synced");
   app.listen(port, function() {
     console.log("Swiggity Server on port " + port);
   });
