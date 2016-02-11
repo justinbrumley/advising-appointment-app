@@ -4,7 +4,6 @@ var Sequelize = require('sequelize');
 var config;
 
 var env = process.env.NODE_ENV || 'dev';
-console.log('Pulling ' + env + ' config');
 if(env == 'production') {
   config = require('../config/config.json').production;
 } else {
@@ -13,13 +12,15 @@ if(env == 'production') {
 
 console.log("Connecting to database at " + config.host);
 
-var sequelize = new Sequelize(
-  config.database,
-  config.username,
-  config.password, {
+var sequelize = new Sequelize(config.database, config.username, config.password, {
     host: config.host,
     port: 3306,
-    dialect: config.dialect
+    dialect: config.dialect,
+    logging: true,
+    pool: {
+      maxConnections: 5,
+      maxIdleTime: 30
+    }
   });
 
 var models = [
