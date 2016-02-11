@@ -1,7 +1,14 @@
 'use strict';
 
 var Sequelize = require('sequelize');
-var config = require('../config/config.json').development;
+var config;
+
+var env = process.env.NODE_ENV || 'dev';
+if(env == 'production') {
+  config = require('../config/config.json').production;
+} else {
+  config = require('../config/config.json').development;
+}
 
 var sequelize = new Sequelize(
   config.database,
