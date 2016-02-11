@@ -16,6 +16,7 @@ var sequelize = new Sequelize(config.database, config.username, config.password,
     host: config.host,
     port: 3306,
     dialect: config.dialect,
+    dialect: config.dialectOptions,
     logging: true,
     pool: {
       maxConnections: 5,
