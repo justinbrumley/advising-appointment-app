@@ -1,0 +1,17 @@
+extends ../_layout.jade
+
+block content
+  form.login-form(method='POST')
+    .row
+      .columns.small-12.medium-6.medium-offset-3
+        .callout
+          label
+            | CWID
+            input(id='cwid', type='text', name='cwid', placeHolder='CWID')
+          label
+            | Password
+            input(id='password', type='password', name='password', placeHolder='Password')
+          button.button#login-form-submit Submit
+        
+block scripts
+  script(src='/js/login.js', type='application/javascript')

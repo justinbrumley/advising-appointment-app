@@ -17,7 +17,7 @@ module.exports = function(sequelize, DataTypes) {
     password: {
       type: Sequelize.STRING,
       set: function(v) {
-        var salt = bcrypt.genSaltSync(13);
+        var salt = bcrypt.genSaltSync(3);
         var hash = bcrypt.hashSync(v, salt);
         this.setDataValue('password', hash);
       }
@@ -25,6 +25,14 @@ module.exports = function(sequelize, DataTypes) {
     role: {
       type: Sequelize.ENUM,
       values: ['advisee', 'admin', 'advisor', 'super_admin', 'student_worker']
+    }
+  }, {
+    instanceMethods: {
+      verifyPassword: function(password, done) {
+        return bcrypt.compare(password, this.password, function(err, res) {
+          return done(err, res);
+        });
+      }
     }
   });
   

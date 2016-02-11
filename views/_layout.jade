@@ -12,9 +12,13 @@ html
     .row.full-width
       .columns.small-12.sub-header
             #loginButton
-              a(href='/users/login') Login
-              // Temporary register button
-              a(href='/users/register' style='padding-left:15px;') Register
+              if isAuthenticated
+                | Hi, #{user}
+                a(href='/users/logout') Logout
+              else
+                a(href='/users/login') Login
+                // Temporary register button
+                a(href='/users/register' style='padding-left:15px;') Register
     .row.full-width
       .columns.small-12.header
         img(src='/img/ulm_logo.png')
