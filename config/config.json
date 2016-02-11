@@ -18,7 +18,7 @@
     "username": "root",
     "password": "SuperSecurePassword123",
     "database": "advising_appointment_db",
-    "host": "54.237.21.27",
+    "host": "grouponedb-cluster.cluster-cvg2mbjfxvtv.us-east-1.rds.amazonaws.com",
     "dialect": "mysql",
     "dialectOptions": {
       "SSL_VERIFY_SERVER_CERT": "./certs/mysql-ssl-ca-cert.pem"
