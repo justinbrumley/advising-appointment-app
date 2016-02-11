@@ -40,12 +40,12 @@ module.exports = function(sequelize, DataTypes) {
   user.sync().then(function() {
     user.find({
       where: {
-        cwid: '999999999'
+        cwid: '99999999'
       }
-    }).then(function(user) {
-      if(!user) {
+    }).then(function(u) {
+      if(!u) {
         user.create({
-          cwid: '999999999',
+          cwid: '99999999',
           username: 'super_admin',
           password: 'SuperSecurePassword123',
           role: 'super_admin'
