@@ -4,6 +4,7 @@ var Sequelize = require('sequelize');
 var config;
 
 var env = process.env.NODE_ENV || 'dev';
+console.log('Pulling ' + env + ' config');
 if(env == 'production') {
   config = require('../config/config.json').production;
 } else {
