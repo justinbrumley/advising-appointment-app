@@ -21,7 +21,7 @@
     "host": "54.237.21.27",
     "dialect": "mysql",
     "dialectOptions": {
-      "ssl": "Amazon RDS"
+      "SSL_VERIFY_SERVER_CERT": "./certs/mysql-ssl-ca-cert.pem"
     }
   }
 }
