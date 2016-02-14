@@ -4,29 +4,32 @@ var Sequelize = require('sequelize');
 var config;
 
 var env = process.env.NODE_ENV || 'dev';
-if(env == 'production') {
+if (env == 'production') {
   config = require('../config/config.json').production;
-} else {
+}
+else {
   config = require('../config/config.json').development;
 }
 
 console.log("Connecting to database at " + config.host);
 
 var sequelize = new Sequelize(config.database, config.username, config.password, {
-    host: config.host,
-    port: 3306,
-    dialect: config.dialect,
-    dialectOptions: config.dialectOptions,
-    logging: true,
-    pool: {
-      maxConnections: 5,
-      maxIdleTime: 30
-    }
-  });
+  host: config.host,
+  port: 3306,
+  dialect: config.dialect,
+  dialectOptions: config.dialectOptions,
+  logging: true,
+  pool: {
+    maxConnections: 5,
+    maxIdleTime: 30
+  }
+});
 
 var models = [
-  'appointment',
-  'user'
+  'Appointment',
+  'User',
+  'Role',
+  'UserRole'
 ];
 
 models.forEach(function(model) {
@@ -35,13 +38,28 @@ models.forEach(function(model) {
 });
 
 (function(m) {
-  // Advisor associations
-  m.user.hasMany(m.appointment, {
+  // Appointment associations
+  m.User.hasMany(m.Appointment, {
     foreignKey: 'advisor_cwid'
   });
-  m.appointment.belongsTo(m.user, {
+  m.Appointment.belongsTo(m.User, {
     foreignKey: 'advisor_cwid'
   });
+  //Role Association
+  m.User.hasMany(m.UserRole, {
+    foreignKey: 'cwid'
+  });
+
+  m.Role.hasMany(m.UserRole, {
+    foreignKey: 'role_id'
+  });
+  m.UserRole.belongsTo(m.Role, {
+    foreignKey: 'role_id'
+  });
+  m.UserRole.belongsTo(m.User, {
+    foreignKey: 'cwid'
+  });
+
 
 })(module.exports);
 

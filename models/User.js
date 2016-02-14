@@ -4,7 +4,7 @@ var Sequelize = require("sequelize");
 var bcrypt = require('bcryptjs');
 
 module.exports = function(sequelize, DataTypes) {
-  var user = sequelize.define("user", {
+  var User = sequelize.define("User", {
     cwid: {
       type: Sequelize.STRING,
       allowNull: false,
@@ -21,10 +21,6 @@ module.exports = function(sequelize, DataTypes) {
         var hash = bcrypt.hashSync(v, salt);
         this.setDataValue('password', hash);
       }
-    },
-    role: {
-      type: Sequelize.ENUM,
-      values: ['advisee', 'admin', 'advisor', 'super_admin', 'student_worker']
     }
   }, {
     instanceMethods: {
@@ -37,14 +33,14 @@ module.exports = function(sequelize, DataTypes) {
   });
   
   // Sync and seed the user table
-  user.sync().then(function() {
-    user.find({
+  User.sync().then(function() {
+    User.find({
       where: {
         cwid: '99999999'
       }
     }).then(function(u) {
       if(!u) {
-        user.create({
+        User.create({
           cwid: '99999999',
           username: 'super_admin',
           password: 'SuperSecurePassword123',
@@ -54,5 +50,5 @@ module.exports = function(sequelize, DataTypes) {
     })
   });
   
-  return user;
+  return User;
 };
