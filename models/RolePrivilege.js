@@ -4,12 +4,12 @@ var Sequelize = require("sequelize");
 //var bcrypt = require('bcryptjs');
 
 module.exports = function(sequelize, DataTypes) {
-    var UserRole = sequelize.define("UserRole", {
-        cwid: {
-            type: Sequelize.STRING,
+    var RolePrivilege = sequelize.define("RolePrivilege", {
+        role_id: {
+            type: Sequelize.INTEGER,
             allowNull: false
         },
-        role_id: {
+        privilege_id: {
             type: Sequelize.INTEGER,
             allowNull: false
         }
@@ -23,5 +23,5 @@ module.exports = function(sequelize, DataTypes) {
         }); 
     });
 */
-    return UserRole;
+    return RolePrivilege;
 };

@@ -4,20 +4,20 @@ var Sequelize = require("sequelize");
 //var bcrypt = require('bcryptjs');
 
 module.exports = function(sequelize, DataTypes) {
-  var Role = sequelize.define("Role", {
+  var Privilege = sequelize.define("Privilege", {
     id: {
       type: Sequelize.INTEGER,
       allowNull: false,
       primaryKey: true
     },
-    role: {
+    privilege: {
       type: Sequelize.STRING,
       allowNull: false
     },
   });
   
   // Sync and seed the user table
-  Role.sync().then(function() {
+  Privilege.sync().then(function() {
   /*  return Role.bulkCreate([
     { id: 1, role: 'advisee' },
     { id: 2, role: 'advisor' },
@@ -27,5 +27,5 @@ module.exports = function(sequelize, DataTypes) {
     ]); */
   });
   
-  return Role;
+  return Privilege;
 };

@@ -59,6 +59,8 @@ models.forEach(function(model) {
   m.UserRole.belongsTo(m.User, {
     foreignKey: 'cwid'
   });
+  //Privilege Association
+
 
 
 })(module.exports);
