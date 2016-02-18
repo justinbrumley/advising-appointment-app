@@ -29,7 +29,9 @@ var models = [
   'Appointment',
   'User',
   'Role',
-  'UserRole'
+  'UserRole',
+  'RolePrivilege',
+  'Privilege'
 ];
 
 models.forEach(function(model) {
@@ -59,8 +61,20 @@ models.forEach(function(model) {
   m.UserRole.belongsTo(m.User, {
     foreignKey: 'cwid'
   });
-  //Privilege Association
+  //Privilege Assoociation
+  m.Role.hasMany(m.RolePrivilege, {
+    foreignKey: 'role_id'
+  });
 
+  m.Privilege.hasMany(m.RolePrivilege, {
+    foreignKey: 'role_id'
+  });
+  m.RolePrivilege.belongsTo(m.Role, {
+    foreignKey: 'role_id'
+  });
+  m.RolePrivilege.belongsTo(m.Privilege, {
+    foreignKey: 'role_id'
+  });
 
 
 })(module.exports);
