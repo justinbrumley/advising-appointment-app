@@ -3,7 +3,7 @@ var router = express.Router();
 var models = require('../models');
 var sequelize = models.sequelize;
 
-var User = models['user'];
+var User = models['User'];
 
 // -------------------------
 // Set up /users routes
