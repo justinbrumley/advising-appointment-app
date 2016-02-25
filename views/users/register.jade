@@ -17,6 +17,14 @@ block content
           label
             | Verify Password
             input(id='passwordVerify', type='password', placeHolder='Password')
+          label
+            | Select Role (Are you an advisor, student, etc..)
+            select(name='roleDropDown')
+             option(value='Advisee') Student
+             option(value='Advisor') Advisor
+             option(value='Administrator') Administrator
+             option(value='Student_Worker') Student Worker
+
           button.button#register-form-submit Submit
         
 block scripts
