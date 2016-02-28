@@ -6,8 +6,7 @@ var config;
 var env = process.env.NODE_ENV || 'dev';
 if (env == 'production') {
   config = require('../config/config.json').production;
-}
-else {
+} else {
   config = require('../config/config.json').development;
 }
 
