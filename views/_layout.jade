@@ -10,7 +10,7 @@ html
     
   body
     if isAuthenticated
-      | Hi, #{user}
+      .top-bar-button.top-bar-button-two Hi, #{user}
       a.top-bar-button.top-bar-button-one(href='/users/logout') Logout
     else
       a.top-bar-button.top-bar-button-two(href='/users/login') Login
@@ -24,5 +24,6 @@ html
     
     script(src='/js/jquery.js' type='application/javascript')
     script(src='/js/foundation.min.js' type='application/javascript')
+    script(src='/js/jquery.blockUI.js' type='application/javascript')
     script(src='/js/knockout.js' type='application/javascript')
     block scripts

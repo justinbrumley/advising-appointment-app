@@ -24,7 +24,7 @@ body {
   top: -1px;
   background-color: #3B0000;
   height: 50px;
-  width: 80px;
+  /* width: 80px; */
   line-height: 45px;
   padding-left: 10px;
   padding-right: 10px;
@@ -65,6 +65,11 @@ body {
 
 .register-form, .login-form {
   padding-top:10px;
+  margin-bottom: 20px;
+  
+  .callout {
+    border-radius: 20px;
+  }
   
   button {
     width: 100%;

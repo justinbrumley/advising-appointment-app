@@ -13,6 +13,18 @@ $('#register-form-submit').on('click', function(e) {
     return false;
   }
   
+  $.blockUI({ css: { 
+    border: 'none', 
+    padding: '15px', 
+    backgroundColor: '#000', 
+    '-webkit-border-radius': '10px', 
+    '-moz-border-radius': '10px', 
+    opacity: .5, 
+    color: '#fff' 
+  },
+    message: "Logging in..."
+  });
+  
   $.ajax({
     accepts: 'json',
     data: {
@@ -24,6 +36,7 @@ $('#register-form-submit').on('click', function(e) {
     url: '/users/register',
     type: 'POST'
   }).done(function(data) {
+    $.unblockUI();
     if(data) {
       if(data.success == true) {
         // Success - User created

@@ -4,6 +4,17 @@ var $cwid = $('#cwid');
 var $password = $('#password');
 
 $('#login-form-submit').on('click', function(e) {
+  $.blockUI({ css: { 
+    border: 'none', 
+    padding: '15px', 
+    backgroundColor: '#000', 
+    '-webkit-border-radius': '10px', 
+    '-moz-border-radius': '10px', 
+    opacity: .5, 
+    color: '#fff' 
+  },
+    message: "Logging in..."
+  });
   $.ajax({
     url: '/users/login',
     accepts: 'json',
@@ -14,6 +25,7 @@ $('#login-form-submit').on('click', function(e) {
     dataType: 'json',
     type: 'POST'
   }).done(function(data) {
+    $.unblockUI();
     if(data) {
       if(data.success == true) {
         // Success - User logged in
