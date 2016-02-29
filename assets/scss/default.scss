@@ -69,6 +69,10 @@ body {
   
   .callout {
     border-radius: 20px;
+    
+    &.alert {
+      text-align: center;
+    }
   }
   
   button {

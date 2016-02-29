@@ -2,6 +2,7 @@
 
 var $cwid = $('#cwid');
 var $password = $('#password');
+var $error = $('#login-error');
 
 $('#login-form-submit').on('click', function(e) {
   $.blockUI({ css: { 
@@ -33,6 +34,9 @@ $('#login-form-submit').on('click', function(e) {
       } else {
         // Failed - Error message
         console.log(data.message);
+        $error.text(data.message);
+        $error.show();
+        setTimeout(function() { $error.hide(); }, 4000);
       }
     } else {
       // No data received. Assume error

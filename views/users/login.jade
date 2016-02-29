@@ -4,6 +4,10 @@ block content
   form.login-form(method='POST')
     .row
       .columns.small-12.medium-6.medium-offset-3
+        #login-error.callout.alert.alert-box(data-alert, hidden)
+          | Error logging in. Please try again.
+    .row
+      .columns.small-12.medium-6.medium-offset-3
         .callout
           label
             | CWID
