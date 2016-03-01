@@ -1,8 +1,8 @@
 extends ../_layout.jade
 
 block content
-  form.login-form(method='POST')
-    .row(data-bind='if: error')
+  .login-form
+    .row(data-bind='visible: showError', style='display:none;')
       .columns.small-12.medium-6.medium-offset-3
         .callout.alert.alert-box(data-alert, data-bind='text: error')
     .row

@@ -3,6 +3,7 @@ var viewModel = {
   cwid: ko.observable(),
   password: ko.observable(),
   error: ko.observable(),
+  showError: ko.observable(),
   
   login: function(e) {
     $.blockUI({ css: { 
@@ -35,7 +36,9 @@ var viewModel = {
           // Failed - Error message
           console.log(data.message);
           this.error(data.message);
-          setTimeout(function() { this.error(null); }.bind(this), 4000);
+          this.showError(true);
+          // Clear out error messages after 4 seconds.
+          setTimeout(function() { this.showError(false); this.error(null); }.bind(this), 4000);
         }
       } else {
         // No data received. Assume error
@@ -47,4 +50,6 @@ var viewModel = {
   }
 }
 
-ko.applyBindings(viewModel);
+$(document).ready(function() {
+  ko.applyBindings(viewModel);
+});
