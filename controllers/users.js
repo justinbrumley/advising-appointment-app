@@ -4,6 +4,8 @@ var models = require('../models');
 var sequelize = models.sequelize;
 
 var User = models['User'];
+var UserRole = models['UserRole'];
+var Role = models['Role'];
 
 // -------------------------
 // Set up /users routes
@@ -81,9 +83,13 @@ router.post('/login', function(req, res) {
   User.find({
     where: {
       cwid: cwid
-    }
+    },
+    include: [{
+      model: UserRole,
+      include: [ Role ]
+    }]
   }).then(function(user) {
-    console.log(JSON.stringify(user));
+    console.log("User", JSON.stringify(user));
     if(user) {
       user.verifyPassword(password, function(err, success) {
         if(err) {
@@ -99,7 +105,7 @@ router.post('/login', function(req, res) {
           req.session = req.session || {};
           req.session.isAuthenticated = true;
           req.session.user = user.username;
-          req.session.role = user.role;
+          req.session.role = user.UserRoles[0].Role.role;
           return res.json({
             success: true
           });

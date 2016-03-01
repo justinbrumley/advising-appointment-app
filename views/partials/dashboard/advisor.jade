@@ -1,0 +1,20 @@
+br
+.row
+  .columns.small-3.medium-3
+    .callout.sidebar
+      button.button Adjenda
+      button.button Calendar
+      button.button Settings
+  .columns.small-9.medium-9.content-town
+    #advisorCalendar
+    
+script.
+  $(document).ready(function() {
+    $('#advisorCalendar').fullCalendar({
+      header: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'month,basicWeek,basicDay'
+      }
+    });
+  });
