@@ -7,17 +7,17 @@ block content
         .callout
           label
             | CWID
-            input(id='cwid', type='text', name='cwid', placeHolder='CWID')
+            input(data-bind='value: cwid', id='cwid', type='text', name='cwid', placeHolder='CWID')
           label
             | Username
-            input(id='username', type='text', name='username', placeHolder='Username')
+            input(data-bind='value: username', id='username', type='text', name='username', placeHolder='Username')
           label
             | Password
-            input(id='password', type='password', name='password', placeHolder='Password')
+            input(data-bind='value: password', id='password', type='password', name='password', placeHolder='Password')
           label
             | Verify Password
-            input(id='passwordVerify', type='password', placeHolder='Password')
-          button.button#register-form-submit Submit
+            input(data-bind='value: passwordVerify', id='passwordVerify', type='password', placeHolder='Password')
+          button.button(data-bind='click: register') Submit
         
 block scripts
   script(src='/js/register.js', type='application/javascript')
