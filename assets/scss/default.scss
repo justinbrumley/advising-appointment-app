@@ -80,6 +80,14 @@ body {
   }
 }
 
+.sidebar {
+  border-radius: 10px;
+  .button {
+    width: 100%;
+    border-radius: 10px;
+  }
+}
+
 @media only screen and (max-device-width: $mobileWidth) {
   /*  Mobile Styles */
   .header {
