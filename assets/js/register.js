@@ -1,13 +1,21 @@
 'use strict';
-var viewModel = {
-  cwid: ko.observable(),
-  username: ko.observable(),
-  password: ko.observable(),
-  passwordVerify: ko.observable(),
+
+$(document).ready(function() {
+  // ------------
+  // Variables
+  // ------------
+  var $cwidEl = $('#cwid');
+  var $passwordEl = $('#password');
+  var $verifyPasswordEl = $('#passwordVerify');
+  var $usernameEl = $('#username');
+  var $submitButtonEl = $('#registerSubmit');
   
-  register: function(e) {
+  // ------------
+  // Functions
+  // ------------
+  function register() {
     // Validate passwords match
-    if(this.password !== this.passwordVerify) {
+    if($passwordEl.val() !== $verifyPasswordEl.val()) {
       // Show error
       console.log("Passwords do no match!");
       return false;
@@ -22,15 +30,15 @@ var viewModel = {
       opacity: .5, 
       color: '#fff' 
     },
-      message: "Logging in..."
+      message: "Registering..."
     });
     
     $.ajax({
       accepts: 'json',
       data: {
-        cwid: this.cwid,
-        username: this.username,
-        password: this.password
+        cwid: $cwidEl.val(),
+        username: $usernameEl.val(),
+        password: $passwordEl.val()
       },
       dataType: 'json',
       url: '/users/register',
@@ -53,7 +61,10 @@ var viewModel = {
     
     return false;
   }
-  }
-
-ko.applyBindings(viewModel);
+  
+  // ------------
+  // Bindings
+  // ------------
+  $submitButtonEl.on('click', register);
+});
 

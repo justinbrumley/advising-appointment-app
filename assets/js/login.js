@@ -19,7 +19,7 @@ $(document).ready(function() {
       $errorEl.text('');
       $errorEl.hide();
     }, 4000);
-  };
+  }
   
   function login() {
     $.blockUI({ 
@@ -61,7 +61,7 @@ $(document).ready(function() {
         console.log("no response");
       }
     });
-  };
+  }
   
   // ---------------
   // Bindings
