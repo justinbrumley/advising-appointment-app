@@ -2,19 +2,19 @@ extends ../_layout.jade
 
 block content
   .login-form
-    .row(data-bind='visible: showError', style='display:none;')
+    .row
       .columns.small-12.medium-6.medium-offset-3
-        .callout.alert.alert-box(data-alert, data-bind='text: error')
+        .callout.alert.alert-box(data-alert, hidden)
     .row
       .columns.small-12.medium-6.medium-offset-3
         .callout
           label
             | CWID
-            input(data-bind='value: cwid', id='cwid', type='text', name='cwid', placeHolder='CWID')
+            input(id='cwid', type='text', name='cwid', placeHolder='CWID')
           label
             | Password
-            input(data-bind='value: password', id='password', type='password', name='password', placeHolder='Password')
-          button.button(data-bind='click: login') Submit
+            input(id='password', type='password', name='password', placeHolder='Password')
+          button.button#loginSubmit Submit
 
 block scripts
   script(src='/js/login.js', type='application/javascript')
