@@ -5,13 +5,13 @@ var sass = require('gulp-sass');
 var uglify = require('gulp-uglify');
 
 gulp.task('js-min', function() {
-  return gulp.src('assets/js/*.js')
+  return gulp.src(['assets/js/*.js', 'assets/js/**/*.js'])
     .pipe(uglify())
     .pipe(gulp.dest('public/js'));
 });
 
 gulp.task('js-min:watch', function() {
-  gulp.watch(['./assets/js/*.js'], ['js-min']);
+  gulp.watch(['./assets/js/*.js', './assets/js/**/*.js'], ['js-min']);
 });
 
 gulp.task('sass', function() {

@@ -1,31 +1,30 @@
 extends ../_layout.jade
 
 block content
-  form.register-form(method='POST')
+  .register-form
     .row
       .columns.small-12.medium-6.medium-offset-3
         .callout
           label
             | CWID
-            input(data-bind='value: cwid', id='cwid', type='text', name='cwid', placeHolder='CWID')
+            input(id='cwid', type='text', name='cwid', placeHolder='CWID')
           label
             | Username
-            input(data-bind='value: username', id='username', type='text', name='username', placeHolder='Username')
+            input(id='username', type='text', name='username', placeHolder='Username')
           label
             | Password
-            input(data-bind='value: password', id='password', type='password', name='password', placeHolder='Password')
+            input(id='password', type='password', name='password', placeHolder='Password')
           label
             | Verify Password
-            input(data-bind='value: passwordVerify', id='passwordVerify', type='password', placeHolder='Password')
+            input(id='passwordVerify', type='password', placeHolder='Password')
           label
             | Select Role (Are you an advisor, student, etc..)
-            select(name='roleDropDown')
-             option(value='Advisee') Student
-             option(value='Advisor') Advisor
-             option(value='Administrator') Administrator
-             option(value='Student_Worker') Student Worker
-          button.button(data-bind='click: register') Submit
-          
-        
+            select(id='role', name='roleDropDown')
+              option(value='Advisee') Student
+              option(value='Advisor') Advisor
+              option(value='Administrator') Administrator
+              option(value='Student_Worker') Student Worker
+          button.button#registerSubmit Submit
+
 block scripts
   script(src='/js/register.js', type='application/javascript')
