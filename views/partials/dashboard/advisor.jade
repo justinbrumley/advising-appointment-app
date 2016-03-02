@@ -1,19 +1,24 @@
 br
 .row
-  .columns.small-3.medium-3
+  .columns.small-12.medium-3
     .callout.sidebar
-      button.button Calendar
-      button.button Settings
-  .columns.small-9.medium-9.content-town
-    #advisorCalendar
+      button.button(data-bind='click: showCalendar') Calendar
+      button.button(data-bind='click: showConfig') Configure Times
+      button.button(data-bind='click: showSettings') Settings
+  .columns.small-12.medium-9.content-town
+    // ko if: isState('calendar')
+    .calendar-town
+      #advisorCalendar
+    // /ko
     
-script.
-  $(document).ready(function() {
-    $('#advisorCalendar').fullCalendar({
-      header: {
-        left: 'prev,next today',
-        center: 'title',
-        right: 'month,basicWeek,basicDay'
-      }
-    });
-  });
+    // ko if: isState('appointments')
+    .appointments-town
+      h4 Appointments Town
+    // /ko
+    
+    // ko if: isState('settings')
+    .settings-town
+      h4 Settings Town
+    // /ko
+    
+script(src='/js/advisor/dashboard.js', type='application/javascript')
