@@ -32,23 +32,7 @@ module.exports = function(sequelize, DataTypes) {
     }
   });
   
-  // Sync and seed the user table
-  User.sync().then(function() {
-    User.find({
-      where: {
-        cwid: '99999999'
-      }
-    }).then(function(u) {
-      if(!u) {
-        User.create({
-          cwid: '99999999',
-          username: 'super_admin',
-          password: 'SuperSecurePassword123',
-          role: 'super_admin'
-        })
-      }
-    })
-  });
+ 
   
   return User;
 };
