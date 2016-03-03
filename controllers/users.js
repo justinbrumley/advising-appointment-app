@@ -1,4 +1,5 @@
 var express = require('express');
+var async = require('async');
 var router = express.Router();
 var models = require('../models');
 var sequelize = models.sequelize;
@@ -23,45 +24,96 @@ router.post('/register', function(req, res) {
   var cwid = req.body.cwid;
   var username = req.body.username;
   var password = req.body.password;
-  
-  User.find({
-    where: {
-      cwid: cwid
+  var role = req.body.role;
+  console.log("Role", role);
+
+  async.waterfall([
+    // Check if user already exists
+    function(callback) {
+      User.find({
+        where: {
+          cwid: cwid
+        }
+      }).done(function(user) {
+        if (user) {
+          // User already exists
+          callback('User already exists');
+        }
+        else {
+          callback(null);
+        }
+      });
+    },
+    // Create the User
+    function(callback) {
+      User.create({
+        cwid: cwid,
+        username: username,
+        password: password
+      }).done(function(user) {
+        if (!user) {
+          callback('Error while trying to create user');
+        }
+        else {
+          callback(null, user);
+        }
+      });
+    },
+    // Create the UserRole
+    function(user, callback) {
+      UserRole.create({
+        cwid: cwid,
+        role_id: role
+      }).done(function(userRole) {
+        // Get the role name to store in session
+        if (!userRole) {
+          callback('Error while adding to UserRole');
+        }
+        else {
+          callback(null, user, userRole);
+        }
+      });
+    },
+    // Get the Role Name
+    function(user, userRole, callback) {
+      Role.find({
+        where: {
+          id: userRole.role_id
+        }
+      }).done(function(role) {
+        if (!role) {
+          callback('Error locating role');
+        }
+        else {
+          callback(null, user, role.role)
+        }
+      });
+    },
+    // Set the session data as logged in
+    function(user, role, callback) {
+      if (!req.session) {
+        req.session = {};
+      }
+      req.session.isAuthenticated = true;
+      req.session.user = user.username;
+      req.session.role = role;
+      
+      callback(null, user);
     }
-  }).done(function(user) {
-    if (user) {
-      // User already exists
-      return res.json({
+  ], function(err, user) {
+    // Register Waterfall callback
+    if (err) {
+      console.log(err);
+      res.json({
         success: false,
-        message: 'CWID already exists'
+        message: err
+      });
+    } else {
+      res.json({
+        success: true,
+        message: user
       });
     }
-    
-    // Create user
-    User.create({
-      cwid: cwid,
-      username: username,
-      password: password,
-      role: 'student'
-    }).done(function(user) {
-      if(user) {
-        // set the session data as logged in
-        if(!req.session) {
-          req.session = {};
-        }
-        req.session.isAuthenticated = true;
-        req.session.user = username;
-        req.session.role = user.role;
-        return res.json({
-          success: true,
-          message: user
-        });
-      } else {
-        return res.json({
-          success: false
-        });
-      }
-    });
   });
 });
 
@@ -72,35 +124,35 @@ router.get('/login', function(req, res) {
 router.post('/login', function(req, res) {
   var cwid = req.body.cwid;
   var password = req.body.password;
-  
-  if(!cwid || !password) {
+
+  if (!cwid || !password) {
     return res.json({
       success: false,
       message: 'No credentials'
     })
   }
-  
+
   User.find({
     where: {
       cwid: cwid
     },
     include: [{
       model: UserRole,
-      include: [ Role ]
+      include: [Role]
     }]
   }).then(function(user) {
     console.log("User", JSON.stringify(user));
-    if(user) {
+    if (user) {
       user.verifyPassword(password, function(err, success) {
-        if(err) {
+        if (err) {
           console.log(err);
           return res.json({
             success: false,
             message: 'Error validating password'
           });
         }
-        
-        if(success) {
+
+        if (success) {
           // Successfully authenticated
           req.session = req.session || {};
           req.session.isAuthenticated = true;
@@ -109,7 +161,8 @@ router.post('/login', function(req, res) {
           return res.json({
             success: true
           });
-        } else {
+        }
+        else {
           // Passwords don't match
           return res.json({
             success: false,
@@ -117,7 +170,8 @@ router.post('/login', function(req, res) {
           });
         }
       });
-    } else {
+    }
+    else {
       return res.json({
         success: false,
         message: 'invalid credentials'

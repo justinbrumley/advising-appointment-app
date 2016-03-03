@@ -8,6 +8,7 @@ $(document).ready(function() {
   var $passwordEl = $('#password');
   var $verifyPasswordEl = $('#passwordVerify');
   var $usernameEl = $('#username');
+  var $role = $('#role');
   var $submitButtonEl = $('#registerSubmit');
   
   // ------------
@@ -38,7 +39,8 @@ $(document).ready(function() {
       data: {
         cwid: $cwidEl.val(),
         username: $usernameEl.val(),
-        password: $passwordEl.val()
+        password: $passwordEl.val(),
+        role: $role.val()
       },
       dataType: 'json',
       url: '/users/register',
