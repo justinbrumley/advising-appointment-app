@@ -5,7 +5,8 @@
     "database": "test_db",
     "host": "localhost",
     "dialect": "mysql",
-    "dialectOptions": {}
+    "dialectOptions": {},
+    "seederStorage": "sequelize"
   },
   "test": {
     "username": "root",
@@ -19,6 +20,7 @@
     "password": "SuperSecurePassword123",
     "database": "advising_appointment_db",
     "host": "grouponedb-cluster.cluster-cvg2mbjfxvtv.us-east-1.rds.amazonaws.com",
+    "seederStorage": "sequelize",
     "dialect": "mysql",
     "dialectOptions": {
       "SSL_VERIFY_SERVER_CERT": "./certs/mysql-ssl-ca-cert.pem"
