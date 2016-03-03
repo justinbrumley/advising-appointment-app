@@ -5,7 +5,7 @@ var app = express();
 var models = require('./models');
 var bodyParser = require('body-parser');
 var favicon = require('serve-favicon');
-var middleware = require('./controllers/middleware');
+var authLocals = require('./controllers/middleware').authLocals;
 var session = require('express-session');
 
 var port = process.env.PORT || 8080;
@@ -36,7 +36,7 @@ app.use(session({
 app.use(favicon(__dirname + '/favicon.ico'));
 
 // Load middleware
-middleware(app);
+app.use(authLocals);
 
 // ----------------------------
 // Controller initialization

@@ -50,7 +50,7 @@ $(document).ready(function() {
       if(data) {
         if(data.success == true) {
           // Success - User created
-          window.location.href = '/';
+          window.location.href = '/dashboard';
         } else {
           // Failed - Error message
           console.log(data.message);
