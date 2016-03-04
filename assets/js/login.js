@@ -21,7 +21,8 @@ $(document).ready(function() {
     }, 4000);
   }
   
-  function login() {
+  function login(e) {
+    e.preventDefault();
     $.blockUI({ 
       css: { 
         border: 'none', 
