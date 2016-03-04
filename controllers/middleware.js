@@ -7,6 +7,7 @@ module.exports = {
       res.locals = {
         user: req.session.user || '',
         isAuthenticated: req.session.isAuthenticated || false,
+        cwid: req.session.cwid || '',
         role: req.session.role || ''
       };
     }
@@ -14,12 +15,13 @@ module.exports = {
       res.locals = {
         user: '',
         isAuthenticated: false,
-        role: ''
+        role: '',
+        cwid: ''
       };
     }
     next();
   },
-  
+
   requireAuth: function(req, res, next) {
     if(req.session.isAuthenticated) {
       next();

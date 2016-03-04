@@ -34,15 +34,15 @@ body {
   border: solid 1px #510808;
   border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;
-  
+
   &.top-bar-button-one {
     right: 120px;
   }
-  
+
   &.top-bar-button-two {
     right: 200px;
   }
-  
+
   &:hover {
     color: grey;
   }
@@ -50,7 +50,7 @@ body {
 
 .button {
   background-color: #660000;
-  
+
   &:hover {
     background-color: #3B0000;
   }
@@ -66,15 +66,15 @@ body {
 .register-form, .login-form {
   padding-top:10px;
   margin-bottom: 20px;
-  
+
   .callout {
     border-radius: 20px;
-    
+
     &.alert {
       text-align: center;
     }
   }
-  
+
   button {
     width: 100%;
   }
@@ -97,7 +97,7 @@ body {
       padding: 4px 0 4px 0;
     }
   }
-  
+
   .sub-header {
     display: none;
   }

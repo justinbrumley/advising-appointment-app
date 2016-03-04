@@ -1,0 +1,1 @@
+"use strict";$(document).ready(function(){function n(){$.ajax({url:"/api/users/"+t+"/sidebar",type:"GET",dataType:"json",accepts:"json"}).done(function(n){console.log("Top Data",n),$.each(n.options,function(n,t){o.append('<button class="button">'+t+"</button>")})})}var t=$("#userCWID").val(),o=$("#sidebar");n()});

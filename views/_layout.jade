@@ -17,6 +17,7 @@ html
     block scripts
     
   body
+    input(id='userCWID', type='hidden', value='#{cwid}')
     if isAuthenticated
       .top-bar-button.top-bar-button-two Hi, #{user}
       a.top-bar-button.top-bar-button-one(href='/users/logout') Logout

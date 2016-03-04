@@ -1,6 +1,13 @@
 extends ../_layout.jade
 
+block scripts
+  script(src='/js/dashboard.js', type='application/javascript')
+
 block content
+  br
   .row
-    .columns.small-12
-      h2 Dashboard Town
+    .columns.small-12.medium-3
+      .sidebar.callout#sidebar
+    .columns.small-12.medium-9
+      #contentTown
+        h3 CONTENT TOWN

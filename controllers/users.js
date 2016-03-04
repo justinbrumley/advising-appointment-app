@@ -96,8 +96,9 @@ router.post('/register', function(req, res) {
       }
       req.session.isAuthenticated = true;
       req.session.user = user.username;
+      req.session.cwid = user.cwid;
       req.session.role = role;
-      
+
       callback(null, user);
     }
   ], function(err, user) {
@@ -156,8 +157,10 @@ router.post('/login', function(req, res) {
           // Successfully authenticated
           req.session = req.session || {};
           req.session.isAuthenticated = true;
+          req.session.cwid = user.cwid;
           req.session.user = user.username;
           req.session.role = user.UserRoles[0].Role.role;
+          console.log("Role", user.UserRoles[0].Role.role);
           return res.json({
             success: true
           });
