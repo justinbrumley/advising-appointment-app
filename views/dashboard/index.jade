@@ -1,30 +1,44 @@
 extends ../_layout.jade
 
 block scripts
-  script(src='/js/dashboard.js', type='application/javascript')
+  // Load advisor dashboard script
+  if role == 'advisor'
+    script(src='/js/dashboard/advisor.js', type='application/javascript')
+  
+  // Load advisee dashboard script
+  if role == 'advisee'
+    script(src='/js/dashboard/advisee.js', type='application/javascript')
+    
+  // Load student worker dashboard script
+  if role == 'student_worker'
+    script(src='/js/dashboard/student_worker.js', type='application/javascript')
+  
+  // Load admin dashboard script
+  if role == 'admin'
+    script(src='/js/dashboard/admin.js', type='application/javascript')
+  
+  // Load super_admin dashboard script
+  if role == 'super_admin'
+    script(src='/js/dashboard/super_admin.js', type='application/javascript')
 
 block content
   br
-  .row
-    .columns.small-12.medium-3
-      .sidebar.callout#sidebar
-    .columns.small-12.medium-9
-      // Load advisor dashboard
-      if role == 'advisor'
-        include ./_advisor.jade
-      
-      // Load advisee dashboard
-      if role == 'advisee'
-        include ./_advisee.jade
-        
-      // Load student worker dashboard
-      if role == 'student_worker'
-        include ./_student_worker.jade
-      
-      // Load admin dashboard
-      if role == 'admin'
-        include ./_admin.jade
-      
-      // Load super_admin dashboard.
-      if role == 'super_admin'
-        include ./_super_admin.jade
+  // Load advisor dashboard
+  if role == 'advisor'
+    include ./_advisor.jade
+  
+  // Load advisee dashboard
+  if role == 'advisee'
+    include ./_advisee.jade
+    
+  // Load student worker dashboard
+  if role == 'student_worker'
+    include ./_student_worker.jade
+  
+  // Load admin dashboard
+  if role == 'admin'
+    include ./_admin.jade
+  
+  // Load super_admin dashboard.
+  if role == 'super_admin'
+    include ./_super_admin.jade
