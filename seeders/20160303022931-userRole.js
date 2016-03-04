@@ -14,7 +14,9 @@ module.exports = {
     */
     return queryInterface.bulkInsert('UserRoles', [{
       cwid: '99999999',
-      role_id: 4
+      role_id: 4,
+      createdAt: new Date(),
+      updatedAt: new Date()
     }]);
   },
 

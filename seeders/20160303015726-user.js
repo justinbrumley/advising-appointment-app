@@ -11,12 +11,14 @@ module.exports = {
         name: 'John Doe',
         isBetaMember: false
       }], {});
-    
+
     */
     return queryInterface.bulkInsert('Users', [{
       cwid: '99999999',
       username: 'super_admin',
-      password: '$2a$04$4JJs4IfD2P8jykq4BQErfuXjMBbOgMxNdOkaOULOJb4vB1JRV/NES'
+      password: '$2a$04$4JJs4IfD2P8jykq4BQErfuXjMBbOgMxNdOkaOULOJb4vB1JRV/NES',
+      createdAt: new Date(),
+      updatedAt: new Date()
     }], {});
   },
 

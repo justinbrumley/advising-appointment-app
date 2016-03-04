@@ -14,19 +14,29 @@ module.exports = {
     */
     return queryInterface.bulkInsert('Roles', [{
       id: 0,
-      role: 'super_admin'
+      role: 'super_admin',
+      createdAt: new Date(),
+      updatedAt: new Date()
     }, {
       id: 1,
-      role: 'advisee'
+      role: 'advisee',
+      createdAt: new Date(),
+      updatedAt: new Date()
     }, {
       id: 2,
-      role: 'advisor'
+      role: 'advisor',
+      createdAt: new Date(),
+      updatedAt: new Date()
     }, {
       id: 3,
-      role: 'admin'
+      role: 'admin',
+      createdAt: new Date(),
+      updatedAt: new Date()
     }, {
       id: 4,
-      role: 'student_worker'
+      role: 'student_worker',
+      createdAt: new Date(),
+      updatedAt: new Date()
     }]);
   },
 
