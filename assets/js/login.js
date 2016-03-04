@@ -31,7 +31,7 @@ $(document).ready(function() {
         '-webkit-border-radius': '10px', 
         '-moz-border-radius': '10px', 
         opacity: .5, 
-        color: '#fff' 
+        color: '#fff'
       },
       message: "Logging in..."
     });
