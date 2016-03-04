@@ -13,8 +13,8 @@ module.exports = {
       }], {});
     */
     return queryInterface.bulkInsert('UserRoles', [{
-      cwid: '99999999',
-      role_id: 4,
+      cwid: '99999999', // Super_Admin cwid
+      role_id: 0, // Super_Admin role id
       createdAt: new Date(),
       updatedAt: new Date()
     }]);
@@ -30,7 +30,7 @@ module.exports = {
     */
     return queryInterface.bulkDelete('UserRoles', [{
       cwid: '99999999',
-      role_id: '4'
+      role_id: '0'
     }]);
   }
 };

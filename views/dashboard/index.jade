@@ -9,5 +9,22 @@ block content
     .columns.small-12.medium-3
       .sidebar.callout#sidebar
     .columns.small-12.medium-9
-      #contentTown
-        h3 CONTENT TOWN
+      // Load advisor dashboard
+      if role == 'advisor'
+        include ./_advisor.jade
+      
+      // Load advisee dashboard
+      if role == 'advisee'
+        include ./_advisee.jade
+        
+      // Load student worker dashboard
+      if role == 'student_worker'
+        include ./_student_worker.jade
+      
+      // Load admin dashboard
+      if role == 'admin'
+        include ./_admin.jade
+      
+      // Load super_admin dashboard.
+      if role == 'super_admin'
+        include ./_super_admin.jade
