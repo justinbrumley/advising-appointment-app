@@ -1,3 +1,5 @@
 node_modules/
 *.log
 public/css/default.css
+public/js/*.js
+public/js/**/*.js
