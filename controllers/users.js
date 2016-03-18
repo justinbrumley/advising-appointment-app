@@ -25,7 +25,6 @@ router.post('/register', function(req, res) {
   var username = req.body.username;
   var password = req.body.password;
   var role = req.body.role;
-  console.log("Role", role);
 
   async.waterfall([
     // Check if user already exists
@@ -85,7 +84,7 @@ router.post('/register', function(req, res) {
           callback('Error locating role');
         }
         else {
-          callback(null, user, role.role)
+          callback(null, user, role)
         }
       });
     },
@@ -97,7 +96,8 @@ router.post('/register', function(req, res) {
       req.session.isAuthenticated = true;
       req.session.user = user.username;
       req.session.cwid = user.cwid;
-      req.session.role = role;
+      req.session.role = role.role;
+      req.session.role_id = role.id;
 
       callback(null, user);
     }
@@ -142,7 +142,6 @@ router.post('/login', function(req, res) {
       include: [Role]
     }]
   }).then(function(user) {
-    console.log("User", JSON.stringify(user));
     if (user) {
       user.verifyPassword(password, function(err, success) {
         if (err) {
@@ -160,7 +159,7 @@ router.post('/login', function(req, res) {
           req.session.cwid = user.cwid;
           req.session.user = user.username;
           req.session.role = user.UserRoles[0].Role.role;
-          console.log("Role", user.UserRoles[0].Role.role);
+          req.session.role_id = user.UserRoles[0].Role.id;
           return res.json({
             success: true
           });

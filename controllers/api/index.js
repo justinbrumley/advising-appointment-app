@@ -6,6 +6,7 @@ var async = require('async');
 
 var models = require('../../models');
 
+var User = models.User;
 var UserRole = models.UserRole;
 var Role = models.Role;
 
@@ -16,8 +17,8 @@ router.get('/', function(req, res) {
 });
 
 /**
-* Pull list of roles for the logged in user.
-*/
+ * Pull list of roles for the logged in user.
+ */
 router.get('/me/roles', requireAuth, function(req, res) {
   var cwid = req.session.cwid;
 
@@ -43,20 +44,43 @@ router.get('/me/roles', requireAuth, function(req, res) {
       });
     }
   ], function(err, roles) {
-    if(err) {
+    if (err || !roles) {
       res.json({
         success: false,
-        message: err
+        message: err ? err : 'No roles found'
       });
-    } else if(roles) {
+    } else if (roles) {
       res.json({
         success: true,
         roles: roles
       });
+    }
+  });
+});
+
+/**
+ * Set the current role for the user (if they have that role.)
+ */
+router.post('/me/role', requireAuth, function(req, res) {
+  var role_id = +req.body.role_id;
+  var cwid = req.session.cwid;
+
+  User.find({
+    where: {
+      cwid: cwid
+    },
+    include: [UserRole]
+  }).done(function(user) {
+    if(_.pluck(user.UserRoles, 'role_id').indexOf(role_id) >= 0) {
+      req.session.role_id = role_id;
+      res.json({
+        success: true,
+        role_id: role_id
+      });
     } else {
       res.json({
         success: false,
-        message: 'No roles found'
+        message: 'User not in that role'
       });
     }
   });

@@ -14,6 +14,39 @@ html
     script(src='/js/foundation.min.js' type='application/javascript')
     script(src='/js/jquery.blockUI.js' type='application/javascript')
     script(src='//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.6.1/fullcalendar.min.js' type='application/javascript')
+    
+    script(type='application/javascript').
+      $(document).ready(function() {
+        // Get list of roles and bind events
+        $.get({ url: '/api/me/roles' }).done(function(data) {
+          if(data.success) {
+            var $roleDropdownEl = $('#roleDropdown');
+            $.each(data.roles, function(i, ele) {
+              $roleDropdownEl.append('<option value="' + ele.id + '">' + ele.role + '</option>')
+            });
+            
+            // Set initial value of dropdown
+            var role_id = '#{role_id}';
+            console.log("Setting initial value", role_id);
+            $roleDropdownEl.val('#{role_id}')
+            
+            // On role drop down change
+            $roleDropdownEl.on('change', function() {
+              $.post({ 
+                url: '/api/me/role', 
+                data: {
+                  role_id: $(this).val()
+                }
+              }).done(function(data) {
+                if(data.success) {
+                  location.reload();
+                }
+              });
+            });
+          }
+        });
+      });
+    
     block scripts
     
   body
@@ -27,5 +60,9 @@ html
     .row.full-width
       .columns.small-12.header
         img(src='/img/Logo20.png')
+    if isAuthenticated
+      .row.full-width
+        .columns.small-12
+          select#roleDropdown
         
     block content
