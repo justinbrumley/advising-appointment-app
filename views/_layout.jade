@@ -28,7 +28,6 @@ html
             
             // Set initial value of dropdown
             var role_id = '#{role_id}';
-            console.log("Setting initial value", role_id);
             $roleDropdownEl.val('#{role_id}')
             
             // On role drop down change
@@ -53,17 +52,15 @@ html
   body
     input(id='userCWID', type='hidden', value='#{cwid}')
     if isAuthenticated
+      .top-bar-button.top-bar-select
+        select#roleDropdown
       .top-bar-button.top-bar-button-two Hi, #{user}
       a.top-bar-button.top-bar-button-one(href='/users/logout') Logout
     else
-      a.top-bar-button.top-bar-button-two(href='/users/login') Login
+      a.top-bar-button.top-bar-button-three(href='/users/login') Login
       a.top-bar-button.top-bar-button-one(href='/users/register' style='padding-left:15px;') Register
     .row.full-width
       .columns.small-12.header
         img(src='/img/Logo20.png')
-    if isAuthenticated
-      .row.full-width
-        .columns.small-12
-          select#roleDropdown
         
     block content
