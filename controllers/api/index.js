@@ -4,6 +4,7 @@ var requireAuth = require('../middleware').requireAuth;
 var requireRole = require('../middleware').requireRole;
 var _ = require('underscore');
 var async = require('async');
+var uuid = require('node-uuid');
 
 var models = require('../../models');
 
@@ -97,14 +98,19 @@ router.get('/me/appointments', requireRole('advisor'), function(req, res) {
   var startDate = req.params.startdate;
   var endDate = req.params.endDate;
 
-  Appointment.findAll({
+  var search_options = {
     where: {
-      advisor_cwid: req.session.cwid,
-      start_time: {
-        $between: [startDate ? startDate : '1/1/1990', endDate ? endDate : '1/1/3000']
-      }
+      advisor_cwid: req.session.cwid
     }
-  }).done(function(appointments) {
+  };
+
+  if(startDate && endDate) {
+    search_options.where.start_time = {
+      $between: [startDate ? startDate : '1/1/1990', endDate ? endDate : '1/1/3000']
+    }
+  }
+
+  Appointment.findAll(search_options).done(function(appointments) {
     return res.json({
       success: true,
       appointments: appointments
@@ -113,19 +119,49 @@ router.get('/me/appointments', requireRole('advisor'), function(req, res) {
 });
 
 router.post('/me/appointments', requireRole('advisor'), function(req, res) {
-  var apt = req.body.appointment;
-
   Appointment.findAll({
     where: {
       advisor_cwid: req.session.cwid,
-      start_time: {
-        $between: [apt.start_time, apt.start_time]
-      }
+      $or: [
+        {
+          start_time: {
+            $between: [req.body.start_time, req.body.end_time]
+          }
+        },
+        {
+          end_time: {
+            $between: [req.body.start_time, req.body.end_time]
+          }
+        }
+      ]
     }
   }).done(function(appointments) {
-    return res.json({
-      success: true,
-      appointments: appointments
+    console.log("Appointments", appointments);
+    if(appointments && appointments.length) {
+      return res.json({
+        success: false,
+        message: 'Slot(s) not empty'
+      });
+    }
+
+    Appointment.create({
+      id: uuid.v4(),
+      start_time: req.body.start_time,
+      end_time: req.body.end_time,
+      advisor_cwid: req.session.cwid,
+      advisee_cwid: null
+    }).done(function(appointment) {
+      if(!appointment) {
+        return res.json({
+          success: false,
+          message: 'Error adding appointment slot.'
+        });
+      } else {
+        res.json({
+          success: true,
+          appointment: appointment
+        })
+      }
     });
   });
 });
