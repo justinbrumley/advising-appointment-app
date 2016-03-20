@@ -9,6 +9,7 @@ var AdvisorDashboard = function() {
   self.loadElements = function() {
     self.$sidebarButtonEl = $('.sidebar .button');
     self.$content = $('.content').eq(0);
+    self.$appointmentDialogEl = $('appointment-dialog').eq(0);
   };
 
   self.blockContent = function(m) {
@@ -71,6 +72,12 @@ var AdvisorDashboard = function() {
     setTimeout(function() {
       self.unblockContent();
     }, 1000);
+  };
+
+  self.addAppointment = function() {
+    // Shows dialog to add empty appointment slot(s)
+    console.log("Adding appointment slot");
+    self.$appointmentDialogEl.show();
   };
 
   self.setState = function(s) {

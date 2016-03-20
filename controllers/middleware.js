@@ -51,5 +51,20 @@ module.exports = {
     } else {
       res.redirect('/users/login');
     }
+  },
+
+  requireRole: function(role) {
+    var roles;
+    if(!Array.isArray(role)) {
+      roles = [role];
+    }
+
+    return function(req, res, next) {
+      if(req.session.isAuthenticated && roles.indexOf(req.session.role) >= 0) {
+        next();
+      } else {
+        res.sendStatus(403);
+      }
+    }
   }
 };

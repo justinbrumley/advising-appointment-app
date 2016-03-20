@@ -1,5 +1,10 @@
 extends ../_layout.jade
 
+block head
+  // Load advisor dashboard css
+  if role == 'advisor'
+    link(href='/css/dashboard/advisor.css', rel='stylesheet')
+
 block scripts
   // Load advisor dashboard script
   if role == 'advisor'
