@@ -40,13 +40,39 @@ body {
   }
 
   &.top-bar-button-two {
+    right: 366px;
+  }
+  
+  &.top-bar-button-three {
+    right: 216px;
+  }
+  
+  &.top-bar-select {
     right: 200px;
+    select {
+      width: 100%;
+      color: white;
+      border: 0;
+      font-size: 13px;
+      background-color: #3B0000;
+      
+      &:focus {
+        border: 0;
+        outline: 0px;
+      }
+      
+      option {
+        border: 0;
+        outline: 0px;
+      }
+    }
   }
 
   &:hover {
     color: grey;
   }
 }
+
 
 .button {
   background-color: #660000;
