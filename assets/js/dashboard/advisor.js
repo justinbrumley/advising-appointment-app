@@ -9,7 +9,7 @@ var AdvisorDashboard = function() {
   self.loadElements = function() {
     self.$sidebarButtonEl = $('.sidebar .button');
     self.$content = $('.content').eq(0);
-    self.$appointmentDialogEl = $('appointment-dialog').eq(0);
+    self.$appointmentDialogEl = $('.appointment-dialog').eq(0);
   };
 
   self.blockContent = function(m) {
