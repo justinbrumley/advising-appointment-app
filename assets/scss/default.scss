@@ -50,7 +50,7 @@ body {
   &.top-bar-select {
     right: 200px;
     width: 152px;
-    
+
     select {
       width: 100%;
       color: white;
@@ -59,11 +59,6 @@ body {
       background-color: #3B0000;
 
       &:focus {
-        border: 0;
-        outline: 0px;
-      }
-
-      option {
         border: 0;
         outline: 0px;
       }
