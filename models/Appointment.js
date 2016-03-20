@@ -19,8 +19,8 @@ module.exports = function(sequelize, DataTypes) {
     advisee_cwid: {
       type: Sequelize.STRING
     },
-    duration: {
-      type: Sequelize.INTEGER
+    end_time: {
+      type: Sequelize.DATE
     },
     start_time: {
       type: Sequelize.DATE
