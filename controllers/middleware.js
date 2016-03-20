@@ -8,15 +8,38 @@ module.exports = {
         user: req.session.user || '',
         isAuthenticated: req.session.isAuthenticated || false,
         cwid: req.session.cwid || '',
-        role: req.session.role || ''
+        role: req.session.role || '',
+        role_id: req.session.role_id
       };
+
+      // Override role if role_id is present
+      if(req.session.role_id >= 0) {
+        switch(req.session.role_id) {
+          case 0:
+            res.locals.role = 'super_admin';
+            break;
+          case 1:
+            res.locals.role = 'advisee';
+            break;
+          case 2:
+            res.locals.role = 'advisor';
+            break;
+          case 3:
+            res.locals.role = 'admin';
+            break;
+          case 4:
+            res.locals.role = 'student_worker';
+            break;
+        }
+      }
     }
     else {
       res.locals = {
         user: '',
         isAuthenticated: false,
         role: '',
-        cwid: ''
+        cwid: '',
+        role_id: -1
       };
     }
     next();
