@@ -41,7 +41,10 @@ var AdvisorDashboard = function() {
     var $calendar = $('<div>');
     self.$content.append($calendar);
     $calendar.fullCalendar({
-      height: $(window).height() - 150
+      height: $(window).height() - 150,
+      windowResize: _.debounce(function(ViewModel) {
+        height: $(window).height() - 150;
+      }, 300)
     });
     self.unblockContent();
   };
