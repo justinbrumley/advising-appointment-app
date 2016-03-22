@@ -7,15 +7,14 @@ block content
         .callout.alert.alert-box(data-alert, hidden)
     .row
       .columns.small-12.medium-6.medium-offset-3
-        .callout
-          label
-            | CWID
-            input(id='cwid', type='text', name='cwid', placeHolder='CWID', autofocus='autofocus')
-           
-          label
-            | Password
-            input(id='password', type='password', name='password', placeHolder='Password')
-          button.button#loginSubmit Submit
+        label
+          | CWID
+          input(id='cwid', type='text', name='cwid', placeHolder='CWID', autofocus='autofocus')
+         
+        label
+          | Password
+          input(id='password', type='password', name='password', placeHolder='Password')
+        button.button#loginSubmit Submit
 
 block scripts
   script(src='/js/login.js', type='application/javascript')
