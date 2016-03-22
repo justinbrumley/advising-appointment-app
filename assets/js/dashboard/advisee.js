@@ -67,16 +67,18 @@ var AdviseeDashboard = function() {
       }
 
       // Create calendar dom element
-      var $calendar = $('<div>');
-      self.$content.append($calendar);
+      self.$calendar = $('<div>');
+      self.$content.append(self.$calendar);
 
       // Initialize FullCalendar
-      $calendar.fullCalendar({
+      self.$calendar.fullCalendar({
         header: {
           left: 'prev,next today',
           center: 'title',
-          right: 'month,basicWeek,basicDay'
+          right: 'month,agendaWeek,agendaDay'
         },
+        //theme: true,
+        defaultView: self.calendarState ? self.calendarState : 'month',
         events: events,
         eventClick: function(event) {
           $.ajax({
@@ -86,6 +88,7 @@ var AdviseeDashboard = function() {
               id: event.id
             }
           }).done(function(data) {
+            self.calendarState = self.$calendar.fullCalendar('getView').name;
             self.setState('calendar');
           });
         }
