@@ -59,7 +59,7 @@ var AdvisorDashboard = function() {
           title: a.advisee_cwid ? a.advisee_cwid : 'Empty',
           start: moment.utc(a.start_time).local(),
           end: moment.utc(a.end_time).local(),
-          color: a.advisee_cwid ? 'blue' : 'grey'
+          color: a.advisee_cwid ? '#660000' : 'grey'
         });
       }
 
