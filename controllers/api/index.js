@@ -73,10 +73,15 @@ router.post('/me/role', requireAuth, function(req, res) {
     where: {
       cwid: cwid
     },
-    include: [UserRole]
+    include: [{
+      model: UserRole,
+      include: [ Role ]
+    }]
   }).done(function(user) {
-    if(_.pluck(user.UserRoles, 'role_id').indexOf(role_id) >= 0) {
+    var i = _.pluck(user.UserRoles, 'role_id').indexOf(role_id);
+    if(i >= 0) {
       req.session.role_id = role_id;
+      req.session.role = user.UserRoles[i].Role.role;
       res.json({
         success: true,
         role_id: role_id
@@ -94,40 +99,138 @@ router.post('/me/role', requireAuth, function(req, res) {
 * Finds all appointments for an advisor.
 * Can be filtered by date and whether or not they are empty
 */
-router.get('/me/appointments', requireRole('advisor'), function(req, res) {
-  var filled = req.params.filled;
+router.get('/me/appointments', requireRole('advisor', 'advisee'), function(req, res) {
   var startDate = req.params.startdate;
   var endDate = req.params.endDate;
+  var advisor_cwid = req.session.cwid;
 
-  var search_options = {
-    where: {
-      advisor_cwid: req.session.cwid,
-      start_time: {
-        $not: null
-      },
-      end_time: {
-        $not: null
+  async.waterfall([
+    function(callback) {
+      if(req.session.role == 'advisee') {
+        // Get their advisor's cwid
+        User.find({
+          where: {
+            cwid: req.session.cwid
+          }
+        }).done(function(user) {
+          advisor_cwid = user.cwid;
+          callback();
+        });
+      } else if(req.session.role == 'advisor') {
+        callback();
       }
+    },
+    function(callback) {
+      var search_options = {
+        where: {
+          advisor_cwid: advisor_cwid,
+          start_time: {
+            $not: null
+          },
+          end_time: {
+            $not: null
+          }
+        }
+      };
+
+      if(req.session.role == 'advisee') {
+        // Advisees only see empty appointments or their own
+        search_options.where.$or = [
+          {
+            advisee_cwid: req.session.cwid
+          },
+          {
+            advisee_cwid: {
+              $is: null
+            },
+            start_time: {
+              $gt: moment().add(2, 'days').utc().format()
+            }
+          }
+        ];
+      }
+
+      if(startDate && endDate) {
+        search_options.where.start_time = {
+          $between: [startDate ? startDate : '1/1/1990', endDate ? endDate : '1/1/3000']
+        }
+      }
+
+      Appointment.findAll(search_options).done(function(appointments) {
+        return res.json({
+          success: true,
+          appointments: appointments
+        });
+      });
     }
-  };
+  ]);
+});
 
-  if(filled) {
-    search_options.where.advisee_cwid = {
-      $not: null
-    };
-  }
-
-  if(startDate && endDate) {
-    search_options.where.start_time = {
-      $between: [startDate ? startDate : '1/1/1990', endDate ? endDate : '1/1/3000']
-    }
-  }
-
-  Appointment.findAll(search_options).done(function(appointments) {
+/**
+* Attempt to register student for appointment
+*/
+router.post('/me/appointment', requireRole('advisee'), function(req, res) {
+  function error(message) {
     return res.json({
-      success: true,
-      appointments: appointments
+      success: false,
+      message: message
     });
+  }
+
+  async.series([
+    function(callback) {
+      // Make sure the student doesn't already have an appointment.
+      // If they do, remove it first
+      Appointment.find({
+        where: {
+          advisee_cwid: req.session.cwid
+        }
+      }).done(function(appointment) {
+        if(appointment) {
+          appointment.advisee_cwid = null;
+          appointment.save().then(function(appointment) {
+            if(appointment) {
+              callback();
+            } else {
+              callback('Error removing existing appointment');
+            }
+          });
+        } else {
+          callback();
+        }
+      });
+    },
+    function(callback) {
+      Appointment.find({
+        where: {
+          id: req.body.id
+        }
+      }).done(function(appointment) {
+        if(appointment) {
+          if(appointment.advisee_cwid) {
+            return error('Appointment already taken');
+          } else {
+            appointment.advisee_cwid = req.session.cwid;
+            appointment.save().then(function(appointment) {
+              if(appointment) {
+                return res.json({
+                  success: true,
+                  appointment: appointment
+                });
+              } else {
+                return error('Error trying to save appointment');
+              }
+            });
+          }
+        } else {
+          return error('Appointment not found');
+        }
+      });
+    }
+  ], function(err, results) {
+    if(err) {
+      return error(err);
+    }
   });
 });
 

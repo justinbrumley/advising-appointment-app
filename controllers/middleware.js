@@ -53,10 +53,10 @@ module.exports = {
     }
   },
 
-  requireRole: function(role) {
-    var roles;
-    if(!Array.isArray(role)) {
-      roles = [role];
+  requireRole: function() {
+    var roles = [];
+    for(var i = 0; i < arguments.length; i++) {
+      roles.push(arguments[i]);
     }
 
     return function(req, res, next) {
