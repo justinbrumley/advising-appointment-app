@@ -98,11 +98,12 @@ var AdviseeDashboard = function() {
   * Settings specific setup
   */
   self.settings = function() {
-    console.log("Loading settings...");
+    console.log('Loading settings...');
 
     // TODO Remove this fake load
-    self.blockContent("Loading Settings...")
+    self.blockContent('Loading Settings...')
     setTimeout(function() {
+      self.$content.append('<h3>No settings to show :(</h3>');
       self.unblockContent();
     }, 1000);
   };

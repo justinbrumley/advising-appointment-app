@@ -1,17 +1,22 @@
 'use strict';
 
-// Advisor Dashboard Initialization
+// Advisor Dashboard ViewModel
 var AdvisorDashboard = function() {
   var self = this;
   self.state = null;
 
-  // Fetches elements from the dom
+  /**
+  * Fetches elements from the dom
+  */
   self.loadElements = function() {
     self.$sidebarButtonEl = $('.sidebar .button');
     self.$content = $('.content').eq(0);
     self.$appointmentDialogEl = $('.appointment-dialog').eq(0);
   };
 
+  /**
+  * Blocks content part of DOM
+  */
   self.blockContent = function(m) {
     self.$content.block({
       css: {
@@ -27,11 +32,16 @@ var AdvisorDashboard = function() {
     });
   };
 
+  /**
+  * Unblocks content part of DOM
+  */
   self.unblockContent = function() {
     self.$content.unblock();
   };
 
-  // Calendar specific setup
+  /**
+  * Calendar specific setup
+  */
   self.calendar = function() {
     self.blockContent("Loading Calendar...");
 
@@ -41,6 +51,8 @@ var AdvisorDashboard = function() {
       type: 'GET'
     }).done(function(data) {
       var events = [];
+
+      // Loop throught appointments and add them to events array
       for(var i = 0; i < data.appointments.length; i++) {
         var a = data.appointments[i];
         events.push({
@@ -50,8 +62,12 @@ var AdvisorDashboard = function() {
           color: a.advisee_cwid ? 'blue' : 'grey'
         });
       }
+
+      // Set up calendar DOM
       var $calendar = $('<div>');
       self.$content.append($calendar);
+
+      // Initialize FullCalendar
       $calendar.fullCalendar({
         header: {
           left: 'prev,next today',
@@ -60,43 +76,57 @@ var AdvisorDashboard = function() {
         },
         events: events
       });
+
+      // Unblock page
       self.unblockContent();
     });
   };
 
-  // Agenda specific setup
+  /**
+  * Agenda specific setup
+  */
   self.agenda = function() {
-    console.log("Loading agenda...");
     // TODO Remove this fake load
-    self.blockContent("Loading Agenda...")
+    self.blockContent('Loading Agenda...')
     setTimeout(function() {
+      self.$content.append('<h3>No agenda to show :(</h3>');
       self.unblockContent();
     }, 1000);
   };
 
-  // Settings specific setup
+  /**
+  * Settings specific setup
+  */
   self.settings = function() {
-    console.log("Loading settings...");
-
     // TODO Remove this fake load
     self.blockContent("Loading Settings...")
     setTimeout(function() {
+      self.$content.append('<h3>No settings to show :(</h3>');
       self.unblockContent();
     }, 1000);
   };
 
+  /*
+  * Add appointment slots
+  */
   self.addAppointment = function() {
     // Shows dialog to add empty appointment slot(s)
     console.log("Adding appointment slot");
     self.$appointmentDialogEl.show();
   };
 
+  /**
+  * Set the view state
+  */
   self.setState = function(s) {
     self.$content.html('');
     self.state = s;
     self[self.state]();
   };
 
+  /*
+  * On DOM Loaded
+  */
   $(document).ready(function() {
     // Set initial state to calendar
     self.loadElements();
@@ -110,4 +140,5 @@ var AdvisorDashboard = function() {
   });
 }
 
+// Initialize view model
 var ViewModel = new AdvisorDashboard();
