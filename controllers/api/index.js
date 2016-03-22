@@ -5,6 +5,7 @@ var requireRole = require('../middleware').requireRole;
 var _ = require('underscore');
 var async = require('async');
 var uuid = require('node-uuid');
+var moment = require('moment');
 
 var models = require('../../models');
 
@@ -100,9 +101,21 @@ router.get('/me/appointments', requireRole('advisor'), function(req, res) {
 
   var search_options = {
     where: {
-      advisor_cwid: req.session.cwid
+      advisor_cwid: req.session.cwid,
+      start_time: {
+        $not: null
+      },
+      end_time: {
+        $not: null
+      }
     }
   };
+
+  if(filled) {
+    search_options.where.advisee_cwid = {
+      $not: null
+    };
+  }
 
   if(startDate && endDate) {
     search_options.where.start_time = {
@@ -125,12 +138,12 @@ router.post('/me/appointments', requireRole('advisor'), function(req, res) {
       $or: [
         {
           start_time: {
-            $between: [req.body.start_time, req.body.end_time]
+            $between: [moment(req.body.start_time).utc().format(), moment(req.body.end_time).utc().format()]
           }
         },
         {
           end_time: {
-            $between: [req.body.start_time, req.body.end_time]
+            $between: [moment(req.body.start_time).utc().format(), moment(req.body.end_time).utc().format()]
           }
         }
       ]

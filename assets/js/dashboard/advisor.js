@@ -31,31 +31,42 @@ var AdvisorDashboard = function() {
     self.$content.unblock();
   };
 
+  // Calendar specific setup
   self.calendar = function() {
-    // Calendar specific setup
-    // TODO Load calendar and show it. BlockUI while this is happening.
-    console.log("Loading calendar...");
-    self.$content.html('');
-
-    // TODO Remove this fake load
     self.blockContent("Loading Calendar...");
-    var $calendar = $('<div>');
-    self.$content.append($calendar);
-    $calendar.fullCalendar({
-      height: $(window).height() - 150,
-      windowResize: _.debounce(function() {
-        console.log('butts');
-        $calendar.fullCalendar('option', 'height', $(window).height() - 150);
-      }, 300)
+
+    // Load appointments
+    $.ajax({
+      url: '/api/me/appointments',
+      type: 'GET'
+    }).done(function(data) {
+      var events = [];
+      for(var i = 0; i < data.appointments.length; i++) {
+        var a = data.appointments[i];
+        events.push({
+          title: a.advisee_cwid ? a.advisee_cwid : 'Empty',
+          start: moment.utc(a.start_time).local(),
+          end: moment.utc(a.end_time).local(),
+          color: a.advisee_cwid ? 'blue' : 'grey'
+        });
+      }
+      var $calendar = $('<div>');
+      self.$content.append($calendar);
+      $calendar.fullCalendar({
+        header: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'month,basicWeek,basicDay'
+        },
+        events: events
+      });
+      self.unblockContent();
     });
-    self.unblockContent();
   };
 
+  // Agenda specific setup
   self.agenda = function() {
-    // Agenda specific setup
-    // TODO Load agenda for the day/week. BlockUI while this is happening.
     console.log("Loading agenda...");
-    self.$content.html('');
     // TODO Remove this fake load
     self.blockContent("Loading Agenda...")
     setTimeout(function() {
@@ -63,11 +74,10 @@ var AdvisorDashboard = function() {
     }, 1000);
   };
 
+  // Settings specific setup
   self.settings = function() {
-    // Settings specific setup
-    // TODO Load settings for user and get ready to show them.
     console.log("Loading settings...");
-    self.$content.html('');
+
     // TODO Remove this fake load
     self.blockContent("Loading Settings...")
     setTimeout(function() {
@@ -82,6 +92,7 @@ var AdvisorDashboard = function() {
   };
 
   self.setState = function(s) {
+    self.$content.html('');
     self.state = s;
     self[self.state]();
   };
