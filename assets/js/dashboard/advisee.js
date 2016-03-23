@@ -11,7 +11,7 @@ var AdviseeDashboard = function() {
   * Fetches elements from the DOM
   */
   self.loadElements = function() {
-    self.$sidebarButtonEl = $('.sidebar .button');
+    self.$sidebarButtonEl = $('.nav-item');
     self.$content = $('.content').eq(0);
   };
 

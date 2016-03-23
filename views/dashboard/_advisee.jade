@@ -1,8 +1,16 @@
-// Advisee Dashboard
-.row.full-width
-  .columns.small-12.medium-3.large-2
-    .sidebar
-      button.button(state='calendar') Calendar
-      button.button(state='settings') Settings
-  .columns.small-12.medium-9.large-10
-    .content
+extends ../_layout.jade
+
+block head
+  link(href='/css/dashboard/advisee.css', rel='stylesheet')
+  
+block scripts
+  script(src='/js/dashboard/advisee.js', type='application/javascript')
+
+block nav-items
+  li
+    a.nav-item(state='calendar') Calendar
+  li
+    a.nav-item(state='settings') Settings
+
+block content
+  .content

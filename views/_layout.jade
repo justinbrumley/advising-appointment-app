@@ -6,7 +6,7 @@ html
     
     link(rel='stylesheet', href='/css/foundation.css')
     link(rel='stylesheet', href='/css/fullcalendar.css')
-    link(href='/css/default.css', rel='stylesheet')
+    link(href='/css/rewrite.css', rel='stylesheet')
     block head
     
     script(src='/js/moment.js' type='application/javascript')
@@ -50,6 +50,33 @@ html
     block scripts
     
   body
+    .topbar
+    .sidebar
+      .logo
+        img(src='http://k-104.com/wp-content/uploads/2015/08/Louisiana-Monroe-sportsbook.pics_.gif')
+      if isAuthenticated
+        hr
+        ul
+          li
+            select#roleDropdown
+      hr
+      ul
+        if isAuthenticated
+          li 
+            a(href='/dashboard') #{user}
+          block nav-items
+          li 
+            a(href='/users/logout') Logout
+        else
+          li 
+            a(href='/users/login') Login
+          li 
+            a(href='/users/register') Register
+          block nav-items          
+      hr
+    .content-wrapper
+      block content
+  //
     input(id='userCWID', type='hidden', value='#{cwid}')
     if isAuthenticated
       .top-bar-button.top-bar-select
@@ -62,5 +89,3 @@ html
     .row.full-width
       .columns.small-12.header
         img(src='/img/Logo20.png')
-        
-    block content

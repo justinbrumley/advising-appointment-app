@@ -1,18 +1,28 @@
-// Advisor Dashboard
-.row.full-width
-  .columns.small-12.medium-3.large-2
-    .sidebar
-      button.button(state='calendar') Calendar
-      button.button(state='agenda') Agenda
-      button.button(state='settings') Settings
-      button.button(state='addAppointment') Add Appointment Slot(s)
-  .columns.small-12.medium-9.large-10
-    .content
+extends ../_layout.jade
+
+block head
+  link(href='/css/dashboard/advisor.css', rel='stylesheet')
+  
+block scripts
+  script(src='/js/dashboard/advisor.js', type='application/javascript')
+
+block nav-items
+  li
+    a.nav-item(state='calendar') Calendar
+  li
+    a.nav-item(state='agenda') Agenda
+  li
+    a.nav-item(state='settings') Settings
+  li
+    a.nav-item(state='addAppointment') Add Appointment Slot(s)
+
+block content
+  .content
     
-// Appointment Slot dialog
-.appointment-dialog
-  a.close-dialog-button
-    | x
-  .row
-    .columns.small-12.dialog-content
-        h2 Add Appointment Slot(s)
+  // Appointment Slot dialog
+  .appointment-dialog
+    a.close-dialog-button
+      | x
+    .row
+      .columns.small-12.dialog-content
+          h2 Add Appointment Slot(s)

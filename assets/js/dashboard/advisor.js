@@ -9,7 +9,7 @@ var AdvisorDashboard = function() {
   * Fetches elements from the dom
   */
   self.loadElements = function() {
-    self.$sidebarButtonEl = $('.sidebar .button');
+    self.$sidebarButtonEl = $('.nav-item');
     self.$content = $('.content').eq(0);
     self.$appointmentDialogEl = $('.appointment-dialog').eq(0);
   };
