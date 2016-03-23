@@ -1,5 +1,13 @@
 .login-form {
   padding-top: 15%;
+  position: relative;
+
+  .alert-row {
+    position: absolute;
+    top: 5%;
+    left: 0;
+    right: 0;
+  }
 
   button {
     width: 100%;
