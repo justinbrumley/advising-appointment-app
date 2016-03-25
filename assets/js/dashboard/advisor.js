@@ -11,7 +11,6 @@ var AdvisorDashboard = function() {
   self.loadElements = function() {
     self.$sidebarButtonEl = $('.nav-item');
     self.$content = $('.content').eq(0);
-    self.$appointmentDialogEl = $('.appointment-dialog').eq(0);
   };
 
   /**
@@ -109,10 +108,35 @@ var AdvisorDashboard = function() {
   /*
   * Add appointment slots
   */
-  self.addAppointment = function() {
+  self.addSlots = function() {
     // Shows dialog to add empty appointment slot(s)
-    console.log("Adding appointment slot");
-    self.$appointmentDialogEl.show();
+    self.$content.load('/templates/dashboard/_add_slots_form.html', function() {
+      var singleSlotForm = self.$content.find('.single-slot-form').eq(0);
+      singleSlotForm.on('submit', function(e) {
+        e.preventDefault();
+        var date = $(this).find('input[name="date"]').val();
+        var start_time = $(this).find('input[name="start_time"]').val();
+        var end_time = $(this).find('input[name="end_time"]').val();
+
+        // Submit new appointment slot:
+        // $.ajax
+      });
+
+      var multiSlotForm = self.$content.find('.multi-slot-form').eq(0);
+      multiSlotForm.on('submit', function(e) {
+        e.preventDefault();
+        var date = $(this).find('input[name="date"]').val();
+        var start_time = $(this).find('input[name="start_time"]').val();
+        var end_time = $(this).find('input[name="end_time"]').val();
+        var duration = $(this).find('input[name="duration"]').val();
+
+        // Form the individual appointments and enter them into array.
+        var s_time = start_time;
+
+        // Submit new appointment slot:
+        // $.ajax
+      });
+    });
   };
 
   /**
