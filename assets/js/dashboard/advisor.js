@@ -85,12 +85,13 @@ var AdvisorDashboard = function() {
   * Agenda specific setup
   */
   self.agenda = function() {
-    // TODO Remove this fake load
-    self.blockContent('Loading Agenda...')
-    setTimeout(function() {
-      self.$content.append('<h3>No agenda to show :(</h3>');
+    self.blockContent('Loading Agenda...');
+
+    // Load agenda template
+    self.$content.load('/templates/dashboard/_agenda.html', function() {
       self.unblockContent();
-    }, 1000);
+      // Agenda specific logic
+    });
   };
 
   /**
@@ -99,10 +100,11 @@ var AdvisorDashboard = function() {
   self.settings = function() {
     // TODO Remove this fake load
     self.blockContent("Loading Settings...")
-    setTimeout(function() {
-      self.$content.append('<h3>No settings to show :(</h3>');
+    // Load settings template
+    self.$content.load('/templates/dashboard/_advisor_settings.html', function() {
       self.unblockContent();
-    }, 1000);
+      // Advisor settings template specific logic
+    });
   };
 
   /*
@@ -133,7 +135,7 @@ var AdvisorDashboard = function() {
         // Form the individual appointments and enter them into array.
         var s_time = start_time;
 
-        // Submit new appointment slot:
+        // Submit new appointment slots:
         // $.ajax
       });
     });
