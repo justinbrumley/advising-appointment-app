@@ -138,7 +138,7 @@ var AdvisorDashboard = function() {
         }).done(function(data) {
           if(data && data.success) {
             // Successfully added new appointment slots
-            // TODO Show success message or something here.
+            $.growlUI('Successfully added appointment slots!');
 
             // Clear the form
             $(this).find('input[name="date"]').val('');
