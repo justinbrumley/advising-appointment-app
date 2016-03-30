@@ -235,51 +235,125 @@ router.post('/me/appointment', requireRole('advisee'), function(req, res) {
 });
 
 router.post('/me/appointments', requireRole('advisor'), function(req, res) {
-  Appointment.findAll({
-    where: {
-      advisor_cwid: req.session.cwid,
-      $or: [
-        {
-          start_time: {
-            $between: [moment(req.body.start_time).utc().format(), moment(req.body.end_time).utc().format()]
-          }
-        },
-        {
-          end_time: {
-            $between: [moment(req.body.start_time).utc().format(), moment(req.body.end_time).utc().format()]
-          }
-        }
-      ]
+
+  var cwid = req.session.cwid;
+  var start_time = req.body.start_time;
+  var end_time = req.body.end_time;
+  var duration = req.body.duration;
+
+  if(req.body.duration) {
+    // Multiple appointments
+    var start = moment(start_time);
+    var end = moment(end_time);
+    var slots = [];
+    while(start < end) {
+      slots.push({
+        id: uuid.v4(),
+        start_time: start.format(),
+        end_time: start.add(duration, 'm').format(),
+        advisor_cwid: cwid,
+        advisee_cwid: null
+      });
+      //start = start.add(duration, 'm');
     }
-  }).done(function(appointments) {
-    console.log("Appointments", appointments);
-    if(appointments && appointments.length) {
-      return res.json({
-        success: false,
-        message: 'Slot(s) not empty'
+
+    return bulkAddAppointmentSlots(slots, cwid);
+  } else {
+    // Single appointment
+    return addAppointmentSlot(start_time, end_time, cwid);
+  }
+
+  function bulkAddAppointmentSlots(slots, advisor_cwid) {
+    // Make sure their are no collisions
+    var searchOptions = {
+      where: {}
+    };
+    searchOptions.where.advisor_cwid = advisor_cwid;
+    searchOptions.where.$or = [];
+    for(var i = 0; i < slots.length; i++) {
+      searchOptions.where.$or.push({
+        start_time: {
+          $between: [moment(slots[i].start_time).utc().format(), moment(slots[i].end_time).utc().format()]
+        }
+      });
+
+      searchOptions.where.$or.push({
+        end_time: {
+          $between: [moment(slots[i].start_time).utc().format(), moment(slots[i].end_time).utc().format()]
+        }
       });
     }
 
-    Appointment.create({
-      id: uuid.v4(),
-      start_time: req.body.start_time,
-      end_time: req.body.end_time,
-      advisor_cwid: req.session.cwid,
-      advisee_cwid: null
-    }).done(function(appointment) {
-      if(!appointment) {
+    Appointment.findAll(searchOptions).done(function(appointments) {
+      if(appointments && appointments.length) {
         return res.json({
           success: false,
-          message: 'Error adding appointment slot.'
+          message: 'Slot(s) not empty'
         });
-      } else {
-        res.json({
-          success: true,
-          appointment: appointment
-        })
       }
+
+      Appointment.bulkCreate(slots).done(function(appointments) {
+        if(!appointments) {
+          return res.json({
+            success: false,
+            message: 'Error adding appointment slot.'
+          });
+        } else {
+          res.json({
+            success: true,
+            appointments: appointments
+          })
+        }
+      });
     });
-  });
+  }
+
+  function addAppointmentSlot(start_time, end_time, advisor_cwid) {
+    Appointment.findAll({
+      where: {
+        advisor_cwid: advisor_cwid,
+        $or: [
+          {
+            start_time: {
+              $between: [moment(start_time).utc().format(), moment(end_time).utc().format()]
+            }
+          },
+          {
+            end_time: {
+              $between: [moment(start_time).utc().format(), moment(end_time).utc().format()]
+            }
+          }
+        ]
+      }
+    }).done(function(appointments) {
+      if(appointments && appointments.length) {
+        return res.json({
+          success: false,
+          message: 'Slot(s) not empty'
+        });
+      }
+
+      Appointment.create({
+        id: uuid.v4(),
+        start_time: start_time,
+        end_time: end_time,
+        advisor_cwid: advisor_cwid,
+        advisee_cwid: null
+      }).done(function(appointment) {
+        if(!appointment) {
+          return res.json({
+            success: false,
+            message: 'Error adding appointment slot.'
+          });
+        } else {
+          res.json({
+            success: true,
+            appointment: appointment
+          })
+        }
+      });
+    });
+  }
 });
 
 module.exports = router;

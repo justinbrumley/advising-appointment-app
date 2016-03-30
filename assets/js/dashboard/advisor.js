@@ -73,7 +73,8 @@ var AdvisorDashboard = function() {
           center: 'title',
           right: 'month,agendaWeek,agendaDay'
         },
-        events: events
+        events: events,
+        eventLimit: true
       });
 
       // Unblock page
@@ -138,7 +139,7 @@ var AdvisorDashboard = function() {
         }).done(function(data) {
           if(data && data.success) {
             // Successfully added new appointment slots
-            $.growlUI('Successfully added appointment slots!');
+            $.growlUI('Successfully added appointment slot!');
 
             // Clear the form
             $(this).find('input[name="date"]').val('');
@@ -160,11 +161,35 @@ var AdvisorDashboard = function() {
         var end_time = $(this).find('input[name="end_time"]').val();
         var duration = $(this).find('input[name="duration"]').val();
 
-        // Form the individual appointments and enter them into array.
-        var s_time = start_time;
+        var startDateTime = moment(date + 'T' + start_time).format();
+        var endDateTime = moment(date + 'T' + end_time).format();
 
         // Submit new appointment slots:
-        // $.ajax
+        $.ajax({
+          type: 'POST',
+          url: '/api/me/appointments',
+          data: {
+            start_time: startDateTime,
+            end_time: endDateTime,
+            duration: duration
+          },
+          dataType: 'json'
+        }).done(function(data) {
+          if(data && data.success) {
+            // Successfully added new appointment slots
+            $.growlUI('Successfully added appointment slots!');
+
+            // Clear the form
+            $(this).find('input[name="date"]').val('');
+            $(this).find('input[name="start_time"]').val('');
+            $(this).find('input[name="end_time"]').val('');
+            $(this).find('input[name="duration"]').val('');
+          } else {
+            // Did not sucessfully add new appointment slots
+            // TODO Show error message
+
+          }
+        }.bind(this));
       });
     });
   };
