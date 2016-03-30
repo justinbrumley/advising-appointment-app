@@ -114,17 +114,45 @@ var AdvisorDashboard = function() {
     // Shows dialog to add empty appointment slot(s)
     self.$content.load('/templates/dashboard/_add_slots_form.html', function() {
       var singleSlotForm = self.$content.find('.single-slot-form').eq(0);
+      var multiSlotForm = self.$content.find('.multi-slot-form').eq(0);
+
+      // Single slot form submit
       singleSlotForm.on('submit', function(e) {
         e.preventDefault();
         var date = $(this).find('input[name="date"]').val();
         var start_time = $(this).find('input[name="start_time"]').val();
         var end_time = $(this).find('input[name="end_time"]').val();
 
+        var startDateTime = moment(date + 'T' + start_time).format();
+        var endDateTime = moment(date + 'T' + end_time).format();
+
         // Submit new appointment slot:
-        // $.ajax
+        $.ajax({
+          type: 'POST',
+          url: '/api/me/appointments',
+          data: {
+            start_time: startDateTime,
+            end_time: endDateTime
+          },
+          dataType: 'json'
+        }).done(function(data) {
+          if(data && data.success) {
+            // Successfully added new appointment slots
+            // TODO Show success message or something here.
+
+            // Clear the form
+            $(this).find('input[name="date"]').val('');
+            $(this).find('input[name="start_time"]').val('');
+            $(this).find('input[name="end_time"]').val('');
+          } else {
+            // Did not sucessfully add new appointment slots
+            // TODO Show error message
+
+          }
+        }.bind(this));
       });
 
-      var multiSlotForm = self.$content.find('.multi-slot-form').eq(0);
+      // Multi slot form submit
       multiSlotForm.on('submit', function(e) {
         e.preventDefault();
         var date = $(this).find('input[name="date"]').val();
