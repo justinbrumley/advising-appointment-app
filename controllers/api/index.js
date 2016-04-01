@@ -59,13 +59,22 @@ router.post('/settings', requireAuth, function(req, res) {
   var default_appointment_duration = req.body.default_appointment_duration;
 
   UserSettings.findOrCreate({
-    cwid: req.session.cwid
+    where: {
+      cwid: req.session.cwid
+    }
   }).done(function(userSettings) {
-    userSettings.first_name = first_name;
-    userSettings.last_name = last_name;
-    userSettings.default_appointment_duration = default_appointment_duration;
+    if(!userSettings) {
+      return res.json({
+        success: false,
+        message: 'Could not find user settings'
+      });
+    }
 
-    userSettings.save().then(function(settings) {
+    userSettings[0].first_name = first_name;
+    userSettings[0].last_name = last_name;
+    userSettings[0].default_appointment_duration = default_appointment_duration;
+
+    userSettings[0].save().then(function(settings) {
       if(settings) {
         return res.json({
           success: true,

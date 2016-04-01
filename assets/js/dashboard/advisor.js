@@ -109,6 +109,39 @@ var AdvisorDashboard = function() {
     self.$content.load('/templates/dashboard/_advisor_settings.html', function() {
       self.unblockContent();
       // Advisor settings template specific logic
+      var $settingsForm = self.$content.find('.settings-form').eq(0);
+      var $firstNameEl = self.$content.find('.first-name-input').eq(0);
+      var $lastNameEl = self.$content.find('.last-name-input').eq(0);
+      var $defaultAppointmentDurationEl = self.$content.find('.default-appointment-duration-input').eq(0);
+
+      $firstNameEl.val(self.first_name);
+      $lastNameEl.val(self.last_name);
+      $defaultAppointmentDurationEl.val(self.default_appointment_duration);
+
+      $settingsForm.on('submit', function(e) {
+        e.preventDefault();
+
+        $.ajax({
+          url: '/api/settings',
+          type: 'POST',
+          data: {
+            first_name: $firstNameEl.val(),
+            last_name: $lastNameEl.val(),
+            default_appointment_duration: $defaultAppointmentDurationEl.val()
+          },
+          dataType: 'json'
+        }).done(function(data) {
+          if(data && data.success) {
+            // Success
+            $.growlUI('Settings saved!');
+            self.first_name = data.user_settings.first_name;
+            self.last_name = data.user_settings.last_name;
+            self.default_appointment_duration = data.user_settings.default_appointment_duration;
+          } else {
+            console.log("Error");
+          }
+        });
+      });
     });
   };
 
@@ -279,6 +312,7 @@ var AdvisorDashboard = function() {
         self.cwid = data.cwid;
         self.first_name = data.first_name;
         self.last_name = data.last_name;
+        self.default_appointment_duration = data.default_appointment_duration;
 
         // Set initial state to calendar
         self.loadElements();
