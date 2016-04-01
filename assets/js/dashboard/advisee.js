@@ -48,7 +48,7 @@ var AdviseeDashboard = function() {
 
     // Load appointments
     $.ajax({
-      url: '/api/me/appointments',
+      url: '/api/appointments',
       type: 'GET'
     }).done(function(data) {
       var events = [];
@@ -83,7 +83,7 @@ var AdviseeDashboard = function() {
         eventLimit: true,
         eventClick: function(event) {
           $.ajax({
-            url: '/api/me/appointment',
+            url: '/api/appointment',
             type: 'POST',
             data: {
               id: event.id

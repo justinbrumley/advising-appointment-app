@@ -21,7 +21,7 @@ html
     script(type='application/javascript').
       $(document).ready(function() {
         // Get list of roles and bind events
-        $.get({ url: '/api/me/roles' }).done(function(data) {
+        $.get({ url: '/api/roles' }).done(function(data) {
           if(data.success) {
             var $roleDropdownEl = $('#roleDropdown');
             $.each(data.roles, function(i, ele) {
@@ -35,7 +35,7 @@ html
             // On role drop down change
             $roleDropdownEl.on('change', function() {
               $.post({ 
-                url: '/api/me/role', 
+                url: '/api/role', 
                 data: {
                   role_id: $(this).val()
                 }

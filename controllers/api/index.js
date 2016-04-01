@@ -83,7 +83,7 @@ router.get('/users/:cwid', requireAuth, function(req, res) {
 /**
 * Update user settings
 */
-router.post('/me/settings', requireAuth, function(req, res) {
+router.post('/settings', requireAuth, function(req, res) {
   var first_name = req.body.first_name;
   var last_name = req.body.last_name;
   var default_appointment_duration = req.body.default_appointment_duration;
@@ -114,7 +114,7 @@ router.post('/me/settings', requireAuth, function(req, res) {
 /**
  * Pull list of roles for the logged in user.
  */
-router.get('/me/roles', requireAuth, function(req, res) {
+router.get('/roles', requireAuth, function(req, res) {
   var cwid = req.session.cwid;
 
   async.waterfall([
@@ -156,7 +156,7 @@ router.get('/me/roles', requireAuth, function(req, res) {
 /**
  * Set the current role for the user (if they have that role.)
  */
-router.post('/me/role', requireAuth, function(req, res) {
+router.post('/role', requireAuth, function(req, res) {
   var role_id = +req.body.role_id;
   var cwid = req.session.cwid;
 
@@ -190,7 +190,7 @@ router.post('/me/role', requireAuth, function(req, res) {
 * Finds all appointments for an advisor.
 * Can be filtered by date and whether or not they are empty
 */
-router.get('/me/appointments', requireRole('advisor', 'advisee'), function(req, res) {
+router.get('/appointments', requireRole('advisor', 'advisee'), function(req, res) {
   var startDate = req.params.startdate;
   var endDate = req.params.endDate;
   var advisor_cwid = req.session.cwid;
@@ -272,7 +272,7 @@ router.get('/me/appointments', requireRole('advisor', 'advisee'), function(req, 
 /**
 * Attempt to register student for appointment
 */
-router.post('/me/appointment', requireRole('advisee'), function(req, res) {
+router.post('/appointment', requireRole('advisee'), function(req, res) {
   function error(message) {
     return res.json({
       success: false,
@@ -337,8 +337,10 @@ router.post('/me/appointment', requireRole('advisee'), function(req, res) {
   });
 });
 
-router.post('/me/appointments', requireRole('advisor'), function(req, res) {
-
+/**
+* Adds new empty appointment slots
+*/
+router.post('/appointments', requireRole('advisor'), function(req, res) {
   var cwid = req.session.cwid;
   var start_time = req.body.start_time;
   var end_time = req.body.end_time;

@@ -46,7 +46,7 @@ var AdvisorDashboard = function() {
 
     // Load appointments
     $.ajax({
-      url: '/api/me/appointments',
+      url: '/api/appointments',
       type: 'GET'
     }).done(function(data) {
       var events = [];
@@ -134,7 +134,7 @@ var AdvisorDashboard = function() {
         // Submit new appointment slot:
         $.ajax({
           type: 'POST',
-          url: '/api/me/appointments',
+          url: '/api/appointments',
           data: {
             start_time: startDateTime,
             end_time: endDateTime
@@ -171,7 +171,7 @@ var AdvisorDashboard = function() {
         // Submit new appointment slots:
         $.ajax({
           type: 'POST',
-          url: '/api/me/appointments',
+          url: '/api/appointments',
           data: {
             start_time: startDateTime,
             end_time: endDateTime,
