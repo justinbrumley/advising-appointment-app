@@ -35,7 +35,7 @@ html
             // On role drop down change
             $roleDropdownEl.on('change', function() {
               $.post({ 
-                url: '/api/role', 
+                url: '/api/roles/set', 
                 data: {
                   role_id: $(this).val()
                 }

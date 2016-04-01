@@ -218,4 +218,72 @@ router.get('/', requireRole('advisor', 'advisee'), function(req, res) {
   ]);
 });
 
+/**
+* Attempt to register student for appointment
+*/
+router.post('/select', requireRole('advisee'), function(req, res) {
+  function error(message) {
+    return res.json({
+      success: false,
+      message: message
+    });
+  }
+
+  async.series([
+    function(callback) {
+      // Make sure the student doesn't already have an appointment.
+      // If they do, remove it first
+      Appointment.find({
+        where: {
+          advisee_cwid: req.session.cwid
+        }
+      }).done(function(appointment) {
+        if(appointment) {
+          appointment.advisee_cwid = null;
+          appointment.save().then(function(appointment) {
+            if(appointment) {
+              callback();
+            } else {
+              callback('Error removing existing appointment');
+            }
+          });
+        } else {
+          callback();
+        }
+      });
+    },
+    function(callback) {
+      Appointment.find({
+        where: {
+          id: req.body.id
+        }
+      }).done(function(appointment) {
+        if(appointment) {
+          if(appointment.advisee_cwid) {
+            return error('Appointment already taken');
+          } else {
+            appointment.advisee_cwid = req.session.cwid;
+            appointment.save().then(function(appointment) {
+              if(appointment) {
+                return res.json({
+                  success: true,
+                  appointment: appointment
+                });
+              } else {
+                return error('Error trying to save appointment');
+              }
+            });
+          }
+        } else {
+          return error('Appointment not found');
+        }
+      });
+    }
+  ], function(err, results) {
+    if(err) {
+      return error(err);
+    }
+  });
+});
+
 module.exports = router;

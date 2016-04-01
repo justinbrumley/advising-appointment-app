@@ -83,7 +83,7 @@ var AdviseeDashboard = function() {
         eventLimit: true,
         eventClick: function(event) {
           $.ajax({
-            url: '/api/appointment',
+            url: '/api/appointments/select',
             type: 'POST',
             data: {
               id: event.id
