@@ -38,8 +38,39 @@ router.get('/me', requireAuth, function(req, res) {
       default_appointment_duration: user.UserSetting.default_appointment_duration,
       username: user.username
     }
-    
+
     res.json(ret);
+  });
+});
+
+/**
+* Update user settings
+*/
+router.post('/me/settings', requireAuth, function(req.res) {
+  var first_name = req.body.first_name;
+  var last_name = req.body.last_name;
+  var default_appointment_duration = req.body.default_appointment_duration;
+
+  UserSettings.findOrCreate({
+    cwid: req.session.cwid
+  }).done(function(userSettings) {
+    userSettings.first_name = first_name;
+    userSettings.last_name = last_name;
+    userSettings.default_appointment_duration = default_appointment_duration;
+
+    userSettings.save().then(function(settings) {
+      if(settings) {
+        return res.json({
+          success: true,
+          user_settings: settings
+        });
+      } else {
+        return res.json({
+          success: false,
+          message: 'Error saving settings'
+        });
+      }
+    });
   });
 });
 
