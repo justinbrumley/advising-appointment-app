@@ -42,6 +42,7 @@ models.forEach(function(model) {
 (function(m) {
   // UserSettings Associations
   m.User.hasOne(m.UserSettings, {
+    as: 'settings',
     foreignKey: 'cwid'
   });
 
@@ -50,7 +51,16 @@ models.forEach(function(model) {
     foreignKey: 'advisor_cwid'
   });
   m.Appointment.belongsTo(m.User, {
+    as: 'advisor',
     foreignKey: 'advisor_cwid'
+  });
+
+  m.User.hasOne(m.Appointment, {
+    foreignKey: 'advisee_cwid'
+  });
+  m.Appointment.belongsTo(m.User, {
+    as: 'advisee',
+    foreignKey: 'advisee_cwid'
   });
 
   //Role Association

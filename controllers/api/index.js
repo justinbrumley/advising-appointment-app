@@ -6,6 +6,7 @@ var _ = require('underscore');
 var async = require('async');
 var uuid = require('node-uuid');
 var moment = require('moment');
+var Sequelize = require('Sequelize');
 
 var models = require('../../models');
 
@@ -29,17 +30,53 @@ router.get('/me', requireAuth, function(req, res) {
     where: {
       cwid: req.session.cwid
     },
-    include: [ UserSettings ]
+    include: [{
+      model: UserSettings,
+      as: 'settings'
+    }]
   }).done(function(user) {
     var ret = {
       cwid: user.cwid,
-      first_name: user.UserSetting.first_name,
-      last_name: user.UserSetting.last_name,
-      default_appointment_duration: user.UserSetting.default_appointment_duration,
+      first_name: user.settings.first_name,
+      last_name: user.settings.last_name,
+      default_appointment_duration: user.settings.default_appointment_duration,
       username: user.username
     }
 
     res.json(ret);
+  });
+});
+
+/**
+* Pull public information about a user by cwid
+*/
+router.get('/users/:cwid', requireAuth, function(req, res) {
+  var cwid = req.params.cwid;
+
+  if(!cwid) {
+    return res.json({
+      success: false,
+      message: 'No CWID provided'
+    });
+  }
+
+  User.find({
+    where: {
+      cwid: cwid
+    },
+    include: [{
+      model: UserSettings,
+      as: 'settings'
+    }]
+  }).done(function(user) {
+    var ret = {
+      cwid: cwid,
+      username: user.username,
+      first_name: user.settings.first_name,
+      last_name: user.settings.last_name
+    };
+
+    return res.json(ret);
   });
 });
 
@@ -210,7 +247,19 @@ router.get('/me/appointments', requireRole('advisor', 'advisee'), function(req, 
         }
       }
 
+      search_options.include = [{
+        model: User,
+        as: 'advisee',
+        attributes: ['cwid'],
+        include: [{
+          model: UserSettings,
+          attributes: ['first_name', 'last_name'],
+          as: 'settings'
+        }]
+      }];
+
       Appointment.findAll(search_options).done(function(appointments) {
+        // Get information about students
         return res.json({
           success: true,
           appointments: appointments
