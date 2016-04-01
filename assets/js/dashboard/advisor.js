@@ -103,7 +103,6 @@ var AdvisorDashboard = function() {
   * Settings specific setup
   */
   self.settings = function() {
-    // TODO Remove this fake load
     self.blockContent("Loading Settings...")
     // Load settings template
     self.$content.load('/templates/dashboard/_advisor_settings.html', function() {

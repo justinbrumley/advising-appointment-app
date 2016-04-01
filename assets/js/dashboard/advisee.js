@@ -108,14 +108,42 @@ var AdviseeDashboard = function() {
   * Settings specific setup
   */
   self.settings = function() {
-    console.log('Loading settings...');
-
-    // TODO Remove this fake load
-    self.blockContent('Loading Settings...')
-    setTimeout(function() {
-      self.$content.append('<h3>No settings to show :(</h3>');
+    self.blockContent('Loading Settings...');
+    // Load settings template
+    self.$content.load('/templates/dashboard/_advisee_settings.html', function() {
       self.unblockContent();
-    }, 1000);
+      // Advisor settings template specific logic
+      var $settingsForm = self.$content.find('.settings-form').eq(0);
+      var $firstNameEl = self.$content.find('.first-name-input').eq(0);
+      var $lastNameEl = self.$content.find('.last-name-input').eq(0);
+
+      $firstNameEl.val(self.first_name);
+      $lastNameEl.val(self.last_name);
+
+      $settingsForm.on('submit', function(e) {
+        e.preventDefault();
+
+        $.ajax({
+          url: '/api/settings',
+          type: 'POST',
+          data: {
+            first_name: $firstNameEl.val(),
+            last_name: $lastNameEl.val(),
+            default_appointment_duration: 20
+          },
+          dataType: 'json'
+        }).done(function(data) {
+          if(data && data.success) {
+            // Success
+            $.growlUI('Settings saved!');
+            self.first_name = data.user_settings.first_name;
+            self.last_name = data.user_settings.last_name;
+          } else {
+            console.log("Error");
+          }
+        });
+      });
+    });
   };
 
   /**
@@ -131,14 +159,23 @@ var AdviseeDashboard = function() {
   * On Document Loaded
   */
   $(document).ready(function() {
-    // Set initial state to calendar
-    self.loadElements();
-    self.setState('calendar');
+    // Load information about self
+    $.ajax({
+      url: '/api/me',
+      type: 'GET'
+    }).done(function(data) {
+      self.first_name = data.first_name;
+      self.last_name = data.last_name;
 
-    // Side bar button click event
-    self.$sidebarButtonEl.on('click', function() {
-      self.unblockContent();
-      self.setState($(this).attr('state'));
+      // Set initial state to calendar
+      self.loadElements();
+      self.setState('calendar');
+
+      // Side bar button click event
+      self.$sidebarButtonEl.on('click', function() {
+        self.unblockContent();
+        self.setState($(this).attr('state'));
+      });
     });
   });
 }
