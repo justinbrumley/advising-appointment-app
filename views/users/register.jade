@@ -6,19 +6,25 @@ block content
       .columns.small-12.medium-6.medium-offset-3
         .callout
           label
-            | CWID
+            | CWID *
             input(id='cwid', type='text', name='cwid', placeHolder='CWID', autofocus='autofocus')
           label
-            | Username
+            | Username *
             input(id='username', type='text', name='username', placeHolder='Username')
           label
-            | Password
+            | Password *
             input(id='password', type='password', name='password', placeHolder='Password')
           label
-            | Verify Password
+            | Verify Password *
             input(id='passwordVerify', type='password', placeHolder='Password')
           label
-            | Select Role (Are you an advisor, student, etc..)
+            | First Name
+            input(id='firstName', type='text', placeHolder='Password')
+          label
+            | Last Name
+            input(id='lastName', type='text', placeHolder='Password')
+          label
+            | Select Role (Are you an advisor, student, etc..) *
             select(id='role', name='roleDropDown')
               option(value='1') Student
               option(value='2') Advisor

@@ -9,8 +9,10 @@ $(document).ready(function() {
   var $verifyPasswordEl = $('#passwordVerify');
   var $usernameEl = $('#username');
   var $role = $('#role');
+  var $firstNameEl = $('#firstName');
+  var $lastNameEl = $('#lastName');
   var $submitButtonEl = $('#registerSubmit');
-  
+
   // ------------
   // Functions
   // ------------
@@ -21,26 +23,33 @@ $(document).ready(function() {
       console.log("Passwords do no match!");
       return false;
     }
-    
-    $.blockUI({ css: { 
-      border: 'none', 
-      padding: '15px', 
-      backgroundColor: '#000', 
-      '-webkit-border-radius': '10px', 
-      '-moz-border-radius': '10px', 
-      opacity: .5, 
-      color: '#fff' 
+
+    if(!$cwidEl.val() || !$passwordEl.val() || !$usernameEl.val()) {
+      console.log("Missing some required fields");
+      return false;
+    }
+
+    $.blockUI({ css: {
+      border: 'none',
+      padding: '15px',
+      backgroundColor: '#000',
+      '-webkit-border-radius': '10px',
+      '-moz-border-radius': '10px',
+      opacity: .5,
+      color: '#fff'
     },
       message: "Registering..."
     });
-    
+
     $.ajax({
       accepts: 'json',
       data: {
         cwid: $cwidEl.val(),
         username: $usernameEl.val(),
         password: $passwordEl.val(),
-        role: $role.val()
+        role: $role.val(),
+        first_name: $firstNameEl.val(),
+        last_name: $lastNameEl.val()
       },
       dataType: 'json',
       url: '/users/register',
@@ -60,13 +69,12 @@ $(document).ready(function() {
         console.log("Received no response");
       }
     });
-    
+
     return false;
   }
-  
+
   // ------------
   // Bindings
   // ------------
   $submitButtonEl.on('click', register);
 });
-
