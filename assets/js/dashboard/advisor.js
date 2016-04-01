@@ -112,6 +112,65 @@ var AdvisorDashboard = function() {
     });
   };
 
+  /**
+  * Show advisees list and allow user to add new ones
+  */
+  self.advisees = function() {
+    // TODO Remove this fake load
+    self.blockContent("Loading Advisees...")
+    // Load settings template
+    self.$content.load('/templates/dashboard/_advisees_list.html', function() {
+      self.unblockContent();
+      // Advisor settings template specific logic
+      var $advisee_list = self.$content.find('.advisee-list').eq(0);
+      var $add_new_button = self.$content.find('.add-new-button').eq(0);
+
+      function setupList(advisees) {
+        $advisee_list.html('');
+        for(var i = 0; i < advisees.length; i++) {
+          if(advisees[i].firstName != '' && advisees[i].last_name != '') {
+            $advisee_list.append('<li>' + advisees[i].first_name + ' ' + advisees[i].last_name + '</li>');
+          } else {
+            $advisee_list.append('<li>' + advisees[i].cwid + ' (no name)</li>');
+          }
+        }
+      }
+
+      function addBindings() {
+        $add_new_button.on('click', function() {
+          // TODO Show form for adding new advisee
+          var cwid = prompt('Insert CWID of new advisee');
+          $.ajax({
+            url: '/api/users/' + self.cwid + '/advisees',
+            type: 'POST',
+            data: {
+              advisee_cwid: cwid
+            },
+            dataType: 'json'
+          }).done(function(data) {
+            if(data && data.success) {
+              fetchList();
+            }
+          });
+        });
+      }
+
+      function fetchList() {
+        $.ajax({
+          url: '/api/users/' + self.cwid + '/advisees',
+          type: 'GET'
+        }).done(function(data) {
+          if(data && data.success) {
+            setupList(data.advisees);
+            addBindings();
+          }
+        });
+      }
+
+      fetchList();
+    });
+  };
+
   /*
   * Add appointment slots
   */
@@ -211,14 +270,26 @@ var AdvisorDashboard = function() {
   * On DOM Loaded
   */
   $(document).ready(function() {
-    // Set initial state to calendar
-    self.loadElements();
-    self.setState('calendar');
+    // Load information about self
+    $.ajax({
+      url: '/api/me',
+      type: 'GET'
+    }).done(function(data) {
+      if(data) {
+        self.cwid = data.cwid;
+        self.first_name = data.first_name;
+        self.last_name = data.last_name;
 
-    // Side bar button click event
-    self.$sidebarButtonEl.on('click', function() {
-      self.unblockContent();
-      self.setState($(this).attr('state'));
+        // Set initial state to calendar
+        self.loadElements();
+        self.setState('calendar');
+
+        // Side bar button click event
+        self.$sidebarButtonEl.on('click', function() {
+          self.unblockContent();
+          self.setState($(this).attr('state'));
+        });
+      }
     });
   });
 }

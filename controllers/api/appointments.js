@@ -153,8 +153,12 @@ router.get('/', requireRole('advisor', 'advisee'), function(req, res) {
             cwid: req.session.cwid
           }
         }).done(function(user) {
-          advisor_cwid = user.cwid;
-          callback();
+          advisor_cwid = user.advisor_cwid;
+          if(!advisor_cwid) {
+            callback('No advisor');
+          } else {
+            callback();
+          }
         });
       } else if(req.session.role == 'advisor') {
         callback();
@@ -215,7 +219,14 @@ router.get('/', requireRole('advisor', 'advisee'), function(req, res) {
         });
       });
     }
-  ]);
+  ], function(err) {
+    if(err) {
+      return res.json({
+        success: false,
+        message: err
+      });
+    }
+  });
 });
 
 /**

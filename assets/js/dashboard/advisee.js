@@ -51,6 +51,12 @@ var AdviseeDashboard = function() {
       url: '/api/appointments',
       type: 'GET'
     }).done(function(data) {
+      if(!data.success) {
+        self.unblockContent();
+        self.$content.append('<h2>' + data.message + '</h2>');
+        return;
+      }
+
       var events = [];
 
       // Get all of the events and add them to an array.
