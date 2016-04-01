@@ -13,15 +13,6 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false
     }
   });
-  
-  /* *Seed data*
-  UserRole.sync().then(function() {
-    return UserRole.create({
-      cwid: '99999999',
-      role_id: 4
-    }); 
-  });
-  */
-  
+
   return UserRole;
 };

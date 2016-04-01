@@ -5,6 +5,7 @@ var models = require('../models');
 var sequelize = models.sequelize;
 
 var User = models['User'];
+var UserSettings = models['UserSettings'];
 var UserRole = models['UserRole'];
 var Role = models['Role'];
 
@@ -54,6 +55,25 @@ router.post('/register', function(req, res) {
           callback('Error while trying to create user');
         }
         else {
+          callback(null, user);
+        }
+      });
+    },
+    function(user, callback) {
+      // Create UserSettings
+      var first_name = req.body.first_name || '';
+      var last_name = req.body.last_name || '';
+      var default_appointment_duration = req.body.default_appointment_duration || 20;
+
+      UserSettings.create({
+        cwid: cwid,
+        first_name: first_name,
+        last_name: last_name,
+        default_appointment_duration: default_appointment_duration
+      }).done(function(userSettings) {
+        if(!userSettings) {
+          callback('Error while adding UserSettings');
+        } else {
           callback(null, user);
         }
       });

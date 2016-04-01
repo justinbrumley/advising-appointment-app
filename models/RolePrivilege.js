@@ -14,14 +14,5 @@ module.exports = function(sequelize, DataTypes) {
     }
   });
 
-  /* Seed Data
-  UserRole.sync().then(function() {
-    return UserRole.create({
-      cwid: '99999999',
-      role_id: 4
-    });
-  });
-  */
-
   return RolePrivilege;
 };

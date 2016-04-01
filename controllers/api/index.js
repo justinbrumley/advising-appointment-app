@@ -10,6 +10,7 @@ var moment = require('moment');
 var models = require('../../models');
 
 var User = models.User;
+var UserSettings = models.UserSettings;
 var UserRole = models.UserRole;
 var Role = models.Role;
 var Appointment = models.Appointment;
@@ -17,6 +18,28 @@ var Appointment = models.Appointment;
 router.get('/', function(req, res) {
   return res.json({
     message: 'swiggity api'
+  });
+});
+
+/**
+* Allows user to pull basic information about themselves.
+*/
+router.get('/me', requireAuth, function(req, res) {
+  User.find({
+    where: {
+      cwid: req.session.cwid
+    },
+    include: [ UserSettings ]
+  }).done(function(user) {
+    var ret = {
+      cwid: user.cwid,
+      first_name: user.UserSetting.first_name,
+      last_name: user.UserSetting.last_name,
+      default_appointment_duration: user.UserSetting.default_appointment_duration,
+      username: user.username
+    }
+    
+    res.json(ret);
   });
 });
 
