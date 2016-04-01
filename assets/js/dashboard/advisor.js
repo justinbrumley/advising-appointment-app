@@ -54,8 +54,12 @@ var AdvisorDashboard = function() {
       // Loop throught appointments and add them to events array
       for(var i = 0; i < data.appointments.length; i++) {
         var a = data.appointments[i];
+        var title = null;
+        if(a.advisee && a.advisee.settings) {
+          title = a.advisee.settings.first_name + ' ' + a.advisee.settings.last_name;
+        }
         events.push({
-          title: a.advisee_cwid ? a.advisee_cwid : 'Empty',
+          title: title || a.advisee_cwid || 'Empty',
           start: moment.utc(a.start_time).local(),
           end: moment.utc(a.end_time).local(),
           color: a.advisee_cwid ? '#660000' : 'grey'
