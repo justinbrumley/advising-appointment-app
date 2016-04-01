@@ -155,7 +155,14 @@ router.post('/login', function(req, res) {
 
   User.find({
     where: {
-      cwid: cwid
+      $or: [
+        {
+          cwid: cwid
+        },
+        {
+          username: cwid
+        }
+      ]
     },
     include: [{
       model: UserRole,

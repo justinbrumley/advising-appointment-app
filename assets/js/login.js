@@ -8,7 +8,7 @@ $(document).ready(function() {
   var $passwordEl = $('#password');
   var $errorEl = $('.callout.alert.alert-box').eq(0);
   var $submitButtonEl = $('#loginSubmit');
-  
+
   // ---------------
   // Functions
   // ---------------
@@ -20,22 +20,22 @@ $(document).ready(function() {
       $errorEl.hide();
     }, 4000);
   }
-  
+
   function login(e) {
     e.preventDefault();
-    $.blockUI({ 
-      css: { 
-        border: 'none', 
-        padding: '15px', 
-        backgroundColor: '#000', 
-        '-webkit-border-radius': '10px', 
-        '-moz-border-radius': '10px', 
-        opacity: .5, 
+    $.blockUI({
+      css: {
+        border: 'none',
+        padding: '15px',
+        backgroundColor: '#000',
+        '-webkit-border-radius': '10px',
+        '-moz-border-radius': '10px',
+        opacity: .5,
         color: '#fff'
       },
       message: "Logging in..."
     });
-    
+
     $.ajax({
       url: '/users/login',
       accepts: 'json',
@@ -63,7 +63,7 @@ $(document).ready(function() {
       }
     });
   }
-  
+
   // ---------------
   // Bindings
   // ---------------
