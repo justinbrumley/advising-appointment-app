@@ -98,7 +98,46 @@ router.get('/:cwid/advisees', requireRole('advisor'), function(req, res) {
         });
       })
     });
+  });
+});
 
+/**
+* Add new advisee to advisors list of advisees
+*/
+router.post('/:cwid/advisees', requireRole('advisor'), function(req, res) {
+  var advisee_cwid = req.body.advisee_cwid;
+  var advisor_cwid = req.params.cwid;
+
+  User.find({
+    where: {
+      cwid: advisee_cwid
+    }
+  }).done(function(user) {
+    if(!user) {
+      return res.json({
+        success: false,
+        message: 'Could no find user'
+      });
+    } else if(user.advisor_cwid) {
+      return res.json({
+        success: false,
+        message: 'User already has an advisor'
+      });
+    } else {
+      user.advisor_cwid = advisor_cwid;
+      user.save().then(function(user) {
+        if(!user) {
+          return res.json({
+            success: false,
+            message: 'Error trying to set advisor'
+          });
+        } else {
+          return res.json({
+            success: true
+          });
+        }
+      });
+    }
   });
 });
 

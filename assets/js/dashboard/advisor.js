@@ -126,6 +126,7 @@ var AdvisorDashboard = function() {
       var $add_new_button = self.$content.find('.add-new-button').eq(0);
 
       function setupList(advisees) {
+        $advisee_list.html('');
         for(var i = 0; i < advisees.length; i++) {
           if(advisees[i].firstName != '' && advisees[i].last_name != '') {
             $advisee_list.append('<li>' + advisees[i].first_name + ' ' + advisees[i].last_name + '</li>');
@@ -137,19 +138,36 @@ var AdvisorDashboard = function() {
 
       function addBindings() {
         $add_new_button.on('click', function() {
-          // Show form for adding new advisee
+          // TODO Show form for adding new advisee
+          var cwid = prompt('Insert CWID of new advisee');
+          $.ajax({
+            url: '/api/users/' + self.cwid + '/advisees',
+            type: 'POST',
+            data: {
+              advisee_cwid: cwid
+            },
+            dataType: 'json'
+          }).done(function(data) {
+            if(data && data.success) {
+              fetchList();
+            }
+          });
         });
       }
 
-      $.ajax({
-        url: '/api/users/' + self.cwid + '/advisees',
-        type: 'GET'
-      }).done(function(data) {
-        if(data && data.success) {
-          setupList(data.advisees);
-          addBindings();
-        }
-      });
+      function fetchList() {
+        $.ajax({
+          url: '/api/users/' + self.cwid + '/advisees',
+          type: 'GET'
+        }).done(function(data) {
+          if(data && data.success) {
+            setupList(data.advisees);
+            addBindings();
+          }
+        });
+      }
+
+      fetchList();
     });
   };
 
