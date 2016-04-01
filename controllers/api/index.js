@@ -46,7 +46,7 @@ router.get('/me', requireAuth, function(req, res) {
 /**
 * Update user settings
 */
-router.post('/me/settings', requireAuth, function(req.res) {
+router.post('/me/settings', requireAuth, function(req, res) {
   var first_name = req.body.first_name;
   var last_name = req.body.last_name;
   var default_appointment_duration = req.body.default_appointment_duration;
