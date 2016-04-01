@@ -40,6 +40,12 @@ models.forEach(function(model) {
 });
 
 (function(m) {
+  // Advisor/Advisee associations
+  m.User.hasOne(m.User, {
+    as: 'advisor',
+    foreignKey: 'advisor_cwid'
+  });
+
   // UserSettings Associations
   m.User.hasOne(m.UserSettings, {
     as: 'settings',
