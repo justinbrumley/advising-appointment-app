@@ -68,12 +68,12 @@ router.get('/:cwid/advisees', requireRole('advisor'), function(req, res) {
 
       User.findAll({
         where: {
-          advisor_cwid: req.params.cwid,
-          include: [{
-            model: UserSettings,
-            as: 'settings'
-          }]
-        }
+          advisor_cwid: req.params.cwid
+        },
+        include: [{
+          model: UserSettings,
+          as: 'settings'
+        }]
       }).done(function(users) {
         if(!users) {
           return res.json({
@@ -82,9 +82,19 @@ router.get('/:cwid/advisees', requireRole('advisor'), function(req, res) {
           });
         }
 
+        var ret = [];
+        for(var i = 0; i < users.length; i++) {
+          console.log("Adding user", JSON.stringify(users[i]));
+          ret.push({
+            cwid: users[i].cwid,
+            first_name: users[i].settings ? users[i].settings.first_name : '',
+            last_name: users[i].settings ? users[i].settings.last_name : ''
+          })
+        }
+
         return res.json({
           success: true,
-          advisees: users
+          advisees: ret
         });
       })
     });
