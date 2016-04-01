@@ -44,6 +44,7 @@ app.use(authLocals);
 app.use('/', require('./controllers/index'));
 app.use('/users', require('./controllers/users'));
 app.use('/api', require('./controllers/api'));
+
 // ----------------------------
 // Sync the db and start the server
 // ----------------------------
