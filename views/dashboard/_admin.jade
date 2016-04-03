@@ -1,2 +1,16 @@
-// Admin Dashboard
-h2 Admin Dashboard
+extends ../_layout.jade
+
+block head
+  link(href='/css/dashboard/admin.css', rel='stylesheet')
+  
+block scripts
+  script(src='/js/dashboard/admin.js', type='application/javascript')
+
+block nav-items
+  li
+    a.nav-item(state='upcomingAppointments') Upcoming Appointments
+  li
+    a.nav-item(state='settings') Settings
+
+block content
+  .content

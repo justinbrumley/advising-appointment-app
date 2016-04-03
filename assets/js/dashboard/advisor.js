@@ -51,7 +51,7 @@ var AdvisorDashboard = function() {
     }).done(function(data) {
       var events = [];
 
-      // Loop throught appointments and add them to events array
+      // Loop through appointments and add them to events array
       for(var i = 0; i < data.appointments.length; i++) {
         var a = data.appointments[i];
         var title = null;
