@@ -11,7 +11,7 @@
   },
   "scripts": {
     "postinstall": "gulp production",
-    "start": "node_modules/.bin/forever start server.js"
+    "start": "node server.js"
   },
   "dependencies": {
     "async": "^1.5.2",
