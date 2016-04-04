@@ -165,7 +165,9 @@ var AdvisorDashboard = function() {
               + advisees[i].first_name
               + ' '
               + advisees[i].last_name
-              + '<span style="float: right;" class="fi-trash"></span></li>');
+              + '<i style="float: right; padding-left:10px;" class="fi-trash"></i>'
+              + '<i style="float: right; padding-left:10px;" class="fi-pencil"></i>' 
+              + '</li>');
           } else {
             $advisee_list.append('<li>' + advisees[i].cwid + ' (no name)</li>');
           }
