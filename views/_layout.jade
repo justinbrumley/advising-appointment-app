@@ -72,19 +72,8 @@ html
             a(href='/users/login') Login
           li 
             a(href='/users/register') Register
-          block nav-items          
-    .content-wrapper
-      block content
-  //
-    input(id='userCWID', type='hidden', value='#{cwid}')
-    if isAuthenticated
-      .top-bar-button.top-bar-select
-        select#roleDropdown
-      .top-bar-button.top-bar-button-two Hi, #{user}
-      a.top-bar-button.top-bar-button-one(href='/users/logout') Logout
-    else
-      a.top-bar-button.top-bar-button-three(href='/users/login') Login
-      a.top-bar-button.top-bar-button-one(href='/users/register' style='padding-left:15px;') Register
-    .row.full-width
-      .columns.small-12.header
-        img(src='/img/Logo20.png')
+          block nav-items
+    .row
+      .columns.small-12
+        .content-wrapper
+          block content
