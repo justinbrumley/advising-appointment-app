@@ -27,9 +27,7 @@
     "sequelize": "^3.19.1",
     "sequelize-cli": "^2.3.1",
     "serve-favicon": "^2.3.0",
-    "underscore": "^1.8.3"
-  },
-  "devDependencies": {
+    "underscore": "^1.8.3",
     "gulp": "^3.9.0",
     "gulp-sass": "^2.1.1",
     "gulp-uglify": "^1.5.1"
