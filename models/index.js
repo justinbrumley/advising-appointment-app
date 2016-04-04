@@ -6,6 +6,8 @@ var config;
 var env = process.env.NODE_ENV || 'dev';
 if (env == 'production') {
   config = require('../config/config.json').production;
+  console.log("Setting host to ", process.env.CLEARDB_DATABASE_URL);
+  config.host = process.env.CLEARDB_DATABASE_URL;
 } else {
   config = require('../config/config.json').development;
 }
