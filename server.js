@@ -8,7 +8,7 @@ var favicon = require('serve-favicon');
 var authLocals = require('./controllers/middleware').authLocals;
 var session = require('express-session');
 
-var port = process.env.PORT || 8080;
+var port = process.env.port || process.env.PORT || 8080;
 
 // ----------------------------
 // Set express app settings
