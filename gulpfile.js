@@ -25,3 +25,4 @@ gulp.task('sass:watch', function() {
 });
 
 gulp.task('default', ['sass', 'js-min', 'js-min:watch', 'sass:watch']);
+gulp.task('production', ['sass', 'js-min']);
