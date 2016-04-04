@@ -14,17 +14,32 @@ if (env == 'production') {
 
 console.log("Connecting to database at " + config.host);
 
-var sequelize = new Sequelize(config.database, config.username, config.password, {
-  host: config.host,
-  port: 3306,
-  dialect: config.dialect,
-  dialectOptions: config.dialectOptions,
-  logging: true,
-  pool: {
-    maxConnections: 5,
-    maxIdleTime: 30
-  }
-});
+var sequelize;
+
+if (env == 'production') {
+  var sequelize = new Sequelize(config.host, {
+    port: 3306,
+    dialect: config.dialect,
+    dialectOptions: config.dialectOptions,
+    logging: true,
+    pool: {
+      maxConnections: 5,
+      maxIdleTime: 30
+    }
+  });
+} else {
+  var sequelize = new Sequelize(config.database, config.username, config.password, {
+    host: config.host,
+    port: 3306,
+    dialect: config.dialect,
+    dialectOptions: config.dialectOptions,
+    logging: true,
+    pool: {
+      maxConnections: 5,
+      maxIdleTime: 30
+    }
+  });
+}
 
 var models = [
   'Appointment',
