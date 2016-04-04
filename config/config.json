@@ -16,10 +16,10 @@
     "dialect": "mysql"
   },
   "production": {
-    "username": "root",
-    "password": "SuperSecurePassword123",
+    "username": "bedeac90bbe42a",
+    "password": "6eb6d946",
     "database": "advising_appointment_db",
-    "host": "grouponedb-cluster.cluster-cvg2mbjfxvtv.us-east-1.rds.amazonaws.com",
+    "host": "localhost",
     "seederStorage": "sequelize",
     "dialect": "mysql",
     "dialectOptions": {
