@@ -5,11 +5,9 @@ var config;
 
 var env = process.env.NODE_ENV || 'dev';
 if (env == 'production') {
-  config = require('../config/config.json').production;
-  console.log("Setting host to ", process.env.CLEARDB_DATABASE_URL);
-  config.host = process.env.CLEARDB_DATABASE_URL;
+  config = require('../config/config').production;
 } else {
-  config = require('../config/config.json').development;
+  config = require('../config/config').development;
 }
 
 console.log("Connecting to database at " + config.host);
