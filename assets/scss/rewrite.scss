@@ -65,23 +65,24 @@ form, .register-form {
     list-style-type: none;
     text-align: left;
     padding-right: 10px;
+    margin: 0 10px 0 10px;
     font-family: 'Quicksand', sans-serif;
 
-    li {
-      width: 100%;
-      padding: 3px;
+    a {
+      color: #FAFAFA;
 
-      a {
-        color: #FAFAFA;
+      li {
+        width: 100%;
+        padding: 3px;
       }
 
       &:hover {
-        background-color: rgba(255, 255, 255, .1);
-        border-radius: 5px;
-        cursor: pointer;
+        color: lightgrey;
 
-        a {
-          color: lightgrey;
+        li {
+          background-color: rgba(255, 255, 255, .1);
+          border-radius: 5px;
+          cursor: pointer;
         }
       }
     }
@@ -93,7 +94,6 @@ form, .register-form {
     border: 0;
     margin-left: 5px;
     margin-right: 5px;
-    margin-top: 10px;
     font-size: 16px;
     text-align: center;
     background-color: #660000;

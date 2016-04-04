@@ -57,21 +57,23 @@ html
     .sidebar
       .logo
         img(src='http://k-104.com/wp-content/uploads/2015/08/Louisiana-Monroe-sportsbook.pics_.gif')
+      br
       if isAuthenticated
+        h6(style='padding: 0 10px 0 10px;') ROLE
         select#roleDropdown
       ul
         if isAuthenticated
           h6 MENU
-          li 
-            a(href='/dashboard') #{user}
+          a(href='/dashboard')
+            li #{user}
           block nav-items
-          li 
-            a(href='/users/logout') Logout
+          a(href='/users/logout')
+            li Logout
         else
-          li 
-            a(href='/users/login') Login
-          li 
-            a(href='/users/register') Register
+          a(href='/users/login') 
+            li Login
+          a(href='/users/register') 
+            li Register
           block nav-items
     .row
       .columns.small-12

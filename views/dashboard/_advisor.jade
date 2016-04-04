@@ -7,16 +7,16 @@ block scripts
   script(src='/js/dashboard/advisor.js', type='application/javascript')
 
 block nav-items
-  li
-    a.nav-item(state='calendar') Calendar
-  li
-    a.nav-item(state='agenda') Agenda
-  li
-    a.nav-item(state='settings') Settings
-  li
-    a.nav-item(state='advisees') Advisees
-  li
-    a.nav-item(state='addSlots') Add Slots
+  a.nav-item(state='calendar')
+    li Calendar
+  a.nav-item(state='agenda')
+    li Agenda
+  a.nav-item(state='settings')
+    li Settings
+  a.nav-item(state='advisees')
+    li Advisees
+  a.nav-item(state='addSlots')
+    li Add Slots
 
 block content
   .content

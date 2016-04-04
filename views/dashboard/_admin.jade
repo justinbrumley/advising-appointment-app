@@ -7,10 +7,10 @@ block scripts
   script(src='/js/dashboard/admin.js', type='application/javascript')
 
 block nav-items
-  li
-    a.nav-item(state='upcomingAppointments') Upcoming Appointments
-  li
-    a.nav-item(state='settings') Settings
+  a.nav-item(state='upcomingAppointments')
+    li Upcoming Appointments
+  a.nav-item(state='settings')
+    li Settings
 
 block content
   .content
