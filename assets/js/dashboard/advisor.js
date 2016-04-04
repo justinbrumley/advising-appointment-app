@@ -161,7 +161,11 @@ var AdvisorDashboard = function() {
         $advisee_list.html('');
         for(var i = 0; i < advisees.length; i++) {
           if(advisees[i].firstName != '' && advisees[i].last_name != '') {
-            $advisee_list.append('<li>' + advisees[i].first_name + ' ' + advisees[i].last_name + '</li>');
+            $advisee_list.append('<li>'
+              + advisees[i].first_name
+              + ' '
+              + advisees[i].last_name
+              + '<span style="float: right;" class="fi-trash"></span></li>');
           } else {
             $advisee_list.append('<li>' + advisees[i].cwid + ' (no name)</li>');
           }
