@@ -8,7 +8,7 @@ config.database = 'test_db';
 config.host = 'localhost';
 config.dialect = 'mysql';
 config.dialectOptions = {};
-config.seederStorage: 'sequelize';
+config.seederStorage = 'sequelize';
 
 // Test
 config.development = {};
