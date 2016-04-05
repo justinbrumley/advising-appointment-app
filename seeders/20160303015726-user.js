@@ -13,6 +13,7 @@ module.exports = {
       }], {});
 
     */
+    console.log('Wuuuuttt');
     return queryInterface.bulkInsert('Users', [{
       cwid: '99999999',
       username: 'super_admin',
