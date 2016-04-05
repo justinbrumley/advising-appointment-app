@@ -1,2 +1,14 @@
-// Student Worker Dashboard
-h2 Student Worker Dashboard
+extends ../_layout.jade
+
+block head
+  link(href='/css/dashboard/student_worker.css', rel='stylesheet')
+  
+block scripts
+  script(src='/js/dashboard/student_worker.js', type='application/javascript')
+
+block nav-items
+  a.nav-item(state='settings')
+    li Settings
+
+block content
+  .content

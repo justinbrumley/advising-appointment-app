@@ -24,5 +24,5 @@ gulp.task('sass:watch', function() {
   gulp.watch(['./assets/scss/**/*.scss', './assets/scss/*.scss'], ['sass']);
 });
 
-gulp.task('default', ['sass', 'js-min', 'js-min:watch', 'sass:watch']);
 gulp.task('production', ['sass', 'js-min']);
+gulp.task('default', ['sass', 'js-min', 'js-min:watch', 'sass:watch']);

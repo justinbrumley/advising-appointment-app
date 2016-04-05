@@ -44,7 +44,66 @@ var AdvisorDashboard = function() {
     self.$content.load('/templates/dashboard/_admin_upcoming_appointments.html', function() {
       // Admin Upcoming Appointments specific logic
 
+      var $form = self.$content.find('.search-form').eq(0);
+      var $advisorCwidEl = self.$content.find('.advisor-cwid-input').eq(0);
+      var $appointmentsEl = self.$content.find('.appointments-list').eq(0);
+      var $exportButtonEl = self.$content.find('.export-button').eq(0);
+      var timeout;
 
+      // Initially hide export button
+      $exportButtonEl.hide();
+
+      $advisorCwidEl.on('keydown', function() {
+        clearTimeout(timeout);
+        timeout = setTimeout(function() {
+          // Auto call form after timeout
+          $form.submit();
+        }, 500);
+      });
+
+      // Search Form Submit Event
+      $form.on('submit', function(e) {
+        e.preventDefault();
+
+        var cwid = $advisorCwidEl.val();
+        if(!cwid) {
+          // No cwid provided
+          return false;
+        }
+
+        console.log("Fetching appointments...");
+        $.ajax({
+          url: '/api/users/' + cwid + '/appointments',
+          type: 'GET',
+          dataType: 'json'
+        }).done(function(data) {
+          console.log("Data", data);
+          $appointmentsEl.html('');
+          $exportButtonEl.hide();
+          if(data.success && data.appointments && data.appointments.length) {
+            for(var i = 0; i < data.appointments.length; i++) {
+              var app = data.appointments[i];
+              var $li = $('<li>');
+              $li.append('<span>' + moment(app.start_time).format('MMMM Do YYYY, h:mm a') + ' - </span>');
+              $li.append('<span>' + moment(app.end_time).format('h:mm a') + '</span>');
+              if(app.advisee && app.advisee.settings) {
+                $li.append('<span style="float:right">'
+                  + app.advisee.settings.first_name
+                  + ' ' + app.advisee.settings.last_name + '</span>');
+              } else {
+                $li.append('<span style="float:right">' + app.advisee_cwid + ' (no name)</span>');
+              }
+              $appointmentsEl.append($li);
+            }
+
+            $exportButtonEl.show();
+          } else if(!data.success) {
+            $appointmentsEl.append('<h6 style="text-align:center;">' + data.message + '</h6>');
+          } else {
+            $appointmentsEl.append('<h6 style="text-align:center;">No appointments found for ' + cwid + '</h6>');
+          }
+        });
+      });
     });
   };
 

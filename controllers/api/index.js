@@ -38,15 +38,34 @@ router.get('/me', requireAuth, function(req, res) {
       as: 'settings'
     }]
   }).done(function(user) {
-    var ret = {
-      cwid: user.cwid,
-      first_name: user.settings.first_name,
-      last_name: user.settings.last_name,
-      default_appointment_duration: user.settings.default_appointment_duration,
-      username: user.username
-    }
+    if(!user.settings) {
+      UserSettings.create({
+        cwid: req.session.cwid,
+        first_name: '',
+        last_name: '',
+        default_appointment_duration: 20
+      }).done(function(settings) {
+        var ret = {
+          cwid: user.cwid,
+          first_name: settings ? settings.first_name : '',
+          last_name: settings ? settings.last_name : '',
+          default_appointment_duration: settings ? settings.default_appointment_duration : 20,
+          username: user.username
+        }
 
-    res.json(ret);
+        res.json(ret);
+      });
+    } else {
+      var ret = {
+        cwid: user.cwid,
+        first_name: user.settings ? user.settings.first_name : '',
+        last_name: user.settings ? user.settings.last_name : '',
+        default_appointment_duration: user.settings ? user.settings.default_appointment_duration : 20,
+        username: user.username
+      }
+
+      res.json(ret);
+    }
   });
 });
 

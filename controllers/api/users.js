@@ -3,10 +3,12 @@ var router = express.Router();
 var requireAuth = require('../middleware').requireAuth;
 var requireRole = require('../middleware').requireRole;
 var models = require('../../models');
+var moment = require('moment');
 
 // Model Declarations
 var User = models.User;
 var UserSettings = models.UserSettings;
+var Appointment = models.Appointment;
 
 /**
 * Pull public information about a user by cwid
@@ -138,6 +140,62 @@ router.post('/:cwid/advisees', requireRole('advisor'), function(req, res) {
         }
       });
     }
+  });
+});
+
+/**
+* Fetches list of upcoming appointments for an advisor by cwid
+*
+* TODO add functionality to pull by specific date ranges
+*/
+router.get('/:cwid/appointments', requireRole('admin'), function(req, res) {
+  var cwid = req.params.cwid;
+  var start = moment().utc();
+  var end = moment().utc().add(7, 'd');
+
+  if(req.params.start && req.params.end) {
+    start = moment(req.params.start).utc();
+    end = moment(req.params.end).utc();
+  }
+
+  if(!cwid) {
+    return res.json({
+      success: false,
+      message: 'No cwid provided'
+    });
+  }
+
+  Appointment.findAll({
+    where: {
+      advisor_cwid: cwid,
+      start_time: {
+        $between: [ start.format(), end.format() ]
+      },
+      advisee_cwid: {
+        $not: null
+      }
+    },
+    order: ['start_time'],
+    include: [{
+      model: User,
+      as: 'advisee',
+      include: [{
+        model: UserSettings,
+        as: 'settings'
+      }]
+    }]
+  }).done(function(appointments) {
+    if(!appointments) {
+      return res.json({
+        success: false,
+        message: 'No appointments for advisor'
+      });
+    }
+
+    return res.json({
+      success: true,
+      appointments: appointments
+    });
   });
 });
 

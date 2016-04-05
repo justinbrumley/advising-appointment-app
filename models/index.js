@@ -26,23 +26,6 @@ var sequelize = new Sequelize(config.database, config.username, config.password,
   }
 });
 
-/*
-if (env == 'production') {
-  var sequelize = new Sequelize(config.url, {
-    port: 3306,
-    dialect: config.dialect,
-    dialectOptions: config.dialectOptions,
-    logging: true,
-    pool: {
-      maxConnections: 5,
-      maxIdleTime: 30
-    }
-  });
-} else {
-
-}
-*/
-
 var models = [
   'Appointment',
   'User',
