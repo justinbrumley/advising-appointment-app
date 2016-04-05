@@ -21,6 +21,7 @@ config.test.dialect = 'mysql';
 // Production
 config.production = {};
 config.production.url = process.env.CLEARDB_DATABASE_URL;
+config.development.database = 'test_db';
 config.production.dialect = 'mysql';
 config.production.seederStorage = 'sequelize';
 config.production.port = 3306;

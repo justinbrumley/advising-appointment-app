@@ -10,7 +10,8 @@ if (env == 'production') {
   config = require('../config/config').development;
 }
 
-console.log("Connecting to database at " + config.host);
+console.log("Connecting to database at (url) " + config.url);
+console.log("Connecting to database at " + config.url);
 
 var sequelize;
 
