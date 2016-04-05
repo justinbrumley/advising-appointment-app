@@ -11,7 +11,7 @@ config.development.dialectOptions = {};
 config.development.seederStorage = 'sequelize';
 
 // Test
-config.test.development = {};
+config.test = {};
 config.test.username = 'root';
 config.test.password = null;
 config.test.database = 'database_test';
