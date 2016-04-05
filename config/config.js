@@ -20,7 +20,7 @@ config.test.dialect = 'mysql';
 
 // Production
 config.production = {};
-config.production.host = 'bedeac90bbe42a:6eb6d946@us-cdbr-iron-east-03.cleardb.net';
+config.production.host = 'us-cdbr-iron-east-03.cleardb.net';
 config.development.database = 'heroku_e6c88833b53d23f';
 config.production.dialect = 'mysql';
 config.production.seederStorage = 'sequelize';
