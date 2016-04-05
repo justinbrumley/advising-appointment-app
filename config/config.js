@@ -24,5 +24,6 @@ config.production.url = process.env.CLEARDB_DATABASE_URL;
 config.production.dialect = 'mysql';
 config.production.seederStorage = 'sequelize';
 config.production.port = 3306;
+config.production.password = '6eb6d946';
 
 module.exports = config;
