@@ -66,7 +66,7 @@ var AdviseeDashboard = function() {
           title: a.advisee_cwid ? 'You' : 'Empty',
           start: moment.utc(a.start_time).local(),
           end: moment.utc(a.end_time).local(),
-          color: a.advisee_cwid ? '#660000' : 'grey',
+          color: a.advisee_cwid ? '#860000' : 'grey',
           id: a.id,
           advisor_cwid: a.advisor_cwid
         });

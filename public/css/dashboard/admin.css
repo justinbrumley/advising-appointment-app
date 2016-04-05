@@ -10,11 +10,11 @@
       background-color: rgba(0, 0, 0, 0.1); }
 
 .export-button {
-  background-color: #660000 !important;
+  background-color: #860000 !important;
   float: right; }
 
 .export-button:focus {
-  background-color: #660000 !important; }
+  background-color: #860000 !important; }
 
 .export-button:hover {
-  background-color: #660000 !important; }
+  background-color: #860000 !important; }
