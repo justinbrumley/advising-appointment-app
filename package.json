@@ -10,7 +10,7 @@
     "npm": "3.7.2"
   },
   "scripts": {
-    "postinstall": "gulp production; node_modules/.bin/sequelize db:seed:all; node_modules/.bin/sequelize db:migrate;",
+    "postinstall": "gulp production;",
     "start": "node server.js"
   },
   "dependencies": {
