@@ -10,11 +10,23 @@ if (env == 'production') {
   config = require('../config/config').development;
 }
 
-console.log("Connecting to database at (url) " + config.url);
-console.log("Connecting to database at " + config.url);
+console.log("Connecting to database at " + config.host);
 
 var sequelize;
 
+var sequelize = new Sequelize(config.database, config.username, config.password, {
+  host: config.host,
+  port: 3306,
+  dialect: config.dialect,
+  dialectOptions: config.dialectOptions,
+  logging: true,
+  pool: {
+    maxConnections: 5,
+    maxIdleTime: 30
+  }
+});
+
+/*
 if (env == 'production') {
   var sequelize = new Sequelize(config.url, {
     port: 3306,
@@ -27,18 +39,9 @@ if (env == 'production') {
     }
   });
 } else {
-  var sequelize = new Sequelize(config.database, config.username, config.password, {
-    host: config.host,
-    port: 3306,
-    dialect: config.dialect,
-    dialectOptions: config.dialectOptions,
-    logging: true,
-    pool: {
-      maxConnections: 5,
-      maxIdleTime: 30
-    }
-  });
+
 }
+*/
 
 var models = [
   'Appointment',
