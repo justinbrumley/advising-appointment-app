@@ -16,19 +16,15 @@ module.exports = {
       }], {});
 
     */
-    User.findAll({}).done(function(users) {
-      console.log("Users", users);
-      return queryInterface.bulkInsert('Users', [{
-        cwid: '99999999',
-        username: 'super_admin',
-        password: '$2a$04$4JJs4IfD2P8jykq4BQErfuXjMBbOgMxNdOkaOULOJb4vB1JRV/NES',
-        advisor_cwid: null,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      }], {});
-    });
 
-
+    return queryInterface.bulkInsert('Users', [{
+      cwid: '99999999',
+      username: 'super_admin',
+      password: '$2a$04$4JJs4IfD2P8jykq4BQErfuXjMBbOgMxNdOkaOULOJb4vB1JRV/NES',
+      advisor_cwid: null,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    }], {});
   },
 
   down: function(queryInterface, Sequelize) {
