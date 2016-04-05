@@ -15,7 +15,7 @@ console.log("Connecting to database at " + config.host);
 var sequelize;
 
 if (env == 'production') {
-  var sequelize = new Sequelize(config.host, {
+  var sequelize = new Sequelize(config.url, {
     port: 3306,
     dialect: config.dialect,
     dialectOptions: config.dialectOptions,
