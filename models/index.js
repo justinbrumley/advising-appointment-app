@@ -43,7 +43,7 @@ models.forEach(function(model) {
 
 (function(m) {
   // Advisor/Advisee associations
-  m.User.hasOne(m.User, {
+  m.User.belongsTo(m.User, {
     as: 'advisor',
     foreignKey: 'advisor_cwid'
   });
