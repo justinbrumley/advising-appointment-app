@@ -71,6 +71,113 @@ var AdvisorDashboard = function() {
       var $dialog;
       self.$content.append($calendar);
 
+      function onDayClick(date, e, view) {
+        // Show dialog to add slots
+        if($dialog) {
+          $dialog.remove();
+          $dialog = null;
+          return false;
+        }
+
+        if(!moment(date).isSameOrAfter(moment(), 'day')) {
+          return false;
+        }
+
+        // Only get date portion of date param
+        date = moment(date).format('l');
+
+        var posX = $(window).width() - e.pageX;
+        var posY = e.pageY;
+
+        $dialog = $('<div>');
+
+        if(e.pageY + 282 >= $(window).height()) {
+          // Go up with popup
+          $dialog.css('bottom', $(window).height() - posY);
+        } else {
+          // Go down with popup
+          $dialog.css('top', posY);
+        }
+
+        var posX = $(window).width() - e.pageX;
+        var posY = e.pageY;
+
+        $dialog.css({
+          'position': 'absolute',
+          'right': posX,
+          'height': '282px',
+          'width': '300px',
+          'z-index': 100,
+          'background-color': '#FEFEFE',
+          'border': '1px solid black',
+          'padding': '10px',
+          'box-shadow': '0 0 10px rgba(0, 0, 0, .2)'
+        });
+
+        var $closeButton = $('<i class="fi-x"></i>');
+        $closeButton.css({
+          'position': 'absolute',
+          'right': '10px',
+          'top': '5px',
+          'cursor': 'pointer'
+        });
+
+        $closeButton.on('click', function() {
+          $dialog.remove();
+          $dialog = null;
+        });
+
+        var $form = $('<form>');
+
+        var $startTimeEl = $('<input type="time" placeholder="Start Time" name="start_time" />');
+        var $endTimeEl = $('<input type="time" placeholder="End Time" name="end_time" />');
+        var $durationEl = $('<input type="number" placeholder="Duration" name="appointment_duration" />');
+
+        $form.append($startTimeEl);
+        $form.append($endTimeEl);
+        $form.append($durationEl);
+
+        $form.append('<button class="button">Submit</button>');
+
+        $form.on('submit', function(e) {
+          e.preventDefault();
+
+          // Make sure form isn't empty
+          if(!$startTimeEl.val() || !$endTimeEl.val() || !$durationEl.val()) {
+            return false;
+          }
+
+          // Make sure start time is earlier than end time
+          if($startTimeEl.val() >= $endTimeEl.val()) {
+            return false;
+          }
+
+          // Submit new appointment slots:
+          $.ajax({
+            type: 'POST',
+            url: '/api/appointments',
+            data: {
+              start_time: moment(date + ' ' + $startTimeEl.val() + ':00').format(),
+              end_time: moment(date + ' ' + $endTimeEl.val() + ':00').format(),
+              duration: $durationEl.val()
+            },
+            dataType: 'json'
+          }).done(function(data) {
+            if(data && data.success) {
+              // Successfully added new appointment slots
+              $.growlUI('Successfully added appointment slot(s)!');
+              $dialog.remove();
+              self.setState('calendar');
+            }
+          });
+        });
+
+        $dialog.append('<h5 style="text-align: center">' + moment(date).format('L') + '</h5>');
+        $dialog.append($closeButton);
+        $dialog.append($form);
+        self.$content.append($dialog);
+      }
+
       // Initialize FullCalendar
       $calendar.fullCalendar({
         header: {
@@ -80,104 +187,7 @@ var AdvisorDashboard = function() {
         },
         events: events,
         eventLimit: true,
-        dayClick: function(date, e, view) {
-          // Show dialog to add slots
-          if($dialog) {
-            $dialog.remove();
-          }
-
-          // Only get date portion of date param
-          date = moment(date).format('l');
-
-          var posX = $(window).width() - e.pageX;
-          var posY = e.pageY;
-
-          $dialog = $('<div>');
-
-          if(e.pageY + 282 >= $(window).height()) {
-            // Go up with popup
-            $dialog.css('bottom', $(window).height() - posY);
-          } else {
-            // Go down with popup
-            $dialog.css('top', posY);
-          }
-
-          var posX = $(window).width() - e.pageX;
-          var posY = e.pageY;
-
-          $dialog.css({
-            'position': 'absolute',
-            'right': posX,
-            'height': '282px',
-            'width': '300px',
-            'z-index': 100,
-            'background-color': '#FEFEFE',
-            'border': '1px solid black',
-            'padding': '10px'
-          });
-
-          var $closeButton = $('<i class="fi-x"></i>');
-          $closeButton.css({
-            'position': 'absolute',
-            'right': '10px',
-            'top': '5px',
-            'cursor': 'pointer'
-          });
-
-          $closeButton.on('click', function() {
-            $dialog.remove();
-          });
-
-          var $form = $('<form>');
-
-          var $startTimeEl = $('<input type="time" placeholder="Start Time" name="start_time" />');
-          var $endTimeEl = $('<input type="time" placeholder="End Time" name="end_time" />');
-          var $durationEl = $('<input type="number" placeholder="Duration" name="appointment_duration" />');
-
-          $form.append($startTimeEl);
-          $form.append($endTimeEl);
-          $form.append($durationEl);
-
-          $form.append('<button class="button">Submit</button>');
-
-          $form.on('submit', function(e) {
-            e.preventDefault();
-
-            // Make sure form isn't empty
-            if(!$startTimeEl.val() || !$endTimeEl.val() || !$durationEl.val()) {
-              return false;
-            }
-
-            // Make sure start time is earlier than end time
-            if($startTimeEl.val() >= $endTimeEl.val()) {
-              return false;
-            }
-
-            // Submit new appointment slots:
-            $.ajax({
-              type: 'POST',
-              url: '/api/appointments',
-              data: {
-                start_time: moment(date + ' ' + $startTimeEl.val() + ':00').format(),
-                end_time: moment(date + ' ' + $endTimeEl.val() + ':00').format(),
-                duration: $durationEl.val()
-              },
-              dataType: 'json'
-            }).done(function(data) {
-              if(data && data.success) {
-                // Successfully added new appointment slots
-                $.growlUI('Successfully added appointment slot(s)!');
-                $dialog.remove();
-                self.setState('calendar');
-              }
-            });
-          });
-
-          $dialog.append('<h5 style="text-align: center">' + moment(date).format('L') + '</h5>');
-          $dialog.append($closeButton);
-          $dialog.append($form);
-          self.$content.append($dialog);
-        }
+        dayClick: onDayClick
       });
 
       // Unblock page
