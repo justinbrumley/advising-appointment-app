@@ -20,6 +20,13 @@ router.post('/', requireRole('advisor'), function(req, res) {
   var end_time = req.body.end_time;
   var duration = req.body.duration;
 
+  if(moment(end_time).isSameOrBefore(moment(start_time))) {
+    return res.json({
+      message: 'End time cannot be before start time',
+      success: false
+    });
+  }
+
   if(req.body.duration) {
     // Multiple appointments
     var start = moment(start_time);
@@ -140,8 +147,8 @@ router.post('/', requireRole('advisor'), function(req, res) {
 * Can be filtered by date and whether or not they are empty
 */
 router.get('/', requireRole('advisor', 'advisee'), function(req, res) {
-  var startDate = req.params.startdate;
-  var endDate = req.params.endDate;
+  var startDate = req.query.startDate;
+  var endDate = req.query.endDate;
   var advisor_cwid = req.session.cwid;
 
   async.waterfall([
