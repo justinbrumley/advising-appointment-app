@@ -45,6 +45,11 @@ app.use('/', require('./controllers/index'));
 app.use('/users', require('./controllers/users'));
 app.use('/api', require('./controllers/api'));
 
+app.get('*', function(req, res) {
+  // 404
+  res.render('404');
+});
+
 // ----------------------------
 // Sync the db and start the server
 // ----------------------------
