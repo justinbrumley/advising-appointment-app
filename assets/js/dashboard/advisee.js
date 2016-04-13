@@ -116,12 +116,19 @@ var AdviseeDashboard = function() {
       var $settingsForm = self.$content.find('.settings-form').eq(0);
       var $firstNameEl = self.$content.find('.first-name-input').eq(0);
       var $lastNameEl = self.$content.find('.last-name-input').eq(0);
+      var $emailEl = self.$content.find('.email-input').eq(0);
 
       $firstNameEl.val(self.first_name);
       $lastNameEl.val(self.last_name);
+      $emailEl.val(self.email);
 
       $settingsForm.on('submit', function(e) {
         e.preventDefault();
+
+        // Required elements
+        if(!$firstNameEl.val() || !$lastNameEl.val() || !$emailEl.val()) {
+          return false;
+        }
 
         $.ajax({
           url: '/api/settings',
@@ -129,6 +136,7 @@ var AdviseeDashboard = function() {
           data: {
             first_name: $firstNameEl.val(),
             last_name: $lastNameEl.val(),
+            email: $emailEl.val(),
             default_appointment_duration: 20
           },
           dataType: 'json'
@@ -138,6 +146,7 @@ var AdviseeDashboard = function() {
             $.growlUI('Settings saved!');
             self.first_name = data.user_settings.first_name;
             self.last_name = data.user_settings.last_name;
+            self.email = data.user_settings.email;
           } else {
             console.log("Error");
           }
@@ -166,6 +175,7 @@ var AdviseeDashboard = function() {
     }).done(function(data) {
       self.first_name = data.first_name;
       self.last_name = data.last_name;
+      self.email = data.email;
 
       // Set initial state to calendar
       self.loadElements();
