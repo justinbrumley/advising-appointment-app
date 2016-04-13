@@ -17,6 +17,11 @@ module.exports = function(sequelize, DataTypes) {
       type: Sequelize.STRING,
       allowNull: true
     },
+    email: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      defaultValue: ''
+    },
     default_appointment_duration: {
       type: Sequelize.INTEGER,
       allowNull: false,

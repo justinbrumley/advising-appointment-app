@@ -43,6 +43,7 @@ router.get('/me', requireAuth, function(req, res) {
         cwid: req.session.cwid,
         first_name: '',
         last_name: '',
+        email: '',
         default_appointment_duration: 20
       }).done(function(settings) {
         var ret = {
@@ -50,7 +51,8 @@ router.get('/me', requireAuth, function(req, res) {
           first_name: settings ? settings.first_name : '',
           last_name: settings ? settings.last_name : '',
           default_appointment_duration: settings ? settings.default_appointment_duration : 20,
-          username: user.username
+          username: user.username,
+          email: settings.email
         }
 
         res.json(ret);
@@ -61,7 +63,8 @@ router.get('/me', requireAuth, function(req, res) {
         first_name: user.settings ? user.settings.first_name : '',
         last_name: user.settings ? user.settings.last_name : '',
         default_appointment_duration: user.settings ? user.settings.default_appointment_duration : 20,
-        username: user.username
+        username: user.username,
+        email: user.settings.email
       }
 
       res.json(ret);
@@ -75,6 +78,7 @@ router.get('/me', requireAuth, function(req, res) {
 router.post('/settings', requireAuth, function(req, res) {
   var first_name = req.body.first_name;
   var last_name = req.body.last_name;
+  var email = req.body.email;
   var default_appointment_duration = req.body.default_appointment_duration;
 
   UserSettings.findOrCreate({
@@ -91,6 +95,7 @@ router.post('/settings', requireAuth, function(req, res) {
 
     userSettings[0].first_name = first_name;
     userSettings[0].last_name = last_name;
+    userSettings[0].email = email;
     userSettings[0].default_appointment_duration = default_appointment_duration;
 
     userSettings[0].save().then(function(settings) {

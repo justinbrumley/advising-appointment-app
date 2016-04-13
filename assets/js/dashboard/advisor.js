@@ -220,14 +220,21 @@ var AdvisorDashboard = function() {
       var $settingsForm = self.$content.find('.settings-form').eq(0);
       var $firstNameEl = self.$content.find('.first-name-input').eq(0);
       var $lastNameEl = self.$content.find('.last-name-input').eq(0);
+      var $emailEl = self.$content.find('.email-input').eq(0);
       var $defaultAppointmentDurationEl = self.$content.find('.default-appointment-duration-input').eq(0);
 
       $firstNameEl.val(self.first_name);
       $lastNameEl.val(self.last_name);
+      $emailEl.val(self.email);
       $defaultAppointmentDurationEl.val(self.default_appointment_duration);
 
       $settingsForm.on('submit', function(e) {
         e.preventDefault();
+
+        // Required Values
+        if(!$emailEl.val() || !$firstNameEl.val() || !$lastNameEl.val() || !$defaultAppointmentDurationEl.val()) {
+          return false;
+        }
 
         $.ajax({
           url: '/api/settings',
@@ -235,6 +242,7 @@ var AdvisorDashboard = function() {
           data: {
             first_name: $firstNameEl.val(),
             last_name: $lastNameEl.val(),
+            email: $emailEl.val(),
             default_appointment_duration: $defaultAppointmentDurationEl.val()
           },
           dataType: 'json'
@@ -244,6 +252,7 @@ var AdvisorDashboard = function() {
             $.growlUI('Settings saved!');
             self.first_name = data.user_settings.first_name;
             self.last_name = data.user_settings.last_name;
+            self.email = data.user_settings.email;
             self.default_appointment_duration = data.user_settings.default_appointment_duration;
           } else {
             console.log("Error");
@@ -429,6 +438,7 @@ var AdvisorDashboard = function() {
         self.cwid = data.cwid;
         self.first_name = data.first_name;
         self.last_name = data.last_name;
+        self.email = data.email;
         self.default_appointment_duration = data.default_appointment_duration;
 
         // Set initial state to calendar
