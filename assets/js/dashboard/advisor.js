@@ -447,7 +447,7 @@ var AdvisorDashboard = function() {
             // Could not remove appointment slots
             console.log("Error trying to remove appointment slots");
           }
-        });
+        }.bind(this));
       });
     });
   };
