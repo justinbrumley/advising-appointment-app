@@ -405,6 +405,54 @@ var AdvisorDashboard = function() {
   };
 
   /**
+  * Removes slots from calendar
+  */
+  self.removeSlots = function() {
+    self.$content.load('/templates/dashboard/_remove_slots_form.html', function() {
+      var form = self.$content.find('.remove-slots-form').eq(0);
+
+      form.on('submit', function(e) {
+        e.preventDefault();
+        var date = $(this).find('input[name="date"]').eq(0).val();
+        var start_time = $(this).find('input[name="start_time"]').eq(0).val();
+        var end_time = $(this).find('input[name="end_time"]').eq(0).val();
+
+        if(!date || !start_time || !end_time) {
+          return false;
+        }
+
+        var result = window.confirm('Are you sure you want to remove appointment slots for ' + date + '?');
+        if(!result) {
+          return false;
+        }
+
+        var startDateTime = moment(date + 'T' + start_time).format();
+        var endDateTime = moment(date + 'T' + end_time).format();
+
+        $.ajax({
+          url: '/api/appointments',
+          type: 'DELETE',
+          data: {
+            startDateTime: startDateTime,
+            endDateTime: endDateTime
+          }
+        }).done(function(data) {
+          if(data.success) {
+            // Successfully removed appointments
+            $.growlUI('Successfully removed ' + data.appointments_removed + ' appointment slots!');
+            $(this).find('input[name="date"]').eq(0).val('');
+            $(this).find('input[name="start_time"]').eq(0).val('');
+            $(this).find('input[name="end_time"]').eq(0).val('');
+          } else {
+            // Could not remove appointment slots
+            console.log("Error trying to remove appointment slots");
+          }
+        });
+      });
+    });
+  };
+
+  /**
   * Set the view state
   */
   self.setState = function(s) {

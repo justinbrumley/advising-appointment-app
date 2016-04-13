@@ -237,6 +237,45 @@ router.get('/', requireRole('advisor', 'advisee'), function(req, res) {
 });
 
 /**
+* Removes appointments for the given date range for an advisor.
+*/
+router.delete('/', requireRole('advisor'), function(req, res) {
+  var startDateTime = req.body.startDateTime;
+  var endDateTime = req.body.endDateTime;
+  var cwid = req.session.cwid;
+
+  if(!startDateTime || !endDateTime || !cwid) {
+    return res.json({
+      success: false,
+      message: 'Error trying to remove appointment slots'
+    });
+  }
+
+  Appointment.destroy({
+    where: {
+      advisor_cwid: cwid,
+      $or: [
+        {
+          start_time: {
+            $between: [moment(startDateTime).utc().format('YYYY-MM-DD HH:mm:ss'), moment(endDateTime).utc().format('YYYY-MM-DD HH:mm:ss')]
+          }
+        },
+        {
+          end_time: {
+            $between: [moment(endDateTime).utc().format('YYYY-MM-DD HH:mm:ss'), moment(endDateTime).utc().format('YYYY-MM-DD HH:mm:ss')]
+          }
+        }
+      ]
+    }
+  }).done(function(num) {
+    return res.json({
+      success: true,
+      appointments_removed: num
+    });
+  });
+});
+
+/**
 * Attempt to register student for appointment
 */
 router.post('/select', requireRole('advisee'), function(req, res) {
