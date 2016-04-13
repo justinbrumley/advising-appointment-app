@@ -278,7 +278,10 @@ var AdvisorDashboard = function() {
               + '<i style="float: right; padding-left:10px;" class="fi-pencil"></i>'
               + '</li>');
           } else {
-            $advisee_list.append('<li>' + advisees[i].cwid + ' (no name)</li>');
+            $advisee_list.append('<li>' + advisees[i].cwid + ' (no name)' +
+            '<i style="float: right; padding-left:10px;" class="fi-trash"></i>' +
+            '<i style="float: right; padding-left:10px;" class="fi-pencil"></i>' +
+            '</li>');
           }
         }
       }
