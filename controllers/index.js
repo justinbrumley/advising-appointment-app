@@ -3,7 +3,7 @@ var router = express.Router();
 var requireAuth = require("./middleware").requireAuth;
 
 router.get('/', function(req, res) {
-  res.render('index');
+  res.redirect('/dashboard');
 });
 
 router.get('/dashboard', requireAuth, function(req, res) {
