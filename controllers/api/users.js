@@ -267,5 +267,42 @@ router.post('/:cwid/password', requireAuth, function(req, res) {
   });
 });
 
+/**
+* Adds user to specific role
+*/
+router.post('/:cwid/role', requireRole('super_admin'), function(req, res) {
+  var cwid = req.params.cwid;
+  var role_id = req.body.role;
+
+  UserRole.findAll({
+    where: {
+      cwid: cwid
+    }
+  }).done(function(userRoles) {
+    if(_.pluck(userRoles, 'role_id').indexOf(role_id) != -1) {
+      return res.json({
+        success: false,
+        message: 'User already in role'
+      });
+    } else {
+      UserRole.create({
+        cwid: cwid,
+        role_id: role_id
+      }).done(function(userRole) {
+        if(userRole) {
+          return res.json({
+            success: true
+          });
+        } else {
+          return res.json({
+            success: false,
+            message: 'Error adding user to role'
+          });
+        }
+      });
+    }
+  });
+});
+
 
 module.exports = router;
