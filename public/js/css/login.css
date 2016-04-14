@@ -1,0 +1,15 @@
+.login-form {
+  padding-top: 15%;
+  position: relative; }
+  .login-form .alert-row {
+    position: absolute;
+    top: 5%;
+    left: 0;
+    right: 0; }
+  .login-form button {
+    width: 100%;
+    background-color: #860000; }
+  .login-form button:focus {
+    background-color: #860000; }
+  .login-form button:hover {
+    background-color: #860000; }

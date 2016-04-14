@@ -1,0 +1,99 @@
+body {
+  font-family: 'Quicksand', 'PT Sans', 'Lato', geneva, tahoma, sans-serif;
+  background-color: #FAFAFA; }
+
+div.growlUI {
+  background: url("/img/check.png") no-repeat 10px 10px;
+  font-size: 18px;
+  min-height: 60px; }
+
+div.growlUI h1, div.growlUI h2 {
+  color: white;
+  padding: 5px 5px 5px 75px;
+  text-align: left;
+  font-size: 18px; }
+
+.topbar {
+  display: none; }
+
+form button, .register-form button {
+  width: 100%;
+  background-color: #860000 !important; }
+
+form button:focus, .register-form button:focus {
+  background-color: #860000 !important; }
+
+form button:hover, .register-form button:hover {
+  background-color: #860000 !important; }
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 260px;
+  background-color: #860000;
+  overflow: hidden; }
+  .sidebar .logo {
+    padding-top: 10px;
+    text-align: center; }
+    .sidebar .logo img {
+      width: 40%; }
+  .sidebar h6 {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.5);
+    font-family: 'Quicksand', sans-serif;
+    font-weight: bold; }
+  .sidebar ul {
+    list-style-type: none;
+    text-align: left;
+    padding-right: 10px;
+    margin: 0 10px 0 10px;
+    font-family: 'Quicksand', sans-serif; }
+    .sidebar ul a {
+      color: #FAFAFA; }
+      .sidebar ul a li {
+        width: 100%;
+        padding: 3px; }
+      .sidebar ul a:hover {
+        color: lightgrey; }
+        .sidebar ul a:hover li {
+          background-color: rgba(255, 255, 255, 0.1);
+          border-radius: 5px;
+          cursor: pointer; }
+  .sidebar select {
+    width: 100%;
+    color: #FAFAFA;
+    border: 0;
+    margin-left: 5px;
+    margin-right: 5px;
+    font-size: 16px;
+    text-align: center;
+    background-color: #860000;
+    font-family: 'Quicksand', sans-serif; }
+    .sidebar select:focus {
+      border: 0;
+      outline: 0px; }
+
+.content-wrapper {
+  padding-left: 270px;
+  padding-right: 10px;
+  padding-top: 10px; }
+  .content-wrapper .content-title {
+    text-align: center; }
+
+/* Mobile view */
+@media (max-width: 768px) {
+  .sidebar {
+    display: none; }
+  .topbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 78px;
+    background-color: #860000;
+    display: initial; }
+  .content-wrapper {
+    padding-left: 1%;
+    padding-top: 88px; } }

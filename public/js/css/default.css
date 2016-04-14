@@ -1,0 +1,87 @@
+body {
+  font-family: geneva, tahoma, sans-serif; }
+
+.header {
+  text-align: left;
+  background-color: #860000;
+  padding-bottom: 5px;
+  background-image: url("/img/bg_pattern.png");
+  height: 100px; }
+  .header img {
+    position: relative;
+    top: 55%;
+    transform: translateY(-45%);
+    height: 125px; }
+
+.top-bar-button {
+  position: absolute;
+  text-align: center;
+  top: -1px;
+  background-color: #3B0000;
+  height: 50px;
+  /* width: 80px; */
+  line-height: 45px;
+  padding-left: 10px;
+  padding-right: 10px;
+  font-size: 13px;
+  color: white;
+  font-weight: bold;
+  border: solid 1px #510808;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px; }
+  .top-bar-button.top-bar-button-one {
+    right: 120px; }
+  .top-bar-button.top-bar-button-two {
+    right: 366px; }
+  .top-bar-button.top-bar-button-three {
+    right: 216px; }
+  .top-bar-button.top-bar-select {
+    right: 200px;
+    width: 152px; }
+    .top-bar-button.top-bar-select select {
+      color: white;
+      border: 0;
+      font-size: 13px;
+      background-color: #3B0000; }
+      .top-bar-button.top-bar-select select:focus {
+        border: 0;
+        outline: 0px; }
+  .top-bar-button:hover {
+    color: grey; }
+
+.button {
+  background-color: #860000; }
+  .button:hover {
+    background-color: #3B0000; }
+
+.full-width {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: initial; }
+
+.register-form, .login-form {
+  padding-top: 10px;
+  margin-bottom: 20px; }
+  .register-form .callout, .login-form .callout {
+    border-radius: 20px; }
+    .register-form .callout.alert, .login-form .callout.alert {
+      text-align: center; }
+  .register-form button, .login-form button {
+    width: 100%; }
+
+.sidebar {
+  border-radius: 10px; }
+  .sidebar .button {
+    width: 100%;
+    border-radius: 10px; }
+
+@media only screen and (max-device-width: 480px) {
+  /*  Mobile Styles */
+  .header {
+    height: 74px; }
+    .header img {
+      height: 66px;
+      padding: 4px 0 4px 0; }
+  .sub-header {
+    display: none; } }

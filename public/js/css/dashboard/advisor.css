@@ -1,0 +1,18 @@
+.advisee-list {
+  list-style: none;
+  margin: 0 0 10px 0; }
+  .advisee-list li {
+    padding: 5px 10px 5px 10px; }
+  .advisee-list li:nth-child(odd) {
+    background-color: rgba(0, 0, 0, 0.05); }
+  .advisee-list li:nth-child(even) {
+    background-color: rgba(0, 0, 0, 0.1); }
+
+.add-new-button {
+  background-color: #860000 !important; }
+
+.add-new-button:focus {
+  background-color: #860000 !important; }
+
+.add-new-button:hover {
+  background-color: #860000 !important; }
