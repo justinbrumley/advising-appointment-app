@@ -68,7 +68,7 @@ var AdvisorDashboard = function() {
 
       // Set up calendar DOM
       var $calendar = $('<div>');
-      var $dialog;
+      var $dialog, delta = 0;
       self.$content.append($calendar);
 
       function onDayClick(date, e, view) {
@@ -78,6 +78,13 @@ var AdvisorDashboard = function() {
           $dialog = null;
           return false;
         }
+
+        var cur = Date.now();
+        if(cur - delta > 400) {
+          delta = cur;
+          return;
+        }
+        delta = 0;
 
         if (!moment(date).isSameOrAfter(moment(), 'day')) {
           return false;
