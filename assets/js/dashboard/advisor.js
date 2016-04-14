@@ -6,16 +6,16 @@ var AdvisorDashboard = function() {
   self.state = null;
 
   /**
-  * Fetches elements from the dom
-  */
+   * Fetches elements from the dom
+   */
   self.loadElements = function() {
     self.$sidebarButtonEl = $('.nav-item');
     self.$content = $('.content').eq(0);
   };
 
   /**
-  * Blocks content part of DOM
-  */
+   * Blocks content part of DOM
+   */
   self.blockContent = function(m) {
     self.$content.block({
       css: {
@@ -32,15 +32,15 @@ var AdvisorDashboard = function() {
   };
 
   /**
-  * Unblocks content part of DOM
-  */
+   * Unblocks content part of DOM
+   */
   self.unblockContent = function() {
     self.$content.unblock();
   };
 
   /**
-  * Calendar specific setup
-  */
+   * Calendar specific setup
+   */
   self.calendar = function() {
     self.blockContent("Loading Calendar...");
 
@@ -52,10 +52,10 @@ var AdvisorDashboard = function() {
       var events = [];
 
       // Loop through appointments and add them to events array
-      for(var i = 0; i < data.appointments.length; i++) {
+      for (var i = 0; i < data.appointments.length; i++) {
         var a = data.appointments[i];
         var title = null;
-        if(a.advisee && a.advisee.settings) {
+        if (a.advisee && a.advisee.settings) {
           title = a.advisee.settings.first_name + ' ' + a.advisee.settings.last_name;
         }
         events.push({
@@ -73,13 +73,13 @@ var AdvisorDashboard = function() {
 
       function onDayClick(date, e, view) {
         // Show dialog to add slots
-        if($dialog) {
+        if ($dialog) {
           $dialog.remove();
           $dialog = null;
           return false;
         }
 
-        if(!moment(date).isSameOrAfter(moment(), 'day')) {
+        if (!moment(date).isSameOrAfter(moment(), 'day')) {
           return false;
         }
 
@@ -91,7 +91,7 @@ var AdvisorDashboard = function() {
 
         $dialog = $('<div>');
 
-        if(e.pageY + 282 >= $(window).height()) {
+        if (e.pageY + 282 >= $(window).height()) {
           // Go up with popup
           $dialog.css('bottom', $(window).height() - posY);
         } else {
@@ -143,12 +143,12 @@ var AdvisorDashboard = function() {
           e.preventDefault();
 
           // Make sure form isn't empty
-          if(!$startTimeEl.val() || !$endTimeEl.val() || !$durationEl.val()) {
+          if (!$startTimeEl.val() || !$endTimeEl.val() || !$durationEl.val()) {
             return false;
           }
 
           // Make sure start time is earlier than end time
-          if($startTimeEl.val() >= $endTimeEl.val()) {
+          if ($startTimeEl.val() >= $endTimeEl.val()) {
             return false;
           }
 
@@ -163,7 +163,7 @@ var AdvisorDashboard = function() {
             },
             dataType: 'json'
           }).done(function(data) {
-            if(data && data.success) {
+            if (data && data.success) {
               // Successfully added new appointment slots
               $.growlUI('Successfully added appointment slot(s)!');
               $dialog.remove();
@@ -196,8 +196,8 @@ var AdvisorDashboard = function() {
   };
 
   /**
-  * Agenda specific setup
-  */
+   * Agenda specific setup
+   */
   self.agenda = function() {
     self.blockContent('Loading Agenda...');
 
@@ -207,10 +207,10 @@ var AdvisorDashboard = function() {
       // Agenda specific logic
     });
   };
-  
-   /**
-  * Change Password
-  */
+
+  /**
+   * Change Password
+   */
   self.changePassword = function() {
     self.blockContent('Loading...');
 
@@ -218,54 +218,61 @@ var AdvisorDashboard = function() {
     self.$content.load('/templates/dashboard/_change_password_form.html', function() {
       self.unblockContent();
       var changePasswordForm = self.$content.find('.change-password-form').eq(0);
-      
-    // Change password form submit
+
+      // Change password form submit
       changePasswordForm.on('submit', function(e) {
         e.preventDefault();
         var current_password = $(this).find('input[name="current_password"]').val();
         var new_password = $(this).find('input[name="new_password"]').val();
         var verify_password = $(this).find('input[name="verify_password"]').val();
-        
-        if (new_password != current_password && new_password == verify_password){
-          $.ajax({
-            url:'/api/users/' + self.cwid +'/password',
-            data: {
-             current_password: current_password,
-             new_password: new_password
-            },
-            type: 'POST'
-          }).done(function(data){
-            if (data && data.success){
-              $.growlUI('Password changed!');
-              
-              // Clear Data
-             $(this).find('input[name="new_password"]').val('');
-            $(this).find('input[name="current_password"]').val('');
-            $(this).find('input[name="verify_password"]').val('');
-            }
-          });
-        } else{
-          //Current password and new password can not match
-          //TODO Show error message
-           $.growlUI('Password must be different from previous.');
-              
-              // Clear Data
+
+        if(new_password !== verify_password) {
+          $.growlUI('Passwords do not match!');
+
+          // Clear Data
+          $(this).find('input[name="new_password"]').val('');
+          $(this).find('input[name="current_password"]').val('');
+          $(this).find('input[name="current_password"]').focus();
+          $(this).find('input[name="verify_password"]').val('');
+        }
+
+        $.ajax({
+          url: '/api/users/' + self.cwid + '/password',
+          data: {
+            current_password: current_password,
+            new_password: new_password
+          },
+          type: 'POST'
+        }).done(function(data) {
+          if (data && data.success) {
+            $.growlUI('Password changed!');
+
+            // Clear Data
             $(this).find('input[name="new_password"]').val('');
             $(this).find('input[name="current_password"]').val('');
+            $(this).find('input[name="current_password"]').focus();
             $(this).find('input[name="verify_password"]').val('');
-          
-        } 
+          } else {
+            $.growlUI('Error: ', data.message);
+
+            // Clear Data
+            $(this).find('input[name="new_password"]').val('');
+            $(this).find('input[name="current_password"]').val('');
+            $(this).find('input[name="current_password"]').focus();
+            $(this).find('input[name="verify_password"]').val('');
+          }
+        }.bind(this));
       });
     });
-  };  
+  };
 
 
   /**
-  * Settings specific setup
-  */
+   * Settings specific setup
+   */
   self.settings = function() {
     self.blockContent("Loading Settings...")
-    // Load settings template
+      // Load settings template
     self.$content.load('/templates/dashboard/_advisor_settings.html', function() {
       self.unblockContent();
       // Advisor settings template specific logic
@@ -284,7 +291,7 @@ var AdvisorDashboard = function() {
         e.preventDefault();
 
         // Required Values
-        if(!$emailEl.val() || !$firstNameEl.val() || !$lastNameEl.val() || !$defaultAppointmentDurationEl.val()) {
+        if (!$emailEl.val() || !$firstNameEl.val() || !$lastNameEl.val() || !$defaultAppointmentDurationEl.val()) {
           return false;
         }
 
@@ -299,7 +306,7 @@ var AdvisorDashboard = function() {
           },
           dataType: 'json'
         }).done(function(data) {
-          if(data && data.success) {
+          if (data && data.success) {
             // Success
             $.growlUI('Settings saved!');
             self.first_name = data.user_settings.first_name;
@@ -315,12 +322,12 @@ var AdvisorDashboard = function() {
   };
 
   /**
-  * Show advisees list and allow user to add new ones
-  */
+   * Show advisees list and allow user to add new ones
+   */
   self.advisees = function() {
     // TODO Remove this fake load
     self.blockContent("Loading Advisees...")
-    // Load settings template
+      // Load settings template
     self.$content.load('/templates/dashboard/_advisees_list.html', function() {
       self.unblockContent();
       // Advisor settings template specific logic
@@ -329,20 +336,14 @@ var AdvisorDashboard = function() {
 
       function setupList(advisees) {
         $advisee_list.html('');
-        for(var i = 0; i < advisees.length; i++) {
-          if(advisees[i].firstName != '' && advisees[i].last_name != '') {
-            $advisee_list.append('<li>'
-              + advisees[i].first_name
-              + ' '
-              + advisees[i].last_name
-              + '<i style="float: right; padding-left:10px;" class="fi-trash"></i>'
-              + '<i style="float: right; padding-left:10px;" class="fi-pencil"></i>'
-              + '</li>');
+        for (var i = 0; i < advisees.length; i++) {
+          if (advisees[i].firstName != '' && advisees[i].last_name != '') {
+            $advisee_list.append('<li>' + advisees[i].first_name + ' ' + advisees[i].last_name + '<i style="float: right; padding-left:10px;" class="fi-trash"></i>' + '<i style="float: right; padding-left:10px;" class="fi-pencil"></i>' + '</li>');
           } else {
             $advisee_list.append('<li>' + advisees[i].cwid + ' (no name)' +
-            '<i style="float: right; padding-left:10px;" class="fi-trash"></i>' +
-            '<i style="float: right; padding-left:10px;" class="fi-pencil"></i>' +
-            '</li>');
+              '<i style="float: right; padding-left:10px;" class="fi-trash"></i>' +
+              '<i style="float: right; padding-left:10px;" class="fi-pencil"></i>' +
+              '</li>');
           }
         }
       }
@@ -359,7 +360,7 @@ var AdvisorDashboard = function() {
             },
             dataType: 'json'
           }).done(function(data) {
-            if(data && data.success) {
+            if (data && data.success) {
               fetchList();
             }
           });
@@ -371,7 +372,7 @@ var AdvisorDashboard = function() {
           url: '/api/users/' + self.cwid + '/advisees',
           type: 'GET'
         }).done(function(data) {
-          if(data && data.success) {
+          if (data && data.success) {
             setupList(data.advisees);
             addBindings();
           }
@@ -383,8 +384,8 @@ var AdvisorDashboard = function() {
   };
 
   /*
-  * Add appointment slots
-  */
+   * Add appointment slots
+   */
   self.addSlots = function() {
     // Shows dialog to add empty appointment slot(s)
     self.$content.load('/templates/dashboard/_add_slots_form.html', function() {
@@ -411,7 +412,7 @@ var AdvisorDashboard = function() {
           },
           dataType: 'json'
         }).done(function(data) {
-          if(data && data.success) {
+          if (data && data.success) {
             // Successfully added new appointment slots
             $.growlUI('Successfully added appointment slot!');
 
@@ -449,7 +450,7 @@ var AdvisorDashboard = function() {
           },
           dataType: 'json'
         }).done(function(data) {
-          if(data && data.success) {
+          if (data && data.success) {
             // Successfully added new appointment slots
             $.growlUI('Successfully added appointment slots!');
 
@@ -467,11 +468,11 @@ var AdvisorDashboard = function() {
       });
     });
   };
-  
- 
+
+
   /**
-  * Removes slots from calendar
-  */
+   * Removes slots from calendar
+   */
   self.removeSlots = function() {
     self.$content.load('/templates/dashboard/_remove_slots_form.html', function() {
       var form = self.$content.find('.remove-slots-form').eq(0);
@@ -482,12 +483,12 @@ var AdvisorDashboard = function() {
         var start_time = $(this).find('input[name="start_time"]').eq(0).val();
         var end_time = $(this).find('input[name="end_time"]').eq(0).val();
 
-        if(!date || !start_time || !end_time) {
+        if (!date || !start_time || !end_time) {
           return false;
         }
 
         var result = window.confirm('Are you sure you want to remove appointment slots for ' + date + '?');
-        if(!result) {
+        if (!result) {
           return false;
         }
 
@@ -502,7 +503,7 @@ var AdvisorDashboard = function() {
             endDateTime: endDateTime
           }
         }).done(function(data) {
-          if(data.success) {
+          if (data.success) {
             // Successfully removed appointments
             $.growlUI('Successfully removed ' + data.appointments_removed + ' appointment slots!');
             $(this).find('input[name="date"]').eq(0).val('');
@@ -518,8 +519,8 @@ var AdvisorDashboard = function() {
   };
 
   /**
-  * Set the view state
-  */
+   * Set the view state
+   */
   self.setState = function(s) {
     self.$content.html('');
     self.state = s;
@@ -527,15 +528,15 @@ var AdvisorDashboard = function() {
   };
 
   /*
-  * On DOM Loaded
-  */
+   * On DOM Loaded
+   */
   $(document).ready(function() {
     // Load information about self
     $.ajax({
       url: '/api/me',
       type: 'GET'
     }).done(function(data) {
-      if(data) {
+      if (data) {
         self.cwid = data.cwid;
         self.first_name = data.first_name;
         self.last_name = data.last_name;
