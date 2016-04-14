@@ -290,8 +290,28 @@ var AdvisorDashboard = function() {
       $settingsForm.on('submit', function(e) {
         e.preventDefault();
 
+        function highlight(el) { el.css('border-color', 'red'); el.on('focus', unhighlight); }
+
+        function unhighlight() { $(this).css('border-color', ''); $(this).off('focus'); }
+
         // Required Values
         if (!$emailEl.val() || !$firstNameEl.val() || !$lastNameEl.val() || !$defaultAppointmentDurationEl.val()) {
+          if(!$emailEl.val()) {
+            highlight($emailEl);
+          }
+
+          if(!$firstNameEl.val()) {
+            highlight($firstNameEl);
+          }
+
+          if(!$lastNameEl.val()) {
+            highlight($lastNameEl);
+          }
+
+          if(!$defaultAppointmentDurationEl.val()) {
+            highlight($defaultAppointmentDurationEl);
+          }
+
           return false;
         }
 
