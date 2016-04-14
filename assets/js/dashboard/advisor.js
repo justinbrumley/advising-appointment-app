@@ -207,6 +207,58 @@ var AdvisorDashboard = function() {
       // Agenda specific logic
     });
   };
+  
+   /**
+  * Change Password
+  */
+  self.changePassword = function() {
+    self.blockContent('Loading...');
+
+    //Load Change Password template
+    self.$content.load('/templates/dashboard/_change_password_form.html', function() {
+      self.unblockContent();
+      var changePasswordForm = self.$content.find('.change-password-form').eq(0);
+      
+    // Change password form submit
+      changePasswordForm.on('submit', function(e) {
+        e.preventDefault();
+        var current_password = $(this).find('input[name="current_password"]').val();
+        var new_password = $(this).find('input[name="new_password"]').val();
+        var verify_password = $(this).find('input[name="verify_password"]').val();
+        
+        if (new_password != current_password && new_password == verify_password){
+          $.ajax({
+            url:'/api/users/' + self.cwid +'/password',
+            data: {
+             current_password: current_password,
+             new_password: new_password
+            },
+            type: 'POST'
+          }).done(function(data){
+            if (data && data.success){
+              $.growlUI('Password changed!');
+              
+              // Clear Data
+             $(this).find('input[name="new_password"]').val('');
+            $(this).find('input[name="current_password"]').val('');
+            $(this).find('input[name="verify_password"]').val('');
+            }
+          });
+        } else{
+          //Current password and new password can not match
+          //TODO Show error message
+           $.growlUI('Password must be different from previous.');
+              
+              // Clear Data
+            $(this).find('input[name="new_password"]').val('');
+            $(this).find('input[name="current_password"]').val('');
+            $(this).find('input[name="verify_password"]').val('');
+          
+        } 
+      });
+    });
+  };  
+
 
   /**
   * Settings specific setup
@@ -415,7 +467,8 @@ var AdvisorDashboard = function() {
       });
     });
   };
-
+  
+ 
   /**
   * Removes slots from calendar
   */

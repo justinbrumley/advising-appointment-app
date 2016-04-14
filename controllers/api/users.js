@@ -4,6 +4,7 @@ var requireAuth = require('../middleware').requireAuth;
 var requireRole = require('../middleware').requireRole;
 var models = require('../../models');
 var moment = require('moment');
+var bcrypt = require('bcryptjs');
 
 // Model Declarations
 var User = models.User;
@@ -118,7 +119,7 @@ router.post('/:cwid/advisees', requireRole('advisor'), function(req, res) {
     if(!user) {
       return res.json({
         success: false,
-        message: 'Could no find user'
+        message: 'Could not find user'
       });
     } else if(user.advisor_cwid) {
       return res.json({
@@ -198,5 +199,49 @@ router.get('/:cwid/appointments', requireRole('admin'), function(req, res) {
     });
   });
 });
+
+/* 
+ *
+ * Allows a user to change their password
+ *
+ */
+router.post('/:cwid/password', requireAuth, function(req, res) {
+  var cwid = req.params.cwid;
+  var current_password = req.body.current_password;
+  var new_password = req.body.new_password;
+
+
+  User.find({
+    where: {
+      cwid: cwid
+    }
+  }).done(function(user) {
+    user.verifyPassword(current_password, function(err, success) {
+      if (err || !success) {
+        return res.json({
+          success: false,
+          message: err ? err : 'Password does not match'
+        });
+      } else if (success) {
+        user.password = new_password;
+        user.save().then(function(user) {
+          if (!user) {
+            return res.json({
+              success: false,
+              message: 'Could not change password'
+            });
+          }
+          else {
+            return res.json({
+              success: true
+            });
+          }
+        });
+      }
+    });
+
+  });
+});
+
 
 module.exports = router;

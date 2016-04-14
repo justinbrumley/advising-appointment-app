@@ -1,0 +1,20 @@
+.appointments-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0; }
+  .appointments-list li {
+    padding: 5px 10px 5px 10px; }
+    .appointments-list li:nth-child(odd) {
+      background-color: rgba(0, 0, 0, 0.05); }
+    .appointments-list li:nth-child(even) {
+      background-color: rgba(0, 0, 0, 0.1); }
+
+.export-button {
+  background-color: #860000 !important;
+  float: right; }
+
+.export-button:focus {
+  background-color: #860000 !important; }
+
+.export-button:hover {
+  background-color: #860000 !important; }
