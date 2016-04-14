@@ -4,10 +4,13 @@ var requireAuth = require('../middleware').requireAuth;
 var requireRole = require('../middleware').requireRole;
 var models = require('../../models');
 var moment = require('moment');
+var async = require('async');
+var _ = require('underscore');
 var bcrypt = require('bcryptjs');
 
 // Model Declarations
 var User = models.User;
+var UserRole = models.UserRole;
 var UserSettings = models.UserSettings;
 var Appointment = models.Appointment;
 
@@ -114,7 +117,10 @@ router.post('/:cwid/advisees', requireRole('advisor'), function(req, res) {
   User.find({
     where: {
       cwid: advisee_cwid
-    }
+    },
+    include: [{
+      model: UserRole
+    }]
   }).done(function(user) {
     if(!user) {
       return res.json({
@@ -127,9 +133,27 @@ router.post('/:cwid/advisees', requireRole('advisor'), function(req, res) {
         message: 'User already has an advisor'
       });
     } else {
-      user.advisor_cwid = advisor_cwid;
-      user.save().then(function(user) {
-        if(!user) {
+      async.series([
+        function(callback) {
+          if(_.pluck(user.UserRoles, 'role_id').indexOf(2) == -1) {
+            UserRole.create({
+              cwid: user.cwid,
+              role_id: 2
+            }).done(function(userRole) {
+              callback(null, userRole);
+            });
+          } else {
+            callback(null);
+          }
+        },
+        function(callback) {
+          user.advisor_cwid = advisor_cwid;
+          user.save().then(function(user) {
+            callback(null, user);
+          });
+        }
+      ], function(err, result) {
+        if(!result[1]) {
           return res.json({
             success: false,
             message: 'Error trying to set advisor'
@@ -200,7 +224,7 @@ router.get('/:cwid/appointments', requireRole('admin'), function(req, res) {
   });
 });
 
-/* 
+/*
  *
  * Allows a user to change their password
  *
