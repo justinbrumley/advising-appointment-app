@@ -1,4 +1,18 @@
 extends ../_layout.jade
 
+block head
+  link(href='/css/dashboard/super_admin.css', rel='stylesheet')
+  
+block scripts
+  script(src='/js/dashboard/super_admin.js', type='application/javascript')
+
+block nav-items
+  a.nav-item(state='editUser')
+    li Edit User
+  a.nav-item(state='changePassword')
+    li Change Password
+  a.nav-item(state='settings')
+    li Settings
+    
 block content
   .content

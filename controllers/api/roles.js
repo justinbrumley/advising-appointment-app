@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var requireAuth = require('../middleware').requireAuth;
+var requireRole = require('../middleware').requireRole;
 var _ = require('underscore');
 var async = require('async');
 
@@ -9,6 +10,24 @@ var models = require('../../models');
 var User = models.User;
 var UserRole = models.UserRole;
 var Role = models.Role;
+
+/**
+*  Pulls list of all roles
+*/
+router.get('/all', requireRole('super_admin'), function(req, res) {
+  Role.findAll().done(function(roles) {
+    var ret = [];
+    for(var i = 0; i < roles.length; i++) {
+      ret.push({
+        id: roles[i].id,
+        name: roles[i].role
+      });
+    }
+    return res.json({
+      roles: ret
+    });
+  });
+});
 
 /**
  * Pull list of roles for the logged in user.

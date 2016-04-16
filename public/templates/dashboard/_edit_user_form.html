@@ -1,0 +1,53 @@
+<h3 class='content-title'>Update User Settings</h3>
+<hr />
+<form class='search-form'>
+  <div class='row'>
+    <div class='columns small-10'>
+      <input type='text' placeholder='CWID or Name' name='cwid' class='user-input' />
+    </div>
+    <div class='columns small-2'>
+      <button class='button'>Search</button>
+    </div>
+  </div>
+</form>
+<div class='user-info row'>
+  <hr />
+  <div class='columns small-6' style='border-right: 1px solid lightgrey;'>
+    <form class='user-edit-form'>
+      <div class='row'>
+        <div class='columns small-12'>
+          <label>First Name</label>
+          <input type='text' placeholder='First Name' name='first_name' class='first-name-input' />
+          <label>Last Name</label>
+          <input type='text' placeholder='Last Name' name='last_name' class='last-name-input' />
+          <label>Username</label>
+          <input type='text' placeholder='Username' name='username' class='username-input' />
+          <button class='button'>Save</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class='columns small-6'>
+    <form class='user-role-form'>
+      <div class='row'>
+        <div class='columns small-12'>
+          <table class='user-roles'>
+            <tr>
+              <th>Role</th>
+            </tr>
+          </table>
+          <div class='row'>
+            <div class='columns small-12'>
+              <select class='roles-dropdown'>
+                <option>SELECT ROLE</option>
+              </select>
+            </div>
+            <div class='columns small-12'>
+              <button class='button'>Add to role</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

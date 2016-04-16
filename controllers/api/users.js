@@ -11,6 +11,7 @@ var bcrypt = require('bcryptjs');
 // Model Declarations
 var User = models.User;
 var UserRole = models.UserRole;
+var Role = models.Role;
 var UserSettings = models.UserSettings;
 var Appointment = models.Appointment;
 
@@ -264,6 +265,56 @@ router.post('/:cwid/password', requireAuth, function(req, res) {
       }
     });
 
+  });
+});
+
+/**
+* Get list of roles that a given user is in
+*/
+router.get('/:cwid/roles', requireRole('super_admin'), function(req, res) {
+  var cwid = req.params.cwid;
+
+  UserRole.findAll({
+    where: {
+      cwid: cwid
+    }
+  }).done(function(userRoles) {
+    if(!userRoles || !userRoles.length) {
+      return res.json({
+        success: false,
+        message: "User has no roles",
+        roles: []
+      });
+    }
+
+    Role.findAll({
+      where: {
+        id: {
+          $in: _.pluck(userRoles, 'role_id')
+        }
+      }
+    }).done(function(roles) {
+      if(!roles) {
+        return res.json({
+          success: false,
+          message: "Error pulling roles",
+          roles: []
+        });
+      }
+
+      var ret = [];
+      for(var i = 0; i < roles.length; i++) {
+        ret.push({
+          id: roles[i].id,
+          name: roles[i].role
+        });
+      }
+
+      return res.json({
+        success: true,
+        roles: ret
+      });
+    });
   });
 });
 
