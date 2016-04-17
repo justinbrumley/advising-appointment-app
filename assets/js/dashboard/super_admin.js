@@ -43,7 +43,15 @@ var SuperAdminDashboard = function() {
 
     self.$content.load('/templates/dashboard/_edit_user_form.html', function() {
       self.unblockContent();
+      var $cwidEl = self.$content.find('.user-input').eq(0);
+      var $rolesTable = self.$content.find('.user-roles').eq(0);
       var $roleDropdownEl = self.$content.find('.roles-dropdown').eq(0);
+      var timeout;
+
+      $cwidEl.on('keydown', function() {
+        window.clearTimeout(timeout);
+        timeout = setTimeout(loadUserInfo, 500);
+      });
 
       // Get list of all roles
       $.ajax({
@@ -56,6 +64,27 @@ var SuperAdminDashboard = function() {
           $roleDropdownEl.append('<option value="' + roles[i].id + '">' + roles[i].name + '</option>');
         }
       });
+
+      // Load user info
+      function loadUserInfo() {
+        var cwid = $cwidEl.val();
+
+        // Load user's roles
+        $.ajax({
+          url: '/api/users/' + cwid + '/roles',
+          type: 'GET'
+        }).done(function(data) {
+          if(data.success) {
+            var roles = data.roles;
+
+            $rolesTable.html('');
+
+            for(var i = 0; i < roles.length; i++) {
+              $rolesTable.append('<li>' + roles[i].name + '</li>');
+            }
+          }
+        });
+      }
     });
   };
 
