@@ -40,6 +40,8 @@ module.exports = {
       Return a promise to correctly handle asynchronicity.
     */
     return queryInterface.bulkDelete('Roles', [{
+      id: 0,
+    }, {
       id: 1,
     }, {
       id: 2,
@@ -47,8 +49,6 @@ module.exports = {
       id: 3,
     }, {
       id: 4,
-    }, {
-      id: 5,
     }]);
   }
 };
