@@ -1,5 +1,6 @@
 'use strict';
 
+
 // Advisor Dashboard ViewModel
 var AdvisorDashboard = function() {
   var self = this;
@@ -49,6 +50,16 @@ var AdvisorDashboard = function() {
       var $appointmentsEl = self.$content.find('.appointments-list').eq(0);
       var $exportButtonEl = self.$content.find('.export-button').eq(0);
       var timeout;
+      
+      $exportButtonEl.off('click');
+       //Generate pdf on export button
+      $exportButtonEl.on('click', function(){
+        var pdf = new jsPDF('p','pt', 'letter');
+        var style = '<style>body { background-color:maroon; color: maroon; }</style>';
+        var source = style + self.$content.find('.appointments-list').eq(0).parent().html();
+        pdf.fromHTML(source);
+        pdf.save('Appointments.pdf');
+      });
 
       // Initially hide export button
       $exportButtonEl.hide();
