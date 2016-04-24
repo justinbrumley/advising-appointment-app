@@ -37,7 +37,16 @@ router.get('/:cwid', requireAuth, function(req, res) {
       as: 'settings'
     }]
   }).done(function(user) {
+    if(!user) {
+      return res.json({
+        success: false,
+        message: 'User not found'
+      });
+    }
+
+
     var ret = {
+      success: true,
       cwid: cwid,
       username: user.username,
       first_name: user.settings.first_name,
@@ -45,6 +54,60 @@ router.get('/:cwid', requireAuth, function(req, res) {
     };
 
     return res.json(ret);
+  });
+});
+
+/**
+* Update information for user
+*/
+router.post('/:cwid', requireRole('super_admin'), function(req, res) {
+  var cwid = req.params.cwid;
+  var first_name = req.body.first_name;
+  var last_name = req.body.last_name;
+  var username = req.body.username;
+
+  if(!first_name || !last_name || !username) {
+    return res.json({
+      success: false,
+      message: 'Insufficient params'
+    });
+  }
+
+  User.find({
+    where: {
+      cwid: cwid
+    },
+    include: [{
+      model: UserSettings,
+      as: 'settings'
+    }]
+  }).done(function(user) {
+    if(user && user.settings) {
+      user.settings.first_name = first_name;
+      user.settings.last_name = last_name;
+      user.username = username;
+      console.log("Saving");
+      user.save().then(function() {
+        user.settings.save().then(function(updated_user) {
+          if(!updated_user) {
+            return res.json({
+              success: false,
+              message: 'Error updating user'
+            });
+          } else {
+            return res.json({
+              success: true,
+              user: updated_user
+            });
+          }
+        });
+      });
+    } else {
+      return res.json({
+        success: false,
+        message: 'Could not find user'
+      });
+    }
   });
 });
 
@@ -352,6 +415,32 @@ router.post('/:cwid/role', requireRole('super_admin'), function(req, res) {
         }
       });
     }
+  });
+});
+
+/**
+* Remove role from user
+*/
+router.delete('/:cwid/role', requireRole('super_admin'), function(req, res) {
+  var cwid = req.params.cwid;
+  var role_id = req.body.role ? parseInt(req.body.role) : undefined;
+
+  if(!cwid || !role_id) {
+    return res.json({
+      success: false,
+      message: 'Missing params'
+    });
+  }
+
+  UserRole.destroy({
+    where: {
+      cwid: cwid,
+      role_id: role_id
+    }
+  }).done(function() {
+    return res.json({
+      success: true
+    });
   });
 });
 
