@@ -20,9 +20,68 @@ html
     script(src='/js/jquery.blockUI.js' type='application/javascript')
     script(src='/js/fullcalendar.min.js' type='application/javascript')
     script(src='/js/underscore-min.js' type='application/javascript')
+    script(src='/js/require.js' type='application/javascript')
 
     script(type='application/javascript').
       $(document).ready(function() {
+        // Function to retrieve list of cookies
+        function getCookie(key) {
+          var theCookies = document.cookie.split(';');
+          var cookies = {};
+          for (var i = 0; i < theCookies.length; i++) {
+            var k = theCookies[i].split('=')[0];
+            var v = theCookies[i].split('=')[1];
+            
+            if(!k || !v) continue;
+            
+            k = k.trim();
+            v = v.trim();
+            
+            if(!key) {
+              cookies[k] = v;
+            } else if(key == k) {
+              cookies[k] = v;
+            }
+          }
+          return cookies;
+        }
+        
+        function setCookie(key, value) {  
+          document.cookie = key + '=' + value + ';path=/;';
+        }
+        
+        var cookie = getCookie('show_intro');
+        
+        if(cookie && cookie.show_intro) {
+          cookie.show_intro = cookie.show_intro == 'true';
+        }
+        
+        if(!cookie || !cookie.show_intro) {
+          var $intro = $('.intro').eq(0);
+          var $introWords = $('.intro-words').eq(0);
+          $intro.show();
+          // RequireJS Load Fake Decryptify
+          require(['/js/fake-decryptify.js'], function(FakeDecryptify) {
+            FakeDecryptify.decrypt('ULM Advising Assistant', {
+              changeRate: 100,
+              updateRate: 100,
+              step: function(err, word) {
+                $introWords.text(word)
+              },
+              done: function(err, finished_word) {
+                $introWords.text(finished_word);
+                setTimeout(function() {
+                  $intro.css('left', '100%');
+                  setTimeout(function() {
+                    $intro.hide();
+                    setCookie('show_intro', true);
+                  }, 750);
+                }, 500);
+              },
+            });
+          });
+        }
+        
         // Get list of roles and bind events
         $.get({ url: '/api/roles' }).done(function(data) {
           if(data.success) {
@@ -55,6 +114,8 @@ html
     block scripts
     
   body
+    .intro
+      .intro-words
     .topbar
     .sidebar
       .logo
