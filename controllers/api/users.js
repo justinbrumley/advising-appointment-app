@@ -16,12 +16,12 @@ var UserSettings = models.UserSettings;
 var Appointment = models.Appointment;
 
 /**
-* Pull public information about a user by cwid
-*/
+ * Pull public information about a user by cwid
+ */
 router.get('/:cwid', requireAuth, function(req, res) {
   var cwid = req.params.cwid;
 
-  if(!cwid) {
+  if (!cwid) {
     return res.json({
       success: false,
       message: 'No CWID provided'
@@ -37,7 +37,7 @@ router.get('/:cwid', requireAuth, function(req, res) {
       as: 'settings'
     }]
   }).done(function(user) {
-    if(!user) {
+    if (!user) {
       return res.json({
         success: false,
         message: 'User not found'
@@ -58,15 +58,15 @@ router.get('/:cwid', requireAuth, function(req, res) {
 });
 
 /**
-* Update information for user
-*/
+ * Update information for user
+ */
 router.post('/:cwid', requireRole('super_admin'), function(req, res) {
   var cwid = req.params.cwid;
   var first_name = req.body.first_name;
   var last_name = req.body.last_name;
   var username = req.body.username;
 
-  if(!first_name || !last_name || !username) {
+  if (!first_name || !last_name || !username) {
     return res.json({
       success: false,
       message: 'Insufficient params'
@@ -82,19 +82,20 @@ router.post('/:cwid', requireRole('super_admin'), function(req, res) {
       as: 'settings'
     }]
   }).done(function(user) {
-    if(user && user.settings) {
+    if (user && user.settings) {
       user.settings.first_name = first_name;
       user.settings.last_name = last_name;
       user.username = username;
       console.log("Saving");
       user.save().then(function() {
         user.settings.save().then(function(updated_user) {
-          if(!updated_user) {
+          if (!updated_user) {
             return res.json({
               success: false,
               message: 'Error updating user'
             });
-          } else {
+          }
+          else {
             return res.json({
               success: true,
               user: updated_user
@@ -102,7 +103,8 @@ router.post('/:cwid', requireRole('super_admin'), function(req, res) {
           }
         });
       });
-    } else {
+    }
+    else {
       return res.json({
         success: false,
         message: 'Could not find user'
@@ -112,15 +114,15 @@ router.post('/:cwid', requireRole('super_admin'), function(req, res) {
 });
 
 /**
-* Fetches list of advisees for an advisor
-*/
+ * Fetches list of advisees for an advisor
+ */
 router.get('/:cwid/advisees', requireRole('advisor'), function(req, res) {
   User.find({
     where: {
       cwid: req.params.cwid
     }
   }).done(function(user) {
-    if(!user) {
+    if (!user) {
       return res.json({
         success: false,
         message: 'Could not locate user'
@@ -129,7 +131,7 @@ router.get('/:cwid/advisees', requireRole('advisor'), function(req, res) {
 
     // Check that the user you are searching for is an advisor
     user.isInRole('advisor', function(err, inRole) {
-      if(!inRole) {
+      if (!inRole) {
         return res.json({
           success: false,
           message: 'User is not an advisor'
@@ -145,7 +147,7 @@ router.get('/:cwid/advisees', requireRole('advisor'), function(req, res) {
           as: 'settings'
         }]
       }).done(function(users) {
-        if(!users) {
+        if (!users) {
           return res.json({
             success: false,
             message: 'Advisor has no advisees'
@@ -153,8 +155,7 @@ router.get('/:cwid/advisees', requireRole('advisor'), function(req, res) {
         }
 
         var ret = [];
-        for(var i = 0; i < users.length; i++) {
-          console.log("Adding user", JSON.stringify(users[i]));
+        for (var i = 0; i < users.length; i++) {
           ret.push({
             cwid: users[i].cwid,
             first_name: users[i].settings ? users[i].settings.first_name : '',
@@ -172,8 +173,8 @@ router.get('/:cwid/advisees', requireRole('advisor'), function(req, res) {
 });
 
 /**
-* Add new advisee to advisors list of advisees
-*/
+ * Add new advisee to advisors list of advisees
+ */
 router.post('/:cwid/advisees', requireRole('advisor'), function(req, res) {
   var advisee_cwid = req.body.advisee_cwid;
   var advisor_cwid = req.params.cwid;
@@ -186,27 +187,30 @@ router.post('/:cwid/advisees', requireRole('advisor'), function(req, res) {
       model: UserRole
     }]
   }).done(function(user) {
-    if(!user) {
+    if (!user) {
       return res.json({
         success: false,
         message: 'Could not find user'
       });
-    } else if(user.advisor_cwid) {
+    }
+    else if (user.advisor_cwid) {
       return res.json({
         success: false,
         message: 'User already has an advisor'
       });
-    } else {
+    }
+    else {
       async.series([
         function(callback) {
-          if(_.pluck(user.UserRoles, 'role_id').indexOf(2) == -1) {
+          if (_.pluck(user.UserRoles, 'role_id').indexOf(2) == -1) {
             UserRole.create({
               cwid: user.cwid,
               role_id: 2
             }).done(function(userRole) {
               callback(null, userRole);
             });
-          } else {
+          }
+          else {
             callback(null);
           }
         },
@@ -217,12 +221,13 @@ router.post('/:cwid/advisees', requireRole('advisor'), function(req, res) {
           });
         }
       ], function(err, result) {
-        if(!result[1]) {
+        if (!result[1]) {
           return res.json({
             success: false,
             message: 'Error trying to set advisor'
           });
-        } else {
+        }
+        else {
           return res.json({
             success: true
           });
@@ -233,21 +238,21 @@ router.post('/:cwid/advisees', requireRole('advisor'), function(req, res) {
 });
 
 /**
-* Fetches list of upcoming appointments for an advisor by cwid
-*
-* TODO add functionality to pull by specific date ranges
-*/
+ * Fetches list of upcoming appointments for an advisor by cwid
+ *
+ * TODO add functionality to pull by specific date ranges
+ */
 router.get('/:cwid/appointments', requireRole('admin'), function(req, res) {
   var cwid = req.params.cwid;
   var start = moment().utc();
   var end = moment().utc().add(7, 'd');
 
-  if(req.params.start && req.params.end) {
+  if (req.params.start && req.params.end) {
     start = moment(req.params.start).utc();
     end = moment(req.params.end).utc();
   }
 
-  if(!cwid) {
+  if (!cwid) {
     return res.json({
       success: false,
       message: 'No cwid provided'
@@ -258,7 +263,7 @@ router.get('/:cwid/appointments', requireRole('admin'), function(req, res) {
     where: {
       advisor_cwid: cwid,
       start_time: {
-        $between: [ start.format(), end.format() ]
+        $between: [start.format(), end.format()]
       },
       advisee_cwid: {
         $not: null
@@ -274,7 +279,7 @@ router.get('/:cwid/appointments', requireRole('admin'), function(req, res) {
       }]
     }]
   }).done(function(appointments) {
-    if(!appointments) {
+    if (!appointments) {
       return res.json({
         success: false,
         message: 'No appointments for advisor'
@@ -310,7 +315,8 @@ router.post('/:cwid/password', requireAuth, function(req, res) {
           success: false,
           message: err ? err : 'Password does not match'
         });
-      } else if (success) {
+      }
+      else if (success) {
         user.password = new_password;
         user.save().then(function(user) {
           if (!user) {
@@ -332,8 +338,8 @@ router.post('/:cwid/password', requireAuth, function(req, res) {
 });
 
 /**
-* Get list of roles that a given user is in
-*/
+ * Get list of roles that a given user is in
+ */
 router.get('/:cwid/roles', requireRole('super_admin'), function(req, res) {
   var cwid = req.params.cwid;
 
@@ -342,7 +348,7 @@ router.get('/:cwid/roles', requireRole('super_admin'), function(req, res) {
       cwid: cwid
     }
   }).done(function(userRoles) {
-    if(!userRoles || !userRoles.length) {
+    if (!userRoles || !userRoles.length) {
       return res.json({
         success: false,
         message: "User has no roles",
@@ -357,7 +363,7 @@ router.get('/:cwid/roles', requireRole('super_admin'), function(req, res) {
         }
       }
     }).done(function(roles) {
-      if(!roles) {
+      if (!roles) {
         return res.json({
           success: false,
           message: "Error pulling roles",
@@ -366,7 +372,7 @@ router.get('/:cwid/roles', requireRole('super_admin'), function(req, res) {
       }
 
       var ret = [];
-      for(var i = 0; i < roles.length; i++) {
+      for (var i = 0; i < roles.length; i++) {
         ret.push({
           id: roles[i].id,
           name: roles[i].role
@@ -382,8 +388,8 @@ router.get('/:cwid/roles', requireRole('super_admin'), function(req, res) {
 });
 
 /**
-* Adds user to specific role
-*/
+ * Adds user to specific role
+ */
 router.post('/:cwid/role', requireRole('super_admin'), function(req, res) {
   var cwid = req.params.cwid;
   var role_id = req.body.role;
@@ -393,21 +399,23 @@ router.post('/:cwid/role', requireRole('super_admin'), function(req, res) {
       cwid: cwid
     }
   }).done(function(userRoles) {
-    if(_.pluck(userRoles, 'role_id').indexOf(role_id) != -1) {
+    if (_.pluck(userRoles, 'role_id').indexOf(role_id) != -1) {
       return res.json({
         success: false,
         message: 'User already in role'
       });
-    } else {
+    }
+    else {
       UserRole.create({
         cwid: cwid,
         role_id: role_id
       }).done(function(userRole) {
-        if(userRole) {
+        if (userRole) {
           return res.json({
             success: true
           });
-        } else {
+        }
+        else {
           return res.json({
             success: false,
             message: 'Error adding user to role'
@@ -419,13 +427,13 @@ router.post('/:cwid/role', requireRole('super_admin'), function(req, res) {
 });
 
 /**
-* Remove role from user
-*/
+ * Remove role from user
+ */
 router.delete('/:cwid/role', requireRole('super_admin'), function(req, res) {
   var cwid = req.params.cwid;
   var role_id = req.body.role ? parseInt(req.body.role) : undefined;
 
-  if(!cwid || !role_id) {
+  if (!cwid || !role_id) {
     return res.json({
       success: false,
       message: 'Missing params'
@@ -444,5 +452,48 @@ router.delete('/:cwid/role', requireRole('super_admin'), function(req, res) {
   });
 });
 
+/*
+ *
+ *Remove advisor from advisee
+ *
+ */
+router.post('/:cwid/advisor/remove', requireRole('advisor'), function(req, res) {
+  var advisor_cwid = req.params.cwid;
+  var advisee_cwid = req.body.advisee_cwid;
+
+  User.find({
+    where: {
+      cwid: advisee_cwid
+    }
+  }).done(function(user) {
+    if (user.advisor_cwid != advisor_cwid || !user.advisor_cwid) {
+      return res.json({
+        success: false,
+        message: 'Not the advisor for this student'
+      });
+    }
+    else {
+      user.advisor_cwid = null;
+      user.save().then(function(user) {
+        console.log('\n\n\n\nUser ', user);
+        if (user) {
+          return res.json({
+            success: true,
+            message: 'Successfully removed student' + user.advisor_cwid
+          });
+        }
+        else {
+          return res.json({
+            success: false,
+            message: 'Nahhh playah'
+          });
+        }
+      });
+
+    }
+ 
+  });
+
+});
 
 module.exports = router;
