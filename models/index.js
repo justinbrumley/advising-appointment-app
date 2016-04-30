@@ -33,7 +33,8 @@ var models = [
   'UserRole',
   'RolePrivilege',
   'Privilege',
-  'UserSettings'
+  'UserSettings',
+  'Major'
 ];
 
 models.forEach(function(model) {
@@ -97,6 +98,14 @@ models.forEach(function(model) {
   });
   m.RolePrivilege.belongsTo(m.Privilege, {
     foreignKey: 'role_id'
+  });
+  
+  //Major Association
+  m.Major.belongsTo(m.User, {
+    foreignKey:'major_id'
+  });
+  m.User.hasOne(m.Major, {
+    foreignKey: 'major_id'
   });
 
 })(module.exports);
