@@ -3,5 +3,6 @@ node_modules/
 public/css/default.css
 public/css/login.css
 public/css/rewrite.css
+public/css/dashboard/*.css
 public/js/*.js
 public/js/**/*.js

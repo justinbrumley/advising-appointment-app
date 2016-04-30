@@ -141,7 +141,7 @@ var AdvisorDashboard = function() {
         var $startTimeEl = $('<input type="time" placeholder="Start Time" name="start_time" />');
         var $endTimeEl = $('<input type="time" placeholder="End Time" name="end_time" />');
         var $durationEl = $('<input type="number" placeholder="Duration" name="appointment_duration" />');
-        
+
 
         $form.append($startTimeEl);
         $form.append($endTimeEl);
@@ -394,10 +394,12 @@ var AdvisorDashboard = function() {
         $advisee_list.html('');
         for (var i = 0; i < advisees.length; i++) {
           if (advisees[i].firstName != '' && advisees[i].last_name != '') {
-            $advisee_list.append('<li>' + advisees[i].first_name + ' ' + advisees[i].last_name + '<i style="float: right; padding-left:10px;" class="fi-trash"></i>' + '<i style="float: right; padding-left:10px;" class="fi-pencil"></i>' + '</li>');
+            $advisee_list.append('<li>' + advisees[i].first_name + ' ' + advisees[i].last_name +
+              '<i style="float: right; padding-left:10px;" advisee="' + advisees[i].cwid + '" class="fi-trash"></i>' +
+              '<i style="float: right; padding-left:10px;" class="fi-pencil"></i>' + '</li>');
           } else {
             $advisee_list.append('<li>' + advisees[i].cwid + ' (no name)' +
-              '<i style="float: right; padding-left:10px;" class="fi-trash"></i>' +
+              '<i style="float: right; padding-left:10px;" advisee="' + advisees[i].cwid + '" class="fi-trash"></i>' +
               '<i style="float: right; padding-left:10px;" class="fi-pencil"></i>' +
               '</li>');
           }
@@ -410,6 +412,26 @@ var AdvisorDashboard = function() {
           var cwid = prompt('Insert CWID of new advisee');
           $.ajax({
             url: '/api/users/' + self.cwid + '/advisees',
+            type: 'POST',
+            data: {
+              advisee_cwid: cwid
+            },
+            dataType: 'json'
+          }).done(function(data) {
+            if (data && data.success) {
+              fetchList();
+            }
+          });
+        });
+
+        $('.fi-trash').on('click', function() {
+          var cwid = $(this).attr('advisee');
+          var answer = window.confirm('Are you sure you want to remove user ' + cwid + '?');
+          if(!answer) {
+            return false;
+          }
+          $.ajax({
+            url: '/api/users/' + self.cwid + '/advisor/remove',
             type: 'POST',
             data: {
               advisee_cwid: cwid
@@ -436,23 +458,6 @@ var AdvisorDashboard = function() {
       }
 
       fetchList();
-      
-        $delete_advisor_button.on('click', function() {
-          var cwid = prompt('Insert CWID of advisee');
-          $.ajax({
-            url: '/api/users/' + self.cwid + '/advisor/remove',
-            type: 'POST',
-            data: {
-              advisee_cwid: cwid
-            },
-            dataType: 'json'
-          }).done(function(data) {
-            console.log('penis');
-            if (data && data.success) {
-            }
-          });
-        });
-      
     });
   };
 
