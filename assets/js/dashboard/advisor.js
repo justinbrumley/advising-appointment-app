@@ -141,6 +141,7 @@ var AdvisorDashboard = function() {
         var $startTimeEl = $('<input type="time" placeholder="Start Time" name="start_time" />');
         var $endTimeEl = $('<input type="time" placeholder="End Time" name="end_time" />');
         var $durationEl = $('<input type="number" placeholder="Duration" name="appointment_duration" />');
+        
 
         $form.append($startTimeEl);
         $form.append($endTimeEl);
@@ -387,6 +388,7 @@ var AdvisorDashboard = function() {
       // Advisor settings template specific logic
       var $advisee_list = self.$content.find('.advisee-list').eq(0);
       var $add_new_button = self.$content.find('.add-new-button').eq(0);
+      var $delete_advisor_button = self.$content.find('.delete-advisor-button').eq(0);
 
       function setupList(advisees) {
         $advisee_list.html('');
@@ -434,6 +436,23 @@ var AdvisorDashboard = function() {
       }
 
       fetchList();
+      
+        $delete_advisor_button.on('click', function() {
+          var cwid = prompt('Insert CWID of advisee');
+          $.ajax({
+            url: '/api/users/' + self.cwid + '/advisor/remove',
+            type: 'POST',
+            data: {
+              advisee_cwid: cwid
+            },
+            dataType: 'json'
+          }).done(function(data) {
+            console.log('penis');
+            if (data && data.success) {
+            }
+          });
+        });
+      
     });
   };
 
