@@ -343,4 +343,89 @@ router.post('/select', requireRole('advisee'), function(req, res) {
   });
 });
 
+/**
+* Overrides a users selection and moves them to another appointment slot.
+*/
+router.post('/override', requireRole('advisor', 'super_admin') function(req, res) {
+  var advisee_cwid = req.body.advisee_cwid;
+  var cwid = req.session.cwid;
+  var new_appointment_id = req.body.appointment_id;
+
+  async.series([
+    function(callback) {
+      // Make sure advisee belongs to advisor
+      User.find({
+        where: {
+          cwid: advisee_cwid
+        }
+      }).done(function(user) {
+        if(!user) {
+          callback('User does not exist');
+        } else if(req.session.role !== 0 && user.advisor_cwid !== cwid) {
+          callback('User is not adviseed by you')
+        } else {
+          callback(null);
+        }
+      });
+    },
+    function(callback) {
+      // Remove advisee from existing appointment if they have one.
+      Appointment.find({
+        where: {
+          advisee_cwid: advisee_cwid
+        }
+      }).done(function(appointment) {
+        if(appointment) {
+          appointment.advisee_cwid = null;
+          appointment.save().then(function(appointment) {
+            if(appointment) {
+              callback(null);
+            } else {
+              callback('Error saving existing appointment');
+            }
+          });
+        } else {
+          callback(null);
+        }
+      });
+    },
+    function(callback) {
+      // Add advisee to new slot
+      Appointment.find({
+        where: {
+          id: new_appointment_id
+        }
+      }).done(function(appointment) {
+        if(!appointment) {
+          callback('Appointment does not exist');
+        } else if(appointment.advisee_cwid) {
+          callback('Appointment slot is not empty');
+        } else {
+          appointment.advisee_cwid = advisee_cwid;
+          appointment.save().then(function(appointment) {
+            if(appointment) {
+              callback(null, appointment);
+            } else {
+              callback('Error saving new appointment slot');
+            }
+          });
+        }
+      });
+    }
+  ], function(err, results) {
+    if(err) {
+      return res.json({
+        success: false,
+        message: err
+      });
+    } else {
+      var appointment = results[2];
+      return res.json({
+        success: true,
+        appointment: appointment
+      });
+    }
+  });
+});
+
 module.exports = router;
