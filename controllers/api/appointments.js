@@ -346,7 +346,7 @@ router.post('/select', requireRole('advisee'), function(req, res) {
 /**
 * Overrides a users selection and moves them to another appointment slot.
 */
-router.post('/override', requireRole('advisor', 'super_admin') function(req, res) {
+router.post('/override', requireRole('advisor', 'super_admin'), function(req, res) {
   var advisee_cwid = req.body.advisee_cwid;
   var cwid = req.session.cwid;
   var new_appointment_id = req.body.appointment_id;

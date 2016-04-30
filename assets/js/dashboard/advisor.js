@@ -60,9 +60,11 @@ var AdvisorDashboard = function() {
         }
         events.push({
           title: title || a.advisee_cwid || 'Empty',
+          appointment_id: a.id,
           start: moment.utc(a.start_time).local(),
           end: moment.utc(a.end_time).local(),
-          color: a.advisee_cwid ? '#860000' : 'grey'
+          color: a.advisee_cwid ? '#860000' : 'grey',
+          advisee_cwid: a.advisee_cwid || undefined
         });
       }
 
@@ -194,7 +196,32 @@ var AdvisorDashboard = function() {
         },
         events: events,
         eventLimit: true,
-        dayClick: onDayClick
+        dayClick: onDayClick,
+        eventClick: function(event) {
+          if(event.advisee_cwid) {
+            // Don't show override prompt if advisee is already here
+            return false;
+          }
+
+          var advisee_cwid = window.prompt('CWID of advisee to move to this slot:');
+
+          $.ajax({
+            url: '/api/appointments/override',
+            type: 'POST',
+            data: {
+              advisee_cwid: advisee_cwid,
+              appointment_id: event.appointment_id
+            }
+          }).done(function(data) {
+            if(data && data.success) {
+              $.growlUI('User has been moved!');
+              self.setState('calendar');
+              return;
+            } else {
+              $.growlUI(data.message);
+            }
+          });
+        }
       });
 
       // Unblock page
