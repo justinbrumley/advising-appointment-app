@@ -24,6 +24,11 @@ module.exports = function(sequelize, DataTypes) {
         this.setDataValue('password', hash);
       }
     },
+    major_id: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      defaultValue: 0
+    },
     advisor_cwid: {
       type: Sequelize.STRING,
       allowNull: true
@@ -44,9 +49,10 @@ module.exports = function(sequelize, DataTypes) {
           },
           include: [Role]
         }).done(function(userRoles) {
-          if(!userRoles) {
+          if (!userRoles) {
             done('Could not find roles');
-          } else {
+          }
+          else {
             var roles = _.pluck(_.pluck(userRoles, 'Role'), 'role');
             done(null, roles.indexOf(role) > -1);
           }
