@@ -597,6 +597,46 @@ var AdvisorDashboard = function() {
   };
 
   /**
+  * Notification Center View
+  */
+  self.notificationCenter = function() {
+    self.$content.load('/templates/dashboard/_notification_center.html', function() {
+      // Notification Center Specific Logic
+      var $sendEmailButtonEl = $('.send-email-button').eq(0);
+      var $emailFormEl = $('.email-form').eq(0);
+      var $emailBodyEl = $('.email-body').eq(0);
+      var $cwidsEl = $('.cwids').eq(0);
+
+      $emailFormEl.on('submit', function(e) {
+        e.preventDefault();
+        var cwids = $cwidsEl.val().split(',');
+        for(var i = 0; i < cwids.length; i++) {
+          cwids[i] = cwids[i].trim();
+        }
+
+        console.log("Sending emails to ", cwids);
+
+        $.ajax({
+          url: '/api/notifications/send',
+          type: 'POST',
+          data: {
+            cwids: cwids.join(';'),
+            email_body: $emailBodyEl.val()
+          }
+        }).done(function(data) {
+          if(data && data.success) {
+            $.growlUI('Emails sent!');
+          } else {
+            $.growlUI(data.message);
+          }
+        });
+      });
+
+
+    });
+  };
+
+  /**
    * Set the view state
    */
   self.setState = function(s) {

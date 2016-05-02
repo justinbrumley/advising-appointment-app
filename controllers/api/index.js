@@ -25,6 +25,9 @@ router.use('/roles', require('./roles.js'));
 // Users Endpoints
 router.use('/users', require('./users.js'));
 
+// Notifications Endpoints
+router.use('/notifications', require('./notifications.js'));
+
 /**
 * Allows user to pull basic information about themselves.
 */
