@@ -27,7 +27,7 @@ module.exports = function(sequelize, DataTypes) {
     major_id: {
       type: Sequelize.INTEGER,
       allowNull: false,
-      defaultValue: 0
+      defaultValue: 5
     },
     advisor_cwid: {
       type: Sequelize.STRING,
