@@ -407,6 +407,7 @@ var AdvisorDashboard = function() {
       }
 
       function addBindings() {
+        $add_new_button.off('click');
         $add_new_button.on('click', function() {
           // TODO Show form for adding new advisee
           var cwid = prompt('Insert CWID of new advisee');
@@ -424,6 +425,7 @@ var AdvisorDashboard = function() {
           });
         });
 
+        $('.fi-trash').off('click');
         $('.fi-trash').on('click', function() {
           var cwid = $(this).attr('advisee');
           var answer = window.confirm('Are you sure you want to remove user ' + cwid + '?');
