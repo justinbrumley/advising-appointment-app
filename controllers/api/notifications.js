@@ -80,7 +80,8 @@ router.post('/send', requireRole('advisor', 'super_admin'), function(req, res) {
 * Returns appropriate email body for advisee
 */
 function getEmailBody(advisee_cwid, callback) {
-  return 'Bitch';
+  // TODO: Add time of appointment to body of message
+  return 'Just a reminder about your advising appointment coming up soon!';
 }
 
 module.exports = router;
